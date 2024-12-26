@@ -51,7 +51,7 @@ const PaymentMethod: React.FC = () => {
       const fetchVendorDetails = async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8005/api/user-vendor-details-service/${vendorId}/`
+            `https://bookingservice-69668940637.asia-east1.run.app/api/user-vendor-details-service/${vendorId}/`
           );
           if (!response.ok) {
             throw new Error(
@@ -131,15 +131,15 @@ const PaymentMethod: React.FC = () => {
     if (!match) return null;
 
     let [_, hours, minutes, meridian] = match;
-    hours = parseInt(hours).toString();
-    minutes = parseInt(minutes).toString();
+    hours = parseInt(hours);
+    minutes = parseInt(minutes);
 
     // Convert to 24-hour time
-    if (meridian.toUpperCase() === "PM" && +hours < 12) {
+    if (meridian.toUpperCase() === "PM" && hours < 12) {
       hours += 12;
     }
-    if (meridian.toUpperCase() === "AM" && +hours === 12) {
-      hours = "0";
+    if (meridian.toUpperCase() === "AM" && hours === 12) {
+      hours = 0;
     }
 
     // Construct ISO string
@@ -201,7 +201,7 @@ const PaymentMethod: React.FC = () => {
           // Send booking data to backend API to save it in the database
           const saveBooking = async () => {
             try {
-              const response = await fetch("http://127.0.0.1:8006/api/user-save-booking/", {
+              const response = await fetch("https://bookingservice-69668940637.asia-east1.run.app/api/user-save-booking/", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

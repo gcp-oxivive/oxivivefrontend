@@ -81,7 +81,7 @@ const fetchUserDetails = async (oxiId: string) => {
     console.log("Fetching user details for oxi_id:", oxiId);
     
     // Adjust URL to match your backend API
-    const response = await fetch(`http://127.0.0.1:8012/api/user-details/${oxiId}`);
+    const response = await fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/user-details/${oxiId}`);
     
     if (!response.ok) {
       throw new Error("Failed to fetch user details");
@@ -101,7 +101,7 @@ const fetchUserDetails = async (oxiId: string) => {
   useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8011/api/user-booking-details/');
+      const response = await fetch('https://drivermanagementservice-69668940637.asia-east1.run.app/api/user-booking-details/');
 
       if (!response.ok) {
         throw new Error('Network response was not ok');

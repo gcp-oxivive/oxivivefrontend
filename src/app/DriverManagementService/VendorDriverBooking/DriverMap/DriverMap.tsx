@@ -195,7 +195,7 @@ const handleReached = async () => {
         const csrfToken = getCookie('csrftoken');
         
         // Send OTP request using Axios
-        const response = await axios.post('http://127.0.0.1:8013/api/user-send-otp/', {
+        const response = await axios.post('https://drivermanagementservice-69668940637.asia-east1.run.app/api/user-send-otp/', {
             email: email,
         }, {
             headers: {

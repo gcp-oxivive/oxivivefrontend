@@ -35,7 +35,7 @@ const DriverProfile: React.FC = () => {
     useEffect(() => {
         if (driverId) {
           console.log(`Fetching driver details for ID: ${driverId}`);  // Debugging line
-            fetch(`http://127.0.0.1:8002/api/profile-driver-details/?driver_id=${driverId}`) // Use the Django API endpoint
+            fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/profile-driver-details/?driver_id=${driverId}`) // Use the Django API endpoint
                 .then((response) => {
                   console.log(`API Response: ${response.status}`);  // Debugging line
                     if (!response.ok) {

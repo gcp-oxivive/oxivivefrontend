@@ -74,7 +74,7 @@ const DriverOtp = () => {
   
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8014/api/driver-validate-otp/',
+        'https://drivermanagementservice-69668940637.asia-east1.run.app/api/driver-validate-otp/',
         { email, otp: enteredOtp, session_key: sessionKey },
         {
           headers: {

@@ -25,7 +25,7 @@ const BookAppointment = () => {
     if (vendorId) {
       const fetchClinicDetails = async () => {
         try {
-          const response = await fetch(`http://127.0.0.1:8004/api/user-vendor-appointment-details/${vendorId}/`);
+          const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/user-vendor-appointment-details/${vendorId}/`);
           if (!response.ok) throw new Error("Failed to fetch clinic details");
           const data = await response.json();
           setClinicData(data);

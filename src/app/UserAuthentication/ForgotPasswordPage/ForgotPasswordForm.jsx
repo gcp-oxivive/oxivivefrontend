@@ -62,7 +62,7 @@ const ForgotPassword = () => {
                 throw new Error('Please enter a valid email address or 10-digit mobile number.');
             }
 
-            const response = await fetch('http://localhost:8000/usmapp/checkemail/', {
+            const response = await fetch('https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/checkemail/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json',
                   'X-CSRFToken': getCookie('csrftoken'),
@@ -99,7 +99,7 @@ const ForgotPassword = () => {
         try {
             const csrfToken = getCsrfToken();
             const sessionKey = sessionStorage.getItem('session_key');
-            const response = await fetch('http://localhost:8000/usmapp/verifyotp/', {
+            const response = await fetch('https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/verifyotp/', {
                 method: 'POST',
                 credentials: 'include',  // Ensure cookies are included for session management
                 headers: { 
@@ -136,7 +136,7 @@ const handleResetPassword = async (e) => {
     console.log("Request body:", JSON.stringify(requestData));
 
     try {
-        const response = await fetch('http://localhost:8000/usmapp/resetpassword/', {
+        const response = await fetch('https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/resetpassword/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
