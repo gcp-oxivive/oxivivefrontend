@@ -61,7 +61,7 @@ const Sidebar = () => {
             className="sidebar-icon"
             data-name="Inventory"
           >
-            <MdOutlineInventory onClick={() => router.push('/AdminServiceClinics/')}/>
+            <MdOutlineInventory onClick={() => router.push('/AdminServiceClinics/Inventory')}/>
           </div>
 
           {/* Driver List */}

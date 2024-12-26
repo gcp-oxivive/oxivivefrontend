@@ -1,0 +1,407 @@
+/* General Layout */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Ensure full viewport height */
+    background-color: #fff; /* Uniform background color */
+    font-family: Arial, sans-serif; /* Optional: Set a default font */
+}
+
+.inventory-container {
+    display: flex;
+    min-height: 100vh; /* Full viewport height */
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  margin-left: 150px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.header1 {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers the content horizontally */
+    position: relative; /* Enables positioning for children */
+}
+
+.header1 h1 {
+    font-size: 30px;
+    color: red;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* Centers the h1 element */
+    margin: 0; /* Removes default margin */
+    font-weight: bold;
+}
+
+.search-bar1 {
+    padding: 8px;
+    width: 200px;
+    border-radius: 10px;
+    border: 1px solid red;
+    font-size: 14px;
+    color: red;
+    /* margin-left: 1100px; */
+    margin-left: auto;
+}
+
+.search-bar1:focus {
+    border-color: red;
+    color: red;
+    outline: none;
+}
+
+.search-bar1::placeholder {
+    color: red;
+}
+
+.filters-container {
+    display: flex;
+    justify-content: center;
+    gap: 45px; /* Space between buttons */
+    margin-bottom: 25px;
+    width: auto;
+    margin-top: 50px;
+}
+
+.filter-button {
+    padding: 8px 25px 8px 18px; /* Increased right padding for alignment */
+    border: 2px solid red; /* Default red border for inactive buttons */
+    cursor: pointer;
+    background-color: #ffffff;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    position: relative;
+    color: red; /* Default text color for inactive buttons */
+    transition: all 0.3s ease;
+}
+
+.filter-button.active {
+    background-color: #e60000; /* Active background color */
+    color: #fff; /* Active text color */
+    border: none; /* Remove border for active button */
+}
+
+.filter-button.active::after {
+    content: "";
+    position: absolute;
+    right: 10px; /* Distance for the dot */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #00cc00; /* Green dot for active state */
+    border-radius: 50%;
+}
+
+
+/* Card Container */
+
+.card-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Space between cards */
+}
+
+.date-group {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.date-header {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    /* border-bottom: 1px solid #ccc; */
+    padding-bottom: 5px;
+    line-height: 1.5;
+}
+
+.date-header span {
+    margin: 0 5px; /* Spacing between individual elements */
+}
+
+.date-header .vendor {
+    font-weight: bold; /* Bold text for emphasis */
+    color: red; 
+}
+
+.date-header .location {
+    font-weight: bold;
+    color: red; 
+}
+
+.date-header .date {
+    font-weight: bold;
+    color: red; 
+}
+
+.requests {
+    color: red;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.cards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 10px;
+}
+
+.filters1 {
+    display: flex;
+    align-items: center;
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative; /* Make it the reference point for absolute positioning */
+    cursor: pointer;
+}
+.dropdown {
+    position: absolute;
+    top: 10%; /* Position the dropdown directly below the filter icon */
+    right: 50px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 200px;
+    border-radius: 5px;
+    margin-top: 150px; /* Add a slight gap between the filter and the dropdown */
+    display: block; /* Ensure it's visible */
+    height: 200px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    color: #000;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+
+.filter-icon1 {
+    margin-right: 10px;
+    cursor: pointer;
+    color: red;
+}
+
+/* Card Header */
+.card-header {
+    background: #f7f7f7;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header .card-column {
+    flex: 1;
+    text-align: center;
+    color: #333;
+    font-size: 20px;
+}
+
+/* Request Cards */
+.request-card {
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.card-column1 {
+    flex: 1; /* Equal width for all columns */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: #000;
+    font-size: 19px;
+}
+
+/* Product Info */
+.product-info {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    gap: 10px; /* Space between name and quantity */
+    flex-wrap: nowrap; /* Prevent wrapping to the next line */
+    color: #000;
+}
+
+/* Category Styles */
+.category {
+    background: #fff;
+    color: red;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 16px;
+    border: 1px solid red;
+}
+
+
+/* Data Styles */
+.card-label {
+    font-weight: bold;
+    color: #000;
+}
+
+.category {
+    background: #fff;
+    color: red;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 16px;
+    border: 1px solid red;
+}
+
+/* Status Styles */
+.status.approved {
+    color: green;
+    font-weight: bold;
+}
+
+.status.pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.status.rejected {
+    color: red;
+    font-weight: bold;
+}
+
+/* Buttons */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+}
+
+.action-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+}
+
+.action-button.approve {
+    background: green;
+    color: #fff;
+    font-weight: bold;
+    margin-right: 10px; /* Space between buttons */
+}
+
+.action-button.reject {
+    background: red;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Base Styles (already applied above) */
+
+/* For smaller laptops (1024px - 1280px) */
+@media (min-width: 1024px) and (max-width: 1280px) {
+    .main-content {
+        margin-left: 150px; /* Reduce left margin for smaller screens */
+        padding: 15px;
+    }
+    .header1 h1 {
+        font-size: 24px; /* Adjust font size for smaller screens */
+    }
+    .date-header{
+        font-size: 18px;
+    }
+    .search-bar1 {
+        width: 180px; /* Reduce width for smaller screens */
+        font-size: 12px;
+        
+    }
+    .filter-button {
+        font-size: 16px; /* Adjust font size for smaller buttons */
+        padding: 6px 15px; /* Reduce padding */
+    }
+    .card-header .card-column {
+        font-size: 16px; /* Reduce font size in card headers */
+    }
+    .product-info {
+        gap: 8px; /* Reduce spacing between items */
+    }
+    .action-button {
+        font-size: 14px; /* Adjust button font size */
+        padding: 4px 8px; /* Reduce padding */
+    }
+}
+
+/* For medium laptops (1281px - 1440px) */
+@media (min-width: 1281px) and (max-width: 1440px) {
+    .main-content {
+        margin-left: 150px; /* Slightly reduced margin */
+    }
+    .header1 h1 {
+        font-size: 26px; /* Slightly smaller font size */
+    }
+    .search-bar1 {
+        width: 200px; /* Default size for this range */
+        
+    }
+    .filter-button {
+        font-size: 18px; /* Medium size for buttons */
+        padding: 8px 20px; /* Balanced padding */
+    }
+}
+
+/* For larger laptops (1441px and up) */
+@media (min-width: 1441px) {
+    .main-content {
+        margin-left: 150px; /* Full margin for larger screens */
+    }
+    .header1 h1 {
+        font-size: 30px; /* Default size */
+    }
+    .search-bar1 {
+        width: 250px; /* Larger input for wider screens */
+       
+    }
+    .filter-button {
+        font-size: 20px; /* Default button size */
+        padding: 8px 25px; /* Default padding */
+    }
+    .product-info {
+        gap: 12px; /* Slightly larger spacing */
+    }
+    .action-button {
+        font-size: 16px; /* Default button font size */
+        padding: 6px 12px; /* Default padding */
+    }
+}
+

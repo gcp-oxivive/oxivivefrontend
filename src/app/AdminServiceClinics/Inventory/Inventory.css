@@ -1,0 +1,450 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+  }
+  
+  .inventory-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  
+
+  .main-content1 {
+    flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  margin-left: 150px;
+  height: 100vh;
+  overflow-y: auto;
+  }
+  
+  /* Header */
+  .header3 {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers the content horizontally */
+    /* padding: 20px; */
+    position: relative; /* Enables positioning for children */
+  }
+  
+  .header h1 {
+    font-size: 30px;
+    color: red;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* Centers the `h1` element */
+    margin: 0; /* Removes default margin */
+    font-weight: bold;
+  }
+  
+  .search-bar3 {
+    padding: 8px;
+    width: 200px;
+    border-radius: 10px;
+    border: 1px solid red;
+    font-size: 14px;
+    color: red;
+    margin-left: auto;
+  }
+  
+  .search-bar3:focus {
+    border-color: red;
+    color: red;
+    outline: none;
+  }
+  
+  .search-bar3::placeholder {
+    color: red;
+  }
+  
+  
+  /* Summary Cards */
+  .summary-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    color: #333;
+    width: 700px;
+  }
+  
+  .card1 {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    flex: 1;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* .card.highlighted {
+    border-color: red;
+  } */
+  
+  .card1 .count {
+    font-size: 24px;
+    font-weight: bold;
+    color: red;
+  }
+  
+  /* Content Section */
+  .content-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  /* Inventory Table */
+  .inventory-table {
+    width: 70%;
+  }
+  
+  .inventory-table table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    color: #333;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inventory-table th,
+  .inventory-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  /* Side Panel (Categories and Stock Numbers) */
+  .side-panel {
+    width: 28%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Categories */
+  .categories {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    color: #333;
+    border: 1px solid #ddd;
+    position: relative;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .categories h2 {
+    margin: 0;
+    font-size: 18px;
+    display: inline-block; /* Ensures it aligns next to the button */
+  }
+  
+  
+  
+  .icons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for 2 items per row */
+    gap: 10px; /* Space between items */
+    margin-top: 10px;
+    max-height: 130px; /* Set the maximum height to show only two rows of items */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: none; /* Hide the scrollbar for modern browsers */
+  }
+  
+  .icons-grid::-webkit-scrollbar {
+    display: none; /* Hide the scrollbar for WebKit-based browsers */
+  }
+  
+  .category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 150px; /* Set a fixed width for consistent layout */
+    /* box-sizing: border-box;  */
+  }
+  
+  .category-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .category-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .category-item p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin: 0;
+  }
+  
+  
+  
+  .icon {
+    width: 90px;
+    height: 50px;
+    background: #ebeaea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+  }
+  
+  .add-items {
+    background: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 20px auto 0; /* Centers the button horizontally */
+    display: block; /* Ensures it occupies the full width for centering */
+    text-align: center;
+    border-radius: 20px;
+  }
+  
+  
+  /* Stock Numbers */
+  .stock-numbers {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    color: #333;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stock-numbers h2 {
+    margin-bottom: 15px; /* Adds space below the heading */
+    font-size: 22px;
+  }
+  
+  .stock-numbers p {
+    margin: 10px 0; /* Adds space between each line of text */
+    display: flex;
+    justify-content: space-between; /* Aligns text and numbers with space in between */
+  }
+  
+  .stock-numbers .highlight {
+    font-weight: bold; /* Highlights the numbers */
+    color: #555; /* Optional: Different color for the numbers */
+  }
+  
+  
+ /* Popup Styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: #333;
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .popup-content h2 {
+    margin: 0 0 20px;
+    color: red;
+    text-align: center;
+  }
+  
+  .popup-content label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .input-field.upload-field {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid red; /* Default border */
+    padding: 8px;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+    padding-bottom: 20px;
+    height: 40px;
+  }
+  
+  .camera-plus-icon {
+    margin-right: 10px;
+    font-size: 1.5rem;
+    color: #666;
+  }
+  
+  .input-field.upload-field label {
+    display: flex;
+    align-items: center;
+    color: #333;
+    font-size: 14px;
+    color: #666;
+    margin-top: 20px;
+  }
+  
+  
+  
+  .popup-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    border-color: red;
+  }
+  .popup-content input:focus {
+    border-color: red;
+    outline: none;
+  }
+  
+  .popup-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .close-popup {
+    background: gray;
+    margin-top: 10px;
+  }
+  
+  
+  /* Media Queries for Smaller Laptop Screens (1024px - 1440px) */
+@media (max-width: 1440px) and (min-width: 1024px) {
+  .inventory-container {
+    flex-direction: column; /* Stack layout vertically */
+  }
+
+  .main-content1 {
+    margin-left: 150px; /* Remove side margin for smaller screens */
+    padding: 15px;
+  }
+
+  .content-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+
+  .side-panel {
+    width: 28%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .header h1 {
+    font-size: 24px; /* Reduce font size */
+  }
+
+  .search-bar2 {
+    width: 150px; /* Adjust width */
+    font-size: 12px;
+  }
+
+  
+
+  .card1 {
+    padding: 15px; /* Adjust padding */
+  }
+
+  .inventory-table {
+    width: 70%; /* Ensure table fits the screen */
+    font-size: 14px; /* Reduce table font size */
+  }
+
+  .categories {
+    padding: 15px; /* Reduce padding */
+  }
+
+  .icons-grid {
+    grid-template-columns: repeat(2, 1fr); /* Keep grid compact */
+    gap: 5px;
+  }
+
+  .category-item {
+    width: 130px;
+  }
+
+  .popup-content {
+    max-width: 80%; /* Expand popup width */
+  }
+}
+
+/* Media Queries for Larger Laptop Screens (1441px - 1920px) */
+@media (min-width: 1441px) and (max-width: 1920px) {
+  .inventory-container {
+    flex-direction: row; /* Maintain horizontal layout */
+  }
+
+  .main-content1 {
+    margin-left: 150px; /* Standard margin for larger screens */
+    padding: 20px;
+  }
+
+  .header h1 {
+    font-size: 30px; /* Maintain default font size */
+  }
+
+  .search-bar2 {
+    width: 200px; /* Maintain default width */
+    font-size: 14px;
+  }
+
+  .summary-cards {
+    flex-direction: row; /* Keep summary cards in a row */
+    gap: 20px; /* Maintain spacing */
+  }
+
+  .card1 {
+    padding: 20px; /* Default padding */
+  }
+
+  .inventory-table {
+    width: 70%; /* Standard table width */
+    font-size: 16px; /* Maintain table font size */
+  }
+
+  .categories {
+    padding: 20px; /* Standard padding */
+  }
+
+  .icons-grid {
+    grid-template-columns: repeat(3, 1fr); /* Increase grid columns */
+    gap: 10px;
+  }
+
+  .popup-content {
+    max-width: 400px; /* Standard popup width */
+  }
+}
