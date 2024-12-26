@@ -126,7 +126,7 @@ const SignupForm: React.FC = () => {
         formData.append('profile_photo', photoUrl);
 
         // Submit to your backend
-        const response = await axios.post('http://localhost:8000/usmapp/Oxi/', formData, {
+        const response = await axios.post('https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/Oxi/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

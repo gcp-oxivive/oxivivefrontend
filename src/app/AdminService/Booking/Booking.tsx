@@ -32,7 +32,7 @@ const Bookings: React.FC = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/bookingapp-bookingservice/?clinic=${selectedClinic}`
+          `https://usermanagementservice-69668940637.asia-east1.run.app/api/bookingapp-bookingservice/?clinic=${selectedClinic}`
         );
         if (!response.ok) {
           throw new Error('Failed to fetch bookings');

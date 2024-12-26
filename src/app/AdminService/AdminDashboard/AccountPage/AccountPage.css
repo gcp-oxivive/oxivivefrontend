@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f6f3f3;
   }
-/* Container styling for overall layout */
+
 .container1 {
     display: flex;
     height: 100vh;

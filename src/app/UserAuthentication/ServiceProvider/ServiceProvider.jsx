@@ -103,7 +103,7 @@ const ServiceProvider = () => {
     console.log('Request Data:', requestData); // Log request payload
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/usmapp/serviceprovider/', {
+        const response = await fetch('https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/serviceprovider/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

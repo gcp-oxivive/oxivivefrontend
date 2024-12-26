@@ -87,7 +87,7 @@ function LoginForm() {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/usmapp/login/', {
+      const response = await fetch('https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

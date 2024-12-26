@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const AccountPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
-  const [identifier, setIdentifier] = useState<string>(''); // This can be username or contact
+  const [identifier, setIdentifier] = useState<string>(''); 
   const [error, setError] = useState<string>('');
   const router = useRouter();
 
