@@ -34,7 +34,7 @@ const EditProfile = () => {
 
   const fetchUserData = async (oxiId) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/usmapp/usmapp-oxiusers/${oxiId}/`);
+      const response = await axios.get(`https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/usmapp-oxiusers/${oxiId}/`);
       console.log(response.data);
       if (response.status === 200) {
         const data = response.data;
@@ -102,7 +102,7 @@ const EditProfile = () => {
         formData.append('profile_photo', cloudinaryResult.secure_url);
       }
 
-      const response = await fetch(`http://localhost:8000/usmapp/usmapp-oxi/${oxiId}/`, {
+      const response = await fetch(`https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/usmapp-oxi/${oxiId}/`, {
         method: 'PATCH',
         credentials: 'include',
         body: formData, // Send FormData instead of JSON

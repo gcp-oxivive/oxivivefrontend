@@ -36,7 +36,7 @@ const InvoicePage: React.FC = () => {
     const fetchInvoices = async () => {
       try {
         const serviceTypeParam = 'Oxi Clinic'; // Always fetch "Oxi Clinic"
-        const response = await axios.get('http://localhost:8000/api/invoices/', {
+        const response = await axios.get('https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoices/', {
           params: { service_type: serviceTypeParam },
         });
         setInvoices(response.data);
@@ -104,7 +104,7 @@ const InvoicePage: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/invoices/', data, {
+      const response = await axios.post('https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoices/', data, {
         headers: {
           'Content-Type': 'application/json',
         },

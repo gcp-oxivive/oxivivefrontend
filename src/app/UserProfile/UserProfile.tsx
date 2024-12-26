@@ -42,7 +42,7 @@ const UserProfile = () => {
 
   const fetchUserData = async (oxiId: string | undefined) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/usmapp/usmapp-oxiusers/${oxiId}/`, {
+      const response = await axios.get(`https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/usmapp-oxiusers/${oxiId}/`, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true, // Equivalent to credentials: 'include' in fetch
       });

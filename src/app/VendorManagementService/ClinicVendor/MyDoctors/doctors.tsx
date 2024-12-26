@@ -86,7 +86,7 @@ const Doctors: React.FC = () => {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/doctors/list_doctors/?vendor=${vendorId}`);
+        const response = await fetch(`https://doctormanagementservice-69668940637.asia-east1.run.app/api/doctors/list_doctors/?vendor=${vendorId}`);
         if (response.ok) {
             const data = await response.json();
 
@@ -167,7 +167,7 @@ const Doctors: React.FC = () => {
 
         console.log('Payload to API:', doctorData);
 
-        const response = await fetch('http://127.0.0.1:8000/api/doctors/add_doctor/', {
+        const response = await fetch('https://doctormanagementservice-69668940637.asia-east1.run.app/api/doctors/add_doctor/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

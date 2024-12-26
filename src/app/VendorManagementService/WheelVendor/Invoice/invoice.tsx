@@ -42,11 +42,11 @@ const InvoicePage: React.FC = () => {
         // Conditionally fetch based on the selected tab
         let response;
         if (selectedTab === 'invoice') {
-          response = await axios.get('http://localhost:8000/api/invoices/', {
+          response = await axios.get('https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoices/', {
             params: { service_type: serviceTypeParam, date: todayString }, // Add date filter for today
           });
         } else if (selectedTab === 'history') {
-          response = await axios.get('http://localhost:8000/api/invoices/', {
+          response = await axios.get('https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoices/', {
             params: { service_type: serviceTypeParam },
           });
         }
@@ -114,7 +114,7 @@ const InvoicePage: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/invoices/', data, {
+      const response = await axios.post('https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoices/', data, {
         headers: {
           'Content-Type': 'application/json',
         },

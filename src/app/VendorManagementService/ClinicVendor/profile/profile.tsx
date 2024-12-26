@@ -38,7 +38,7 @@ const Profile: React.FC = () => {
     if (vendorId) {
       const fetchVendorData = async () => {
         try {
-          const response = await axios.get(`http://127.0.0.1:8001/api/vendorapp-vendordetails/${vendorId}/`);
+          const response = await axios.get(`https://clinicmanagementservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/${vendorId}/`);
           const fetchedSlots = response.data.available_slots;
           setProfileImage(response.data.profile_photo);
           setEmail(response.data.email);
@@ -182,7 +182,7 @@ const Profile: React.FC = () => {
   
       // Update vendor details via PATCH request
       const response = await axios.patch(
-        `http://127.0.0.1:8001/api/vendorapp-vendordetails/${vendorId}/`,
+        `https://clinicmanagementservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/${vendorId}/`,
         updatedData,
         {
           headers: {
@@ -196,7 +196,7 @@ const Profile: React.FC = () => {
   
         // Fetch the updated details from the server
         const updatedResponse = await axios.get(
-          `http://127.0.0.1:8001/api/vendorapp-vendordetails/${vendorId}/`
+          `https://clinicmanagementservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/${vendorId}/`
         );
   
         // Update the local state with the fetched details

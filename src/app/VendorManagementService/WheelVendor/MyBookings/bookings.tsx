@@ -67,7 +67,7 @@ const Bookings: React.FC = () => {
         console.log("Fetching bookings for date:", formattedDate); // Debug log
       }
   
-      const response = await axios.get("http://localhost:8002/api/my-bookings/", { params });
+      const response = await axios.get("https://bookingservice-69668940637.asia-east1.run.app/api/my-bookings/", { params });
       setAllBookings(response.data);
     } catch (error) {
       console.error("Error fetching bookings:", error);

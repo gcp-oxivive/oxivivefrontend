@@ -59,7 +59,7 @@ const Staff: React.FC = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/staff/list_wstaff/?vendor=${vendorId}`);
+      const response = await fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/staff/list_wstaff/?vendor=${vendorId}`);
       if (response.ok) {
         const data = await response.json();
         const formattedStaff = data.map((staff: any) => ({
@@ -153,7 +153,7 @@ const Staff: React.FC = () => {
         user_type: 'Wheel_staff', // Specify user_type dynamically
       };
   
-      const response = await fetch('http://127.0.0.1:8000/api/staff/add_staff/', {
+      const response = await fetch('https://drivermanagementservice-69668940637.asia-east1.run.app/api/staff/add_staff/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

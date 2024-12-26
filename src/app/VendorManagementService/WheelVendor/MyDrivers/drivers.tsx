@@ -51,7 +51,7 @@ const Drivers: React.FC = () => {
     }
   
     try {
-      const response = await fetch(`http://localhost:8000/api/drivers/?vendor_id=${vendorId}`);
+      const response = await fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/drivers/?vendor_id=${vendorId}`);
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched drivers:", data); // Log the fetched data for debugging
@@ -164,7 +164,7 @@ const Drivers: React.FC = () => {
       };
   
       // Send driver data to the backend
-      const response = await fetch('http://localhost:8000/api/drivers/', {
+      const response = await fetch('https://drivermanagementservice-69668940637.asia-east1.run.app/api/drivers/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
