@@ -19,7 +19,7 @@ const Inventorys = () => {
 
     const handleApproveButton = async (vendorId, productId) => {
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/inventoryapp_inventorydetails/", {
+            const response = await axios.post("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventoryapp_inventorydetails/", {
                 vendor_id: vendorId,
                 product_id: productId,
                 action: "approve",
@@ -45,7 +45,7 @@ const Inventorys = () => {
 
     const handleRejectButton = async (vendorId, productId) => {
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/inventoryapp_inventorydetails/", {
+            const response = await axios.post("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventoryapp_inventorydetails/", {
                 vendor_id: vendorId,
                 product_id: productId,
                 action: "reject",
@@ -72,7 +72,7 @@ const Inventorys = () => {
     useEffect(() => {
         const fetchInventoryData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/inventoryapp_inventorydetails/");
+                const response = await axios.get("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventoryapp_inventorydetails/");
                 const groupedData = response.data.reduce((acc, curr) => {
                     const { vendor_identifier, req_date } = curr;
                     const key = `${vendor_identifier}-${req_date}`; // Unique key for each vendor and date group

@@ -27,7 +27,7 @@ const Doctorlist: React.FC = () => {
           setLocation(state); // Set location in state
         }
   
-        const response = await fetch("http://127.0.0.1:8000/api/doctors/", {
+        const response = await fetch("https://adminservice-oxiviveclinic-69668940637.asia-east1.run.app/api/doctors/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

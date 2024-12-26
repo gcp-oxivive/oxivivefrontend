@@ -62,7 +62,7 @@ const CancelBooking = () => {
   const handleCancelBooking = async () => {
     try {
       // Send the booking `id` in the body to specify which booking to cancel
-      const response = await fetch(`http://127.0.0.1:8000/api/bookingapp-bookingservice/${user_id}/`, {
+      const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/bookingapp-bookingservice/${user_id}/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

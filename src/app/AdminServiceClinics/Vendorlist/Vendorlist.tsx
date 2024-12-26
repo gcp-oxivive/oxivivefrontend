@@ -24,7 +24,7 @@ const Vendorlist = () => {
 
     // Fetch vendors
     axios
-      .get("http://127.0.0.1:8000/api/adminservice-vendordetails/")
+      .get("https://adminservice-oxiviveclinic-69668940637.asia-east1.run.app/api/adminservice-vendordetails/")
       .then((response) => {
         const approvedVendors = response.data.filter(
           (vendor) => vendor.document_status === "approved"

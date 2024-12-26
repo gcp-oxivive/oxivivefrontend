@@ -29,7 +29,7 @@ const DriverList: React.FC = () => {
         }
   
         // Fetch drivers data based on location (state)
-        const response = await fetch("http://127.0.0.1:8000/api/drivers/", {
+        const response = await fetch("https://adminservice-oxiviveclinic-69668940637.asia-east1.run.app/api/drivers/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

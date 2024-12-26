@@ -41,7 +41,7 @@ const Manageservice: React.FC = () => {
   // Fetch services from the backend when the component mounts
   const fetchServices = async () => {
     try {
-      const response = await fetch('http://localhost:8001/api/manage-service/');
+      const response = await fetch('https://patientservice-69668940637.asia-east1.run.app/api/manage-service/');
       if (!response.ok) {
         throw new Error('Failed to fetch services');
       }
@@ -63,7 +63,7 @@ const Manageservice: React.FC = () => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:8001/api/manage-service/${service_id}/`, {
+      const response = await fetch(`https://patientservice-69668940637.asia-east1.run.app/api/manage-service/${service_id}/`, {
         method: "DELETE",
       });
 
@@ -145,7 +145,7 @@ const Manageservice: React.FC = () => {
         service_image: cloudinaryData.secure_url,
       };
 
-      const backendResponse = await fetch('http://localhost:8001/api/manage-service/create/', {
+      const backendResponse = await fetch('https://patientservice-69668940637.asia-east1.run.app/api/manage-service/create/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

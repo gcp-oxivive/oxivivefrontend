@@ -89,7 +89,7 @@ const Service: React.FC = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8001/api/services2/');
+        const response = await fetch('https://patientservice-69668940637.asia-east1.run.app/api/services2/');
         const data = await response.json();
         setServices(data); 
       } catch (error) {

@@ -24,7 +24,7 @@ const AccountPage: React.FC = () => {
       const payload = { email, identifier };
       console.log("Payload Sent to Backend:", payload);
   
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', payload);
+      const response = await axios.post('https://adminservice-69668940637.asia-east1.run.app/api/login/', payload);
   
       console.log("Response from Backend:", response.data);
   

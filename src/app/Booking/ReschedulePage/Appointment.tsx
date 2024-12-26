@@ -28,7 +28,7 @@ const Appointment = () => {
     if (vendorId) {
       const fetchAvailableSlots = async () => {
         try {
-          const response = await fetch(`http://127.0.0.1:8000/api/vendor-available-slots/${vendorId}/`);
+          const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/vendor-available-slots/${vendorId}/`);
           if (!response.ok) throw new Error("Failed to fetch available slots");
           const data = await response.json();
           console.log("Fetched available slots:", data.available_slots); // Debugging log
@@ -153,7 +153,7 @@ const Appointment = () => {
           console.log("Payload sent to API:", BookingData); // Debugging log
   
           try {
-            const response = await fetch(`http://127.0.0.1:8000/api/update-booking/`, {
+            const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/update-booking/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

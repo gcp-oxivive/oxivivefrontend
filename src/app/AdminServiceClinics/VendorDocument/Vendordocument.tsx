@@ -111,7 +111,7 @@ const Vendordocument: React.FC = () => {
     };
 
     axios
-      .post("http://localhost:8000/api/vendor-details/", formData)
+      .post("https://vendormanagementservice-69668940637.asia-east1.run.app/api/vendor-details/", formData)
       .then((response) => {
         console.log("Data saved successfully:", response.data);
         alert("Documents uploaded successfully!");

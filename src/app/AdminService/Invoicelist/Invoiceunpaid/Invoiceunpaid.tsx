@@ -32,7 +32,7 @@ const Invoiceunpaid: React.FC = () => {
 
   useEffect(() => {
     if (invoice_id) {
-      fetch(`http://127.0.0.1:8000/api/invoice-details/?invoice_id=${invoice_id}`)
+      fetch(`https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoice-details/?invoice_id=${invoice_id}`)
         .then((res) => res.json())
         .then((data) => setInvoiceData(data))
         .catch((err) => console.error("Error fetching invoice details:", err));
@@ -63,7 +63,7 @@ const Invoiceunpaid: React.FC = () => {
       handler: async (response: any) => {
         // Capture Razorpay payment_id and send it to the backend
         try {
-          const res = await fetch("http://127.0.0.1:8000/api/update-payment-status/", {
+          const res = await fetch("https://paymentandbillingservice-69668940637.asia-east1.run.app/api/update-payment-status/", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -104,7 +104,7 @@ const Invoiceunpaid: React.FC = () => {
       alert("Payment failed!");
       // Update backend on payment failure
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/update-payment-status/", {
+        const res = await fetch("https://paymentandbillingservice-69668940637.asia-east1.run.app/api/update-payment-status/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

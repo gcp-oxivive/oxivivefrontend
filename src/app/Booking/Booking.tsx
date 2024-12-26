@@ -34,7 +34,7 @@ const Booking = () => {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/bookingapp-bookingservice/${user_id}/`);
+                const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/bookingapp-bookingservice/${user_id}/`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Fetched bookings:', data);
@@ -60,7 +60,7 @@ const Booking = () => {
     useEffect(() => {
         const fetchMobileNumber = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/get-oxiuser-details/${oxi_id}/`);
+                const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/get-oxiuser-details/${oxi_id}/`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Fetched mobile number:', data);

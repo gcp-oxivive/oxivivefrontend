@@ -33,7 +33,7 @@ const Invoicedetails: React.FC = () => {
 
   useEffect(() => {
     if (invoice_id) {
-      fetch(`http://127.0.0.1:8000/api/invoice-details/?invoice_id=${invoice_id}`)
+      fetch(`https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoice-details/?invoice_id=${invoice_id}`)
         .then((response) => response.json())
         .then((data) => setInvoiceData(data))
         .catch((error) => console.error("Error fetching invoice details:", error));

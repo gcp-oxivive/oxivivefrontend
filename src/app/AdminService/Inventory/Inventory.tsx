@@ -20,7 +20,7 @@ const Inventory = () => {
 
   // Fetch existing inventory data from the backend
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/inventory/")
+    fetch("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventory/")
       .then((response) => response.json())
       .then((data) => {
         setInventory(data);
@@ -78,7 +78,7 @@ const Inventory = () => {
         product_image: imageUrl,
       };
 
-      const response = await fetch("http://127.0.0.1:8000/api/inventory/", {
+      const response = await fetch("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventory/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataToSend),
@@ -89,7 +89,7 @@ const Inventory = () => {
         alert(response.status === 200 ? "Product updated successfully!" : "Product added successfully!");
 
         // Fetch the updated inventory list
-        const updatedInventory = await fetch("http://127.0.0.1:8000/api/inventory/")
+        const updatedInventory = await fetch("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventory/")
           .then((res) => res.json())
           .catch((err) => {
             console.error("Error fetching updated inventory:", err);

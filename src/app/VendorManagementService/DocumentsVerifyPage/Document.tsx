@@ -191,7 +191,7 @@ const Document: React.FC = () => {
             return;
         }
         try {
-            const response = await axios.post("http://localhost:8000/api/vendor-details/", formDataToSend, {
+            const response = await axios.post("https://vendormanagementservice-69668940637.asia-east1.run.app/api/vendor-details/", formDataToSend, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             console.log(formDataToSend)

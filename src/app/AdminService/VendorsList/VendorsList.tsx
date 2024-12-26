@@ -61,7 +61,7 @@ const VendorsList: React.FC = () => {
   
     try {
       const response = await axios.get<Vendor[]>(
-        `http://127.0.0.1:8000/api/vendorapp-vendordetails/?city=${city}`
+        `https://adminservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/?city=${city}`
       );
       const vendorsData = response.data;
   

@@ -23,7 +23,7 @@ const Inventory: React.FC = () => {
       }
   
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/approved_inventorydetails/?vendor_id=${vendorId}`);
+        const response = await fetch(`https://inventorymanagementservice-69668940637.asia-east1.run.app/api/approved_inventorydetails/?vendor_id=${vendorId}`);
         if (response.ok) {
           const data = await response.json();
           setApprovedItems(data);
@@ -43,7 +43,7 @@ const Inventory: React.FC = () => {
   useEffect(() => {
     const fetchInventoryItems = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/fetchinventory/');
+        const response = await fetch('https://inventorymanagementservice-69668940637.asia-east1.run.app/api/fetchinventory/');
         if (response.ok) {
           const data = await response.json();
           setInventoryItems(data);
@@ -101,7 +101,7 @@ const Inventory: React.FC = () => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/iteminventory/save/', {
+      const response = await fetch('https://inventorymanagementservice-69668940637.asia-east1.run.app/api/iteminventory/save/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

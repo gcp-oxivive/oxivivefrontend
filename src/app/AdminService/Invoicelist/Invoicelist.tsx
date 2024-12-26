@@ -25,7 +25,7 @@ const InvoiceList: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/invoices/")
+    fetch("https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoices/")
       .then((response) => response.json())
       .then((data) => {
         setInvoices(data);

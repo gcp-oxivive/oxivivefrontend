@@ -35,7 +35,7 @@ const AdminDetails = () => {
 
   const handleApprove = async () => {
     try {
-      await fetch(`http://127.0.0.1:8000/api/vendorapp-vendordetails/`, {
+      await fetch(`https://adminservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'approved', email }),
@@ -50,7 +50,7 @@ const AdminDetails = () => {
 
   const handleReject = async () => {
     try {
-      await fetch(`http://127.0.0.1:8000/api/vendorapp-vendordetails/`, {
+      await fetch(`https://adminservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'rejected', email }),
