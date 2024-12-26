@@ -39,7 +39,7 @@ const ClinicSearch: React.FC = () => {
       setLoading(true); // Ensure loading state is set to true when fetching begins
       try {
         const response = await fetch(
-          `http://127.0.0.1:8003/api/user-vendor-details/?location=${encodeURIComponent(location || "")}`
+          `https://bookingservice-69668940637.asia-east1.run.app/api/user-vendor-details/?location=${encodeURIComponent(location || "")}`
         );
         if (!response.ok) throw new Error("Failed to fetch clinic data");
 
@@ -62,7 +62,7 @@ const ClinicSearch: React.FC = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://127.0.0.1:8002/api/user-search-vendor-details/?location=${encodeURIComponent(location || "")}&service=${encodeURIComponent(service || "")}`
+          `https://bookingservice-69668940637.asia-east1.run.app/api/user-search-vendor-details/?location=${encodeURIComponent(location || "")}&service=${encodeURIComponent(service || "")}`
         );
         if (!response.ok) throw new Error("Failed to fetch clinic data");
 
