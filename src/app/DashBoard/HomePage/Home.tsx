@@ -50,8 +50,13 @@ const Home: React.FC = () => {
     router.push(`/DashBoard/ClinicSearch?service=${encodeURIComponent(selectedService)}&location=${encodeURIComponent(location)}&oxi_id=${oxiId}`);
   };
   
-
-
+  const clearLocation = () => {
+    setLocation(''); // Clear the displayed location text
+    setQuery(''); // Clear the search query
+    setCurrentAddress(null); // Reset the current address
+  };
+  
+  
 
   const handleClinicClick = () => {
     setShowClinicEducate(true);
@@ -170,8 +175,19 @@ const Home: React.FC = () => {
             value={query || (currentAddress || '')}
             onFocus={() => setQuery('')} 
             onChange={handleInputChange}
+            
             className="search-input"
           />
+
+{query && (
+      <button 
+        onClick={clearLocation} 
+        className="clear-button" 
+        aria-label="Clear input"
+      >
+        ✕
+      </button>
+    )}
           <div className="notifications-container">
             <IoNotificationsOutline 
               size={26} 

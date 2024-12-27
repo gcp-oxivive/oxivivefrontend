@@ -128,7 +128,7 @@ const ClinicSearch: React.FC = () => {
         {/* Header */}
         <div className="search-bar3">
           <button className="back-button3" onClick={() => router.back()}>
-            <IoChevronBackSharp size={20} />
+            <IoChevronBackSharp size={20} className=" icon2" />
           </button>
           <input
             type="text"

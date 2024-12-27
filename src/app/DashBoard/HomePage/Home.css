@@ -113,7 +113,23 @@ body {
     opacity: 1; /* Ensures the color is fully opaque */
   }
   
-
+  
+  
+  .clear-button {
+    position: absolute;
+    right: 41px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #888;
+  }
+  
+  .clear-button:hover {
+    color: #000;
+  }
 
   .suggestions-list {
     position: absolute;
