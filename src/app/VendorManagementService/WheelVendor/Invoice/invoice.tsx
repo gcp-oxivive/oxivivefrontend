@@ -112,6 +112,7 @@ const InvoicePage: React.FC = () => {
       status: 'Unpaid',
       service_type: serviceType,
     };
+    console.log('data',data);
 
     try {
       const response = await axios.post('https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoices/', data, {
