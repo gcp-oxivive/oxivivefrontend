@@ -395,7 +395,7 @@ color: black;
   display: flex;
   justify-content: space-around;
   border-top: 1px solid #ccc;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   margin-left: px;
   
 }

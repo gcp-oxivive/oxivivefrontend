@@ -18,9 +18,10 @@ interface Driver {
 const Drivers: React.FC = () => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const searchParams=useSearchParams();
-  const vendorId = searchParams.get('vendorId');
+  const vendorId = searchParams.get('vendor_id');
   const [selectedFooter, setSelectedFooter] = useState('home');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [vendorIds, setvendorIds] = useState('');
   const [newDriver, setNewDriver] = useState({ name: '', email: '', phone: '', imageUrl: '',vendor: vendorId || '' });
   const router = useRouter();
 
@@ -28,14 +29,17 @@ const Drivers: React.FC = () => {
     fetchDrivers();
   }, []);
 
+  const urlVendorId = searchParams.get('vendor_id');
+  console.log('urlvendorId',urlVendorId);
+  
   useEffect(() => {
-    const urlVendorId = searchParams.get('vendorId');
     if (urlVendorId) {
       setNewDriver((prev) => ({ ...prev, vendor: urlVendorId }));
     } else {
       const storedVendorId = localStorage.getItem('vendor_id');
       if (storedVendorId) {
         setNewDriver((prev) => ({ ...prev, vendor: storedVendorId }));
+        
       }
     }
   }, [searchParams]);
@@ -51,7 +55,7 @@ const Drivers: React.FC = () => {
     }
   
     try {
-      const response = await fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/drivers/?vendor_id=${vendorId}`);
+      const response = await fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/drivers/?vendor_id=${urlVendorId}`);
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched drivers:", data); // Log the fetched data for debugging

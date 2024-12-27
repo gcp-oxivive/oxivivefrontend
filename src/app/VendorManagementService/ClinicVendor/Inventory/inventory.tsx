@@ -18,7 +18,7 @@ const Inventory: React.FC = () => {
   useEffect(() => {
     const fetchApprovedItems = async () => {
       try {
-        const response = await fetch('https://inventorymanagementservice-69668940637.asia-east1.run.app/api/approved_inventorydetails/');
+        const response = await fetch(`https://inventorymanagementservice-69668940637.asia-east1.run.app/api/approved_inventorydetails/?vendor_id=${vendorId}`);
         if (response.ok) {
           const data = await response.json();
           const filteredData = data.filter((item: any) => item.request_status === 'Approved');
