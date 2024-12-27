@@ -21,6 +21,7 @@ interface Booking {
     user_id: string;
     vendor_id: string;
     oxi_id: string;
+    service_price: string;
 }
 
 const Booking = () => {
@@ -79,13 +80,13 @@ const Booking = () => {
 
     const handleCardClick = (booking: Booking) => {
         if (activeTab === 'History') {
-            router.push(`/Booking/CompleteBooking?status=${booking.booking_status}&serviceType=${booking.service_type}&appointmentDate=${booking.appointment_date}&appointmentTime=${booking.appointment_time}&name=${booking.name}&location=${booking.address}&booking_id=${booking.booking_id}`);
+            router.push(`/Booking/CompleteBooking?status=${booking.booking_status}&serviceType=${booking.service_type}&appointmentDate=${booking.appointment_date}&appointmentTime=${booking.appointment_time}&name=${booking.name}&location=${booking.address}&booking_id=${booking.booking_id}&service_price=${booking.service_price}`);
         }
     };
 
     const handleCancelClick = (booking: Booking) => {
         localStorage.setItem('bookingData', JSON.stringify(booking));
-        router.push(`/Booking/CancelBooking?status=${booking.booking_status}&serviceType=${booking.service_type}&appointmentDate=${booking.appointment_date}&appointmentTime=${booking.appointment_time}&name=${booking.name}&location=${booking.address}&booking_id=${booking.booking_id}`);
+        router.push(`/Booking/CancelBooking?status=${booking.booking_status}&serviceType=${booking.service_type}&appointmentDate=${booking.appointment_date}&appointmentTime=${booking.appointment_time}&name=${booking.name}&location=${booking.address}&booking_id=${booking.booking_id}&service_price=${booking.service_price}`);
     };
 
     const handleRescheduleClick = (booking: Booking) => {
@@ -170,7 +171,7 @@ const Booking = () => {
                 {filteredBookings.length > 0 ? (
                     filteredBookings.map((booking) => (
                         <article key={booking.booking_id} className="booking-card" onClick={() => handleCardClick(booking)}>
-                            <p className="service-name1">{booking.service_type} <span className="price">₹149</span></p>
+                            <p className="service-name1">{booking.service_type} <span className="price">{booking.service_price}</span></p>
                             <p className="booking-address1">Address: {booking.address}</p>
                             <p className="booking-phone1">Phone: {userMobile}</p>
                             <p className="service-time">

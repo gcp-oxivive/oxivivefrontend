@@ -18,6 +18,7 @@ const CompleteBooking = () => {
   const appointmentTime = searchParams.get('appointmentTime');
   const providerName = searchParams.get('name');
   const providerLocation = searchParams.get('location');
+  const serviceprice = searchParams.get('service_price');
 
   const handleBackClick = () => {
     router.back();
@@ -34,7 +35,7 @@ const CompleteBooking = () => {
           <div>
             <p className="service-title">{serviceType}</p>
           </div>
-          <p className="service-price">$&nbsp;49</p>
+          {/* <p className="service-price">$&nbsp;49</p> */}
         </section>
         <section className="job-info">
           <div className="job-header">
@@ -64,9 +65,9 @@ const CompleteBooking = () => {
         </section>
         <section className="order-summary">
           <p className="summary-title">Order Summary</p>
-          <p className="summary-item">Subtotal <span>$156.00</span></p>
+          <p className="summary-item">Subtotal <span>{serviceprice}</span></p>
           <p className="summary-item">Est. Tax <span>$12.00</span></p>
-          <p className="summary-total">Total <span className="price"><FaDollarSign className="dollar-icon" />168</span></p>
+          <p className="summary-total">Total <span className="price"><FaDollarSign className="dollar-icon" />{serviceprice}</span></p>
           <p className="bill-info">We've sent a copy of this bill to your email id </p>
           <a href="mailto:support@rightjoy.com" className='support'>support@rightjoy.com</a>
         </section>

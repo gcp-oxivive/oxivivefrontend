@@ -19,7 +19,8 @@ const CancelBooking = () => {
   const appointmentTime = searchParams.get('appointmentTime') || 'N/A';
   const name = searchParams.get('name') || 'Tyrone Mitchell';
   const location = searchParams.get('location') || '1534 Single Street, USA';
-  const [bookingData, setSelectedData] = useState<{ service_type: string; address: string; name: string; user_id: string; booking_id: string; phone_number: string; email: string; } | null>(null);
+  const serviceprice = searchParams.get('service_price');
+  const [bookingData, setSelectedData] = useState<{ service_type: string; address: string; name: string; user_id: string; booking_id: string; phone_number: string; email: string; service_price: string; } | null>(null);
   useEffect(() => {
     const savedData = localStorage.getItem('bookingData');
     if (savedData) {
@@ -91,7 +92,7 @@ const CancelBooking = () => {
       <main className='cancel-booking-main-container'>
         <section className="cancel-booking-item">
           <h2>{serviceType}</h2>
-          <span className="cancel-booking-price"><FaRupeeSign />49</span>
+          {/* <span className="cancel-booking-price"><FaRupeeSign />49</span> */}
         </section>
 
         <div className="cancel-booking-details">
@@ -110,10 +111,10 @@ const CancelBooking = () => {
         <footer className="cancel-booking-footer">
           <h3>Order Summary</h3>
           <div className="cancel-booking-summary">
-            <p>Subtotal<span><FaRupeeSign />156.00</span></p>
+            <p>Subtotal<span><FaRupeeSign />{serviceprice}</span></p>
             <p>Est. Tax<span><FaRupeeSign />12.00</span></p>
           </div>
-          <p className='cancel-booking-total'>Total<span><FaRupeeSign />168.00</span></p>
+          <p className='cancel-booking-total'>Total<span><FaRupeeSign />{serviceprice}</span></p>
         </footer>
         <button className="cancel-booking-button" onClick={handleCancelBooking}>Cancel Booking</button>
       </main>
