@@ -16,14 +16,14 @@
   overflow-y: auto
 }
 
-.header {
+.header4 {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.location-btn {
+.location-btn2 {
   display: flex;
   align-items: center;
   padding: 5px 15px;
@@ -35,7 +35,7 @@
   cursor: pointer;
 }
 
-.location-btn .icon {
+.location-btn2 .icon {
   margin-right: 5px;
   color: #fff; /* Ensure the location icon matches the button color */
 }
@@ -149,38 +149,9 @@
   background-color: #fcfafa;
 }
 
-/* Global Icon Color */
-.icon {
-  color: #e60012; /* Set all icons to red globally */
-}
 
 
-.block-btn {
-  background-color: #fcfafa;
-  color: #000000;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.block-btn .icon {
-  margin-right: 5px;
-  color: #fff; /* Ensure the block icon matches the button text color */
-}
-
-.block-btn:hover {
-  background-color: #fcfafa;
-}
-
-/* Global Icon Color */
-.icon {
-  color: #e60012; /* Set all icons to red globally */
-}
 
 
 /* Responsive Styles for Laptop Screens Only */
@@ -189,7 +160,7 @@
     padding: 15px;
   }
 
-  .header {
+  .header4 {
     flex-direction: row;
     justify-content: space-between;
   }

@@ -108,7 +108,7 @@ body {
     border-radius: 5px;
   }
   
-  .icon {
+  .icon3 {
     color: #ff3b3b;
     margin-right: 8px;
   }
@@ -227,6 +227,14 @@ body {
   .usertypeSelect label:hover {
     color: #ff3b3b;
   }
+
+  .loadingSpinner {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+  }
+  
   
    
   

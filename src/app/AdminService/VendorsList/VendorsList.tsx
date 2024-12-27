@@ -32,7 +32,7 @@ const VendorsList: React.FC = () => {
     { name: "Kolkata", image: "/images/kolk.jpg" },
     { name: "Mumbai", image: "/images/mumbai.jpg" },
     { name: "Ahmedabad", image: "/images/ahd.jpg" },
-    { name: "All Cities", image: "/images/all cities.jpg" },
+    { name: "All Cities", image: "/images/allcities.jpg" },
   ];
 
   const handleCityClick = (city: string) => {

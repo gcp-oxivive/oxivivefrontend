@@ -245,11 +245,11 @@ body {
   font-size: 18px;
 }
 
-.icon {
+/* .icon {
   font-size: 16px;
   margin-right: 8px;
   color: #333;
-}
+} */
 
 .booking-status {
   font-size: 16px;
@@ -266,6 +266,11 @@ body {
 }
 
 .booking-status.upcoming {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.booking-status.completed {
   background-color: #d4edda;
   color: #155724;
 }

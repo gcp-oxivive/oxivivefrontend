@@ -74,7 +74,7 @@ const DriverList: React.FC = () => {
         <div className="header">
           {/* Location Button with dynamic location */}
           <button className="location-btn">
-            <i className="icon location-icon"></i> {location}
+            <i className="location"></i> {location}
           </button>
           {/* Search Input */}
           <input

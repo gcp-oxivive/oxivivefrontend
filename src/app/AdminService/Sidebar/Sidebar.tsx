@@ -14,7 +14,7 @@ const Sidebar = () => {
 
   // Prefetch critical routes when the component mounts
   useEffect(() => {
-    router.prefetch('/AdminService/');
+    router.prefetch('/AdminService/AdminDashboard/Dashboard');
     router.prefetch('/AdminService/Invoicelist');
     router.prefetch('/AdminService/Booking/');
     router.prefetch('/AdminService/AdminDashboard/');
@@ -41,8 +41,8 @@ const Sidebar = () => {
           <p>Super Admin</p>
         </div>
         <nav className="sidebar-icons">
-          <div className="sidebar-icon" data-name="Admin" >
-            <FaHome onClick={() => navigateWithPreload('/AdminService/')}/>
+          <div className="sidebar-icon" data-name="DashBoard" >
+            <FaHome onClick={() => navigateWithPreload('/AdminService/AdminDashboard/Dashboard')}/>
           </div>
           <div className="sidebar-icon" data-name="Invoice" >
             <FaCartPlus onClick={() => navigateWithPreload('/AdminService/Invoicelist')}/>

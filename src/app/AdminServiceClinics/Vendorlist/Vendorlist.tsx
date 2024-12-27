@@ -66,10 +66,10 @@ const Vendorlist = () => {
       <Sidebar />
       <div className="content">
         <h2 className="title">Vendors List</h2>
-        <div className="header">
+        <div className="header4">
           {/* Location Button with dynamic location */}
-          <button className="location-btn">
-            <i className="icon location-icon"></i> {location}
+          <button className="location-btn2">
+            <i className="location"></i> {location}
           </button>
           {/* Search Input */}
           <input
@@ -116,7 +116,7 @@ const Vendorlist = () => {
                     <td>{vendor.address}</td>
                     <td>
                       <button className="block-btn">
-                        <i className="icon block-icon"></i> Block
+                        <i className="block"></i> Block
                       </button>
                     </td>
                   </tr>

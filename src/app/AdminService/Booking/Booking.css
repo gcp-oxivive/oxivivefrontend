@@ -270,6 +270,11 @@ body {
   color: #155724;
 }
 
+.booking-status.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
 .booking-status.cancel {
   background-color: #f8d7da;
   color: #721c24;

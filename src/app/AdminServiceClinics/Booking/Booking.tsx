@@ -22,7 +22,7 @@ interface BookingsProps {
 
 const Bookings: React.FC<BookingsProps> = ({ userState }) => {
   const [selectedClinic, setSelectedClinic] = useState<string>('Oxi Clinic');
-  const [selectedStatus, setSelectedStatus] = useState<string>('upcoming');
+  const [selectedStatus, setSelectedStatus] = useState<string>('Completed');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -56,7 +56,7 @@ const Bookings: React.FC<BookingsProps> = ({ userState }) => {
     const clinicMatch = booking.service_type?.toLowerCase() === selectedClinic.toLowerCase();
     const statusMatch =
       selectedStatus === 'History'
-        ? booking.booking_status?.toLowerCase() === 'upcoming' ||
+        ? booking.booking_status?.toLowerCase() === 'completed' ||
           booking.booking_status?.toLowerCase() === 'cancel'
         : booking.booking_status?.toLowerCase() === selectedStatus.toLowerCase();
     return clinicMatch && statusMatch;
@@ -91,8 +91,8 @@ const Bookings: React.FC<BookingsProps> = ({ userState }) => {
         <div className="status-toggle-container">
           <div className="status-toggle">
             <button
-              className={selectedStatus === 'upcoming' ? 'active' : ''}
-              onClick={() => setSelectedStatus('upcoming')}
+              className={selectedStatus === 'Completed' ? 'active' : ''}
+              onClick={() => setSelectedStatus('Completed')}
             >
               Completed
             </button>
@@ -129,11 +129,11 @@ const Bookings: React.FC<BookingsProps> = ({ userState }) => {
                 </p>
                 <div className="booking-info">
                   <div className="booking-time">
-                    <FaClock className="icon" />
+                    <FaClock />
                     <span>Time: {booking.appointment_time}</span>
                   </div>
                   <div className="booking-location">
-                    <FaMapMarkerAlt className="icon" />
+                    <FaMapMarkerAlt  />
                     <span>Address: {booking.address}</span>
                   </div>
                   <p className="booking-name">Name: {booking.name}</p>

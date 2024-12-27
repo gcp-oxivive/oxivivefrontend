@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBookOpen, FaAmbulance, FaSignOutAlt, FaFileInvoice } from "react-icons/fa";
 import { IoPeople } from "react-icons/io5";
 import { MdSpaceDashboard, MdOutlineInventory } from "react-icons/md";
@@ -11,6 +11,22 @@ const Sidebar = () => {
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const router = useRouter();
 
+  // Prefetch critical routes on component mount
+  useEffect(() => {
+    router.prefetch('/AdminServiceClinics/Dashboard');
+    router.prefetch('/AdminServiceClinics/Booking');
+    router.prefetch('/AdminServiceClinics/Vendorlist');
+    router.prefetch('/AdminServiceClinics/Inventory');
+    router.prefetch('/AdminServiceClinics/Driverlist');
+    router.prefetch('/AdminServiceClinics/Doctorlist');
+    router.prefetch('/AdminServiceClinics/VendorDocument');
+    router.prefetch('/AdminService/AdminDashboard/AccountPage');
+  }, [router]);
+
+  const navigateWithPreload = (route) => {
+    router.push(route);
+  };
+
   const handleLogoutClick = () => {
     setShowLogoutPopup(true);
   };
@@ -21,7 +37,7 @@ const Sidebar = () => {
 
   const handleConfirmLogout = () => {
     console.log("User logged out");
-    router.push('/AdminService/AdminDashboard/AccountPage');
+    navigateWithPreload('/AdminService/AdminDashboard/AccountPage');
   };
 
   return (
@@ -36,62 +52,70 @@ const Sidebar = () => {
           <div
             className="sidebar-icon"
             data-name="Dashboard"
+            
           >
-            <MdSpaceDashboard onClick={() => router.push('/AdminServiceClinics/Dashboard')}/>
+            <MdSpaceDashboard onClick={() => navigateWithPreload('/AdminServiceClinics/Dashboard')}/>
           </div>
 
           {/* Booking List */}
           <div
             className="sidebar-icon"
             data-name="Bookinglist"
+            
           >
-            <FaBookOpen onClick={() => router.push('/AdminServiceClinics/Booking')}/>
+            <FaBookOpen onClick={() => navigateWithPreload('/AdminServiceClinics/Booking')}/>
           </div>
 
           {/* Vendor List */}
           <div
             className="sidebar-icon"
             data-name="Vendorlist"
+            
           >
-            <IoPeople onClick={() => router.push('/AdminServiceClinics/Vendorlist')}/>
+            <IoPeople onClick={() => navigateWithPreload('/AdminServiceClinics/Vendorlist')}/>
           </div>
 
           {/* Inventory */}
           <div
             className="sidebar-icon"
             data-name="Inventory"
+            
           >
-            <MdOutlineInventory onClick={() => router.push('/AdminServiceClinics/Inventory')}/>
+            <MdOutlineInventory onClick={() => navigateWithPreload('/AdminServiceClinics/Inventory')}/>
           </div>
 
           {/* Driver List */}
           <div
             className="sidebar-icon"
             data-name="Driverlist"
+            
           >
-            <FaAmbulance onClick={() => router.push('/AdminServiceClinics/Driverlist')}/>
+            <FaAmbulance onClick={() => navigateWithPreload('/AdminServiceClinics/Driverlist')}/>
           </div>
 
           {/* Doctor List */}
           <div
             className="sidebar-icon"
             data-name="Doctorlist"
+            
           >
-            <FaUserDoctor onClick={() => router.push('/AdminServiceClinics/Doctorlist')}/>
+            <FaUserDoctor onClick={() => navigateWithPreload('/AdminServiceClinics/Doctorlist')}/>
           </div>
 
           {/* Adding Vendor */}
           <div
             className="sidebar-icon"
             data-name="Adding Vendor"
+            
           >
-            <FaPersonCirclePlus onClick={() => router.push('/AdminServiceClinics/VendorDocument')}/>
+            <FaPersonCirclePlus onClick={() => navigateWithPreload('/AdminServiceClinics/VendorDocument')}/>
           </div>
 
           {/* Logout */}
           <div
             className="sidebar-icon logout-icon"
             data-name="Logout"
+            
           >
             <FaSignOutAlt onClick={handleLogoutClick}/>
           </div>

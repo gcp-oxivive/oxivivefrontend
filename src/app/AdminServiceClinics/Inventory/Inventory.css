@@ -31,7 +31,7 @@ body {
     position: relative; /* Enables positioning for children */
   }
   
-  .header h1 {
+  .header3 h1 {
     font-size: 30px;
     color: red;
     position: absolute;

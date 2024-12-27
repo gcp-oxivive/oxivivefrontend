@@ -1,40 +1,42 @@
 'use client';
 import React, { useState } from 'react';
 import './AccountPage.css';
-import { FaEnvelope} from 'react-icons/fa';
-import { FaLock } from "react-icons/fa";
+import { FaEnvelope } from 'react-icons/fa';
+import { FaLock } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const AccountPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
-  const [identifier, setIdentifier] = useState<string>(''); 
+  const [identifier, setIdentifier] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (!email || !identifier) {
       setError('Email and Identifier (Username/Contact) are required.');
       return;
     }
-  
+
     try {
+      setIsLoading(true); // Start loading
       const payload = { email, identifier };
       console.log("Payload Sent to Backend:", payload);
-  
+
       const response = await axios.post('https://adminservice-69668940637.asia-east1.run.app/api/login/', payload);
-  
+
       console.log("Response from Backend:", response.data);
-  
+
       if (response.data.success) {
         const { usertype, user } = response.data;
-  
+
         console.log("User Details Received:", user);
         console.log("Admin ID Passed:", user.admin_id);
         console.log("State Passed:", user.state);
-  
+
         // Save user details to localStorage
         localStorage.setItem('userDetails', JSON.stringify({
           usertype,
@@ -43,9 +45,9 @@ const AccountPage: React.FC = () => {
           admin_id: user.admin_id, // Add admin_id
           state: user.state,       // Add state here
         }));
-  
+
         console.log("Saved to LocalStorage:", localStorage.getItem('userDetails'));
-  
+
         const navigateTo = usertype === 'SuperAdmin'
           ? '/AdminService/AdminDashboard/Dashboard/'
           : '/AdminServiceClinics/Dashboard/';
@@ -57,11 +59,10 @@ const AccountPage: React.FC = () => {
     } catch (error) {
       console.error("An error occurred while logging in:", error);
       setError('An error occurred while logging in.');
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
-  
-  
-  
 
   return (
     <div className="container1">
@@ -82,7 +83,7 @@ const AccountPage: React.FC = () => {
           <h2 className="title">Log In to Your Account</h2>
           <form className="form" onSubmit={handleLogin}>
             <div className="inputGroup">
-              <FaEnvelope className="icon" />
+              <FaEnvelope className="icon3" />
               <input
                 type="email"
                 placeholder="Email"
@@ -92,7 +93,7 @@ const AccountPage: React.FC = () => {
               />
             </div>
             <div className="inputGroup">
-              <FaLock  className="icon" />
+              <FaLock className="icon3" />
               <input
                 type="text"
                 placeholder="Password"
@@ -101,9 +102,12 @@ const AccountPage: React.FC = () => {
                 onChange={(e) => setIdentifier(e.target.value)}
               />
             </div>
-            <button type="submit" className="signupButton">Log In</button>
+            <button type="submit" className="signupButton" disabled={isLoading}>
+              {isLoading ? 'Logging In...' : 'Log In'}
+            </button>
             {error && <p className="errorMessage">{error}</p>}
           </form>
+          {isLoading && <div className="loadingSpinner">Loading...</div>}
         </div>
       </div>
     </div>
