@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
     const oxiId = localStorage.getItem('oxi_id') || 'Unknown';
 
     if (icon === 'home') {
-      router.push('/');
+      router.push('/DashBoard/HomePage');
     } else if (icon === 'search') {
       router.push('/DashBoard/SearchPage');
     } else if (icon === 'appointments') {
