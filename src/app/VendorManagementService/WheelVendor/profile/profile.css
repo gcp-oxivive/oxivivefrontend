@@ -36,7 +36,7 @@ overflow-y: auto;
   position: absolute;
   top: 15px;
   right: 15px;
-  color: red;
+  color: #FC000E;
   font-size: 24px;
   cursor: pointer;
 }
@@ -47,7 +47,7 @@ overflow-y: auto;
 justify-content: center;
 align-items: center;
 position: relative;
-color: red;
+color: #FC000E;
 }
 
 .profile-title {
@@ -69,7 +69,7 @@ margin-right: 20px;
   left: 10px;
   font-size: 24px;
   cursor: pointer;
-  color: red;
+  color: #FC000E;
   margin-top: 15px;
 }
 
@@ -91,7 +91,7 @@ margin-bottom:px;
 .camera-icon {
 position: absolute;
 font-size: 25px;
-background-color: rgb(252, 6, 6);
+background-color: #FC000E;
 border-radius: 50%;
 padding: 5px;
 border: 1px solid #ccc;
@@ -123,7 +123,7 @@ margin-left: 10px;
 }
 .input-group input:focus {
   outline: none; /* Removes the default browser outline */
-  border-color: red; /* Changes the border to red */
+  border-color: #FC000E; /* Changes the border to red */
 } 
 .time-label-container {
   display: flex;
@@ -133,7 +133,7 @@ margin-left: 10px;
   margin-top: 10px;
 }
 .edit-time-button {
-  color: red;
+  color: #FC000E;
   background: transparent;
   border: none;
   font-size: 15px;
@@ -176,7 +176,7 @@ margin-left: 10px;
   right: 5px; /* Position the icon inside the input box */
   cursor: pointer;
   font-size: 16px; /* Adjust size as needed */
-  color: red;
+  color: #FC000E;
   background: none;
   border: none;
 }
@@ -185,7 +185,7 @@ margin-left: 10px;
 .clear-icon {
   position: absolute;
   cursor: pointer;
-  color: red;
+  color: #FC000E;
   margin-right: 15px;
 }
 .profile-image-wrapper, .oxi-upload-container {
@@ -290,7 +290,7 @@ color: black;
 .save-button3 {
   display: block;
   margin: 0 auto;
-  background-color: red;
+  background-color: #FC000E;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -304,7 +304,7 @@ color: black;
 .logout-button2{
   display: block;
   margin: 0 auto;
-  background-color: red;
+  background-color: #FC000E;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -411,7 +411,7 @@ color: black;
 }
 
 .footer-icon.selected {
-  color: red;
+  color: #FC000E;
 }
 
 .footer-icon span {

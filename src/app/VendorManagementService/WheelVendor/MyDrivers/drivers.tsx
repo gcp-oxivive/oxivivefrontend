@@ -17,6 +17,7 @@ interface Driver {
 
 const Drivers: React.FC = () => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const searchParams=useSearchParams();
   const vendorId = searchParams.get('vendor_id');
   const [selectedFooter, setSelectedFooter] = useState('home');
@@ -46,11 +47,13 @@ const Drivers: React.FC = () => {
   
 
   const fetchDrivers = async () => {
+    setIsLoading(true);
     const vendorId = newDriver.vendor; // Current vendor_id from state
     console.log("Vendor ID being used for fetching:", vendorId);
   
     if (!vendorId) {
       console.error("Vendor ID is missing. Cannot fetch drivers.");
+      setIsLoading(false);
       return;
     }
   
@@ -71,6 +74,8 @@ const Drivers: React.FC = () => {
       }
     } catch (error) {
       console.error("Error fetching drivers:", error);
+    }finally {
+      setIsLoading(false); // End loading
     }
   };
   
@@ -204,22 +209,27 @@ const Drivers: React.FC = () => {
         </button>
       </header>
 
-      <div className="driver-list">
-        <div className="driver-headings">
-          <p>Name</p>
-          <p>Phone no</p>
+      {isLoading ? (
+        <div className="spinner-container8">
+          <div className="spinner8"></div>
         </div>
-        
-        {drivers.map((driver) => (
-          <div key={driver.id} className="driver-card">
-            <img src={driver.imageUrl} alt={driver.name} className="driver-image" />
-            <div className="driver-info">
-              <p className="driver-name">{driver.name}</p>
-              <p className="driver-phone">{driver.phone}</p>
-            </div>
+      ) : (
+        <div className="driver-list">
+          <div className="driver-headings">
+            <p>Name</p>
+            <p>Phone no</p>
           </div>
-        ))}
-      </div>
+          {drivers.map((driver) => (
+            <div key={driver.id} className="driver-card">
+              <img src={driver.imageUrl} alt={driver.name} className="driver-image" />
+              <div className="driver-info">
+                <p className="driver-name">{driver.name}</p>
+                <p className="driver-phone">{driver.phone}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="drivers-footer">
         <div className={`footer-icon ${selectedFooter === 'home' ? 'selected' : ''}`} onClick={() => handleFooterClick('home')}>

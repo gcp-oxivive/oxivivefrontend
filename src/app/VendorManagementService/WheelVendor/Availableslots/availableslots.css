@@ -39,7 +39,7 @@ body {
   .arrow-icon {
     cursor: pointer;
     font-size: 24px; 
-    color: red; 
+    color: #FC000E; 
     margin-left: px;
     margin-bottom: 110px;
   margin-top:10px;
@@ -47,7 +47,7 @@ body {
   
   .header h2 {
     font-size: 30px;
-    color: red;
+    color: #FC000E;
     font-weight: bold;
     text-align: center;
     flex-grow: 1;
@@ -81,9 +81,9 @@ body {
   }
 
   .time-slot.selected {
-    background-color: red; /* Set background color for selected slots */
+    background-color: #FC000E; /* Set background color for selected slots */
     color: white; /* Text color for better contrast */
-    border: 2px solid red; /* Red border to match the theme */
+    border: 2px solid #FC000E; /* Red border to match the theme */
     font-size: 16px;
   }
   
@@ -92,7 +92,7 @@ body {
   }
   
   .edit-button {
-    background-color: red;
+    background-color:#FC000E;
     color: white;
     font-size: 14px;
     font-weight: bold;
@@ -110,5 +110,5 @@ body {
   
   .time-slot.selected {
     background-color:white;
-    color: red;
+    color: #FC000E;
   }
