@@ -79,35 +79,44 @@ const ClinicSearch: React.FC = () => {
   }, [location, service]);
 
   useEffect(() => {
-    const calculateDistances = () => {
+    const calculateDistances = async () => {
       if (!userLocation || clinics.length === 0) return;
-
+  
       const service = new window.google.maps.DistanceMatrixService();
-
-      const clinicAddresses = clinics.map((clinic) => clinic.address);
-      service.getDistanceMatrix(
-        {
-          origins: [{ lat: userLocation.lat, lng: userLocation.lng }],
-          destinations: clinicAddresses,
-          travelMode: window.google.maps.TravelMode.DRIVING,
-        },
-        (response: { rows: { elements: any[] }[] }, status: string) => {
-          if (status === "OK") {
-            const distancesArray = response.rows[0].elements.map((element) =>
-              element.status === "OK" ? element.distance.text : "Distance unavailable"
-            );
-            setDistances(distancesArray);
-          } else {
-            console.error("Error fetching distance matrix:", status);
+      const batchSize = 10; // Process clinics in batches of 10
+  
+      for (let i = 0; i < clinics.length; i += batchSize) {
+        const batch = clinics.slice(i, i + batchSize).map((clinic) => clinic.address);
+  
+        service.getDistanceMatrix(
+          {
+            origins: [{ lat: userLocation.lat, lng: userLocation.lng }],
+            destinations: batch,
+            travelMode: window.google.maps.TravelMode.DRIVING,
+          },
+          (response: google.maps.DistanceMatrixResponse, status: google.maps.DistanceMatrixStatus) => {
+            if (status === "OK") {
+              const distancesArray = response.rows[0].elements.map((element) =>
+                element.status === "OK" ? element.distance.text : "Distance unavailable"
+              );
+  
+              setDistances((prevDistances) => [
+                ...prevDistances,
+                ...distancesArray,
+              ]);
+            } else {
+              console.error("Error fetching distance matrix:", status);
+            }
           }
-        }
-      );
+        );
+      }
     };
-
+  
     if (window.google && window.google.maps) {
       calculateDistances();
     }
   }, [userLocation, clinics]);
+  
 
   const handleCardClick = (vendorId: string, selectedService: string) => {
     const oxiId = localStorage.getItem("oxi_id");

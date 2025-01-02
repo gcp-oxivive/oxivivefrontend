@@ -164,6 +164,9 @@ body {
   width: 5px; /* Width of the scrollbar */
 }
 
+.profile-menu-list::-webkit-scrollbar {
+  display: none;
+ }
 .profile-menu-list::-webkit-scrollbar-thumb {
   background-color: #c4c4c4; /* Color of the scrollbar thumb */
   border-radius: 10px; /* Rounded scrollbar thumb */
