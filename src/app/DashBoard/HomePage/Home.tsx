@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , Suspense} from 'react';
 import './Home.css';
 import { useRouter } from 'next/navigation';
 import { FaMapMarkerAlt } from 'react-icons/fa';
@@ -9,8 +9,10 @@ import { PiAmbulanceLight } from 'react-icons/pi';
 import { BiClinic } from 'react-icons/bi';
 import { MdSportsGymnastics } from 'react-icons/md';
 import { BsPerson } from 'react-icons/bs';
-import SliderComponent from './SliderComponent';
-import Footer from './Footer';
+// Lazy load the SliderComponent and Footer to optimize loading
+const SliderComponent = React.lazy(() => import('./SliderComponent'));
+const Footer = React.lazy(() => import('./Footer'));
+
 
 const API_KEY = "AIzaSyCMsV0WQ7v8ra-2e7qRXVnDr7j0vOoOcWM";
 
@@ -81,16 +83,20 @@ const Home: React.FC = () => {
   
 
   useEffect(() => {
+    // Non-blocking geolocation fetching
+    const geoSuccess = (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords;
+      const location = { lat: latitude, lng: longitude };
+      setCurrentLocation(location);
+      fetchAddress(location);
+    };
+
+    const geoError = (error: GeolocationPositionError) => {
+      console.error('Error obtaining location:', error);
+    };
+
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const location = { lat: latitude, lng: longitude };
-          setCurrentLocation(location);
-          fetchAddress(location);
-        },
-        (error) => console.error('Error obtaining location:', error)
-      );
+      navigator.geolocation.getCurrentPosition(geoSuccess, geoError, { enableHighAccuracy: true });
     } else {
       console.error('Geolocation is not supported by this browser.');
     }
@@ -219,7 +225,9 @@ const Home: React.FC = () => {
 
       <div className="scrollable-content" >
       {/* Promotion Slider */}
-      <SliderComponent />
+      <Suspense fallback={<div>Loading Slider...</div>}>
+          <SliderComponent />
+        </Suspense>
 
       {/* Service Section */}
       <div className="service-section">
@@ -288,9 +296,11 @@ const Home: React.FC = () => {
         </div>
       )}
         </div>
+        <Suspense fallback={<div>Loading Footer...</div>}>
 
       {/* Footer Section */}
       <Footer />
+      </Suspense>
     </div>
   );
 };

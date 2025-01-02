@@ -23,7 +23,8 @@ interface Booking {
 
 const Booking = () => {
     const [bookings, setBookings] = useState<Booking[]>([]);
-    const [activeTab, setActiveTab] = useState('MyBooking'); 
+    const [activeTab, setActiveTab] = useState('MyBooking');
+    const [loading, setLoading] = useState(true); // New loading state
     const router = useRouter();
     const searchParams = useSearchParams();
     const user_id = searchParams.get('oxi_id');
@@ -32,11 +33,12 @@ const Booking = () => {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
+                setLoading(true); // Start loading
                 const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/bookingapp-bookingservice/${user_id}/`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Fetched bookings:', data);
-
+    
                     const updatedBookings = data.map((booking: Booking) => ({
                         ...booking,
                         booking_status: booking.booking_status.toLowerCase() === 'cancel' ? 'cancelled' : booking.booking_status,
@@ -47,11 +49,14 @@ const Booking = () => {
                 }
             } catch (error) {
                 console.error('Error fetching booking data:', error);
+            } finally {
+                setLoading(false); // End loading
             }
         };
-
+    
         fetchBookings();
     }, [user_id]);
+    
 
     const [userMobile, setUserMobile] = useState<string>('N/A');
 
@@ -146,7 +151,11 @@ const Booking = () => {
                 <button className={`tab ${activeTab === 'History' ? 'active' : ''}`} onClick={() => setActiveTab('History')}>History</button>
             </div>
             <section className="booking-list">
-                {filteredBookings.length > 0 ? (
+                {loading ? (
+                    <div className="spinner-overlay">
+                    <div className="spinner"></div>
+                </div>
+                ) : filteredBookings.length > 0 ? (
                     filteredBookings.map((booking) => (
                         <article key={booking.booking_id} className="booking-card" onClick={() => handleCardClick(booking)}>
                             <p className="service-name1">{booking.service_type} <span className="price">{booking.service_price}</span></p>
