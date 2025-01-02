@@ -184,31 +184,29 @@ const Bookings: React.FC = () => {
 
       <div className="gray-section0">
         {loading ? (
-          <p>Loading bookings...</p>
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
         ) : filteredBookings.length > 0 ? (
           filteredBookings.map((booking, index) => (
             <div className="booking-card" key={index}>
-    {/* Header Section: Name and Status */}
-    <div className="header-section">
-        <h3 className="booking-service">{booking.name}</h3> {/* Display user name */}
-        <div className="status-section">
-            <span className="status">{booking.booking_status}</span>
-        </div>
-    </div>
-
-    {/* Address Section: Address and Date-Time */}
-    <div className="user-details-section">
-    <p className="email">Email: {booking.email}</p>
-    <p className="phone-number">Phone: {booking.phone_number}</p>
-        <div className="date-time">
-            <span className="date">{booking.appointment_date}</span>
-            <span className="time">
-                <FontAwesomeIcon icon={faClock} className="time-icon" /> {booking.appointment_time}
-            </span>
-        </div>
-    </div>
-</div>
-
+              <div className="header-section">
+                <h3 className="booking-service">{booking.name}</h3>
+                <div className="status-section">
+                  <span className="status">{booking.booking_status}</span>
+                </div>
+              </div>
+              <div className="user-details-section">
+                <p className="email">Email: {booking.email}</p>
+                <p className="phone-number">Phone: {booking.phone_number}</p>
+                <div className="date-time">
+                  <span className="date">{booking.appointment_date}</span>
+                  <span className="time">
+                    <FontAwesomeIcon icon={faClock} className="time-icon" /> {booking.appointment_time}
+                  </span>
+                </div>
+              </div>
+            </div>
           ))
         ) : (
           <p>No bookings found.</p>

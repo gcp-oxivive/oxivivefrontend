@@ -17,6 +17,7 @@ interface Doctor {
 
 const Doctors: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const searchParams=useSearchParams();
   const vendorId = searchParams.get('vendorId');
   
@@ -84,6 +85,7 @@ const Doctors: React.FC = () => {
         router.push('/login'); // Redirect to login if vendor_id is missing
         return;
     }
+    setIsLoading(true);
 
     try {
         const response = await fetch(`https://doctormanagementservice-69668940637.asia-east1.run.app/api/doctors/list_doctors/?vendor=${vendorId}`);
@@ -107,6 +109,8 @@ const Doctors: React.FC = () => {
         }
     } catch (error) {
         console.error("Error fetching doctors:", error);
+    }finally {
+      setIsLoading(false); // Hide spinner
     }
 };
 
@@ -232,20 +236,24 @@ const Doctors: React.FC = () => {
         <p>Phone no</p>
     </div>
     
-    {doctors.length === 0 ? (
-        <p className="no-data-message">No doctors available for this vendor.</p> // Show this when no doctors
-    ) : (
-        doctors.map((doctor) => (
+    {isLoading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
+        ) : doctors.length === 0 ? (
+          <p className="no-data-message">No doctors available for this vendor.</p>
+        ) : (
+          doctors.map((doctor) => (
             <div key={doctor.id} className="doctor-card">
-                <img src={doctor.imageUrl} alt={doctor.name} className="doctor-image" />
-                <div className="doctor-info">
-                    <p className="doctor-name">{doctor.name}</p>
-                    <p className="doctor-phone">{doctor.phone}</p>
-                </div>
+              <img src={doctor.imageUrl} alt={doctor.name} className="doctor-image" />
+              <div className="doctor-info">
+                <p className="doctor-name">{doctor.name}</p>
+                <p className="doctor-phone">{doctor.phone}</p>
+              </div>
             </div>
-        ))
-    )}
-</div>
+          ))
+        )}
+      </div>
 
 
       <div className="doctors-footer">

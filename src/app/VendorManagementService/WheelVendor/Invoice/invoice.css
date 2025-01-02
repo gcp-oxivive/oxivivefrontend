@@ -46,7 +46,7 @@ body {
     border: none;
     padding: 0;
     cursor: pointer;
-    color: red;
+    color: #FC000E;
     margin-left: 15px;
     margin-top: 15px;
     font-size: 26px;
@@ -57,7 +57,7 @@ body {
     flex-grow: 1;
     font-size: 26px;
     font-weight: bold;
-    color: red;
+    color: #FC000E;
     margin-top: 20px;
     margin-right: 30px;
   }
@@ -66,7 +66,7 @@ body {
     display: flex;
     justify-content: space-around;
     margin: 20px;
-    color: red;
+    color: #FC000E;
     text-decoration: underline;
   }
   
@@ -80,7 +80,7 @@ body {
   }
   .tab.active {
   font-weight: bold; /* Make the active tab text bold */
-  color: red; /* Adjust the color for active tab (optional) */
+  color:#FC000E; /* Adjust the color for active tab (optional) */
   text-decoration: underline;
   }
   
@@ -91,7 +91,7 @@ body {
     left: 0;
     right: 0;
     height: 2px;
-    background-color: red;
+    background-color: #FC000E;
   }
   
   .cards0 {
@@ -113,7 +113,7 @@ body {
     display: none; /* For Webkit browsers (Chrome, Safari) */
   }
   .new-invoice-buttons {
-    background-color: #ff0004;
+    background-color: #FC000E;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -173,15 +173,15 @@ body {
   }
   
   .paid {
-    background-color: green;
+    background-color: #34C759;
   }
   
   .unpaid {
-    background-color: red;
+    background-color: #FC000E;
   }
   
   .new-invoice-buttons {
-    background-color: red;
+    background-color: #FC000E;
     color: white;
     border: none;
     padding: 13px;
@@ -218,7 +218,7 @@ body {
   }
 
   .modal-content h2 {
-    color: red;
+    color: #FC000E;
     text-align: center;
     font-weight: bold;
   }
@@ -257,7 +257,7 @@ body {
   }
   
   .add-item-button {
-    background-color: #ff0004;
+    background-color: #FC000E;
     color: white;
     padding: 10px;
     border: none;
@@ -268,7 +268,7 @@ body {
   }
 
   .raise-claim-button {
-    background-color: red;
+    background-color: #FC000E;
     color: white;
     padding: 10px;
     border: none;
@@ -284,7 +284,7 @@ body {
   
 
   .save-button {
-    background-color: red;
+    background-color: #FC000E;
     color: white;
     padding: 10px;
     border: none;
@@ -348,7 +348,7 @@ body {
   padding: 5px 15px; /* Small padding for button */
   border-radius: 15px; /* Rounded corners */
   text-align: center; /* Center text */
-  background-color: red; /* Button color */
+  background-color: #FC000E; /* Button color */
   color: white; /* Text color */
   font-weight: bold; /* Bold text */
   text-transform: uppercase; /* Uppercase text */
@@ -376,7 +376,7 @@ body {
     margin-top: -10px;
     width: 30px;
     height: 30px;
-    background-color: red;
+    background-color: #FC000E;
     color: white;
     border: none;
     border-radius: 50%;
@@ -416,7 +416,7 @@ body {
   }
   
   .footer-icon.selected {
-    color: red;
+    color: #FC000E;
   }
   
   .footer-icon span {

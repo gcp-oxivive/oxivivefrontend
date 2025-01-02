@@ -17,6 +17,7 @@ interface Staff {
 
 const Staff: React.FC = () => {
   const [staff, setStaff] = useState<Staff[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const searchParams=useSearchParams();
   const vendorId = searchParams.get('vendorId');
   const [selectedFooter, setSelectedFooter] = useState('home');
@@ -80,6 +81,7 @@ const Staff: React.FC = () => {
   };
 
   const fetchStaff = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`https://doctormanagementservice-69668940637.asia-east1.run.app/api/staff/list_cstaff/?vendor=${vendorId}`);
       if (response.ok) {
@@ -96,6 +98,8 @@ const Staff: React.FC = () => {
       }
     } catch (error) {
       console.log('Error fetching staff:', error);
+    }finally {
+      setIsLoading(false); // Hide loader
     }
   };
 
@@ -192,15 +196,19 @@ const Staff: React.FC = () => {
           <p>Phone no</p>
         </div>
 
-        {staff.map((member) => (
-          <div key={member.id} className="staff-card">
-            <img src={member.imageUrl} alt={member.name} className="staff-image" />
-            <div className="staff-info">
-              <p className="staff-name">{member.name}</p>
-              <p className="staff-phone">{member.phone}</p>
+        {isLoading ? (
+          <div className="spinner"></div>
+        ) : (
+          staff.map((member) => (
+            <div key={member.id} className="staff-card">
+              <img src={member.imageUrl} alt={member.name} className="staff-image" />
+              <div className="staff-info">
+                <p className="staff-name">{member.name}</p>
+                <p className="staff-phone">{member.phone}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="staff-footer">

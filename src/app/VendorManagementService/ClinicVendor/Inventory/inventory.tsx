@@ -9,6 +9,7 @@ const Inventory: React.FC = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [approvedItems, setApprovedItems] = useState<any[]>([]);
   const [inventoryItems, setInventoryItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   // Fetch vendor_id from local storage
@@ -28,6 +29,8 @@ const Inventory: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching approved items:', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
       }
     };
 
@@ -47,6 +50,8 @@ const Inventory: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching inventory items:', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
       }
     };
 
@@ -130,9 +135,14 @@ const Inventory: React.FC = () => {
         />
         <h1>Inventory</h1>
       </header>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
 
       {/* Approved Items Section */}
-      {!showPopup && (
+      {!showPopup && !loading &&(
         <div className="approved-items-section">
           <h2>Approved Items</h2>
           <div className="approved-items">

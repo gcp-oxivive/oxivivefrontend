@@ -31,7 +31,7 @@ body.performance{
 .heading {
     display: flex;
     align-items: center;
-    color: red;
+    color: #FC000E;
     font-size: 24px;
     margin-left: 10px;
     font-weight: bold;
@@ -54,7 +54,7 @@ body.performance{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: red;
+    color: #FC000E;
     font-weight: bold;
     margin-left: px;
 }
@@ -95,9 +95,9 @@ body.performance{
   
 .week-day {
     font-size: 16px;
-    color: red;
+    color: #FC000E;
     font-weight: bold;
-    border: 2px solid #ef0808;
+    border: 2px solid #FC000E;
     padding: 10px;
     border-radius: 5px;
     width: 70px;
@@ -109,7 +109,7 @@ body.performance{
 }
 
 .week-day.selected {
-    background-color: red;
+    background-color: #FC000E;
     color: white;
 }
 
@@ -148,14 +148,14 @@ body.performance{
 .tab-item {
     padding: 0.5rem rem;
     cursor: pointer;
-    color: red;
+    color: #FC000E;
     position: relative;
     flex-grow: 1;
     text-align: center;
 }
 
 .tab-item.active {
-    color: red;
+    color: #FC000E;
     font-weight: bold;
     text-decoration: underline;
 }
@@ -182,7 +182,7 @@ body.performance{
     margin-bottom: 1rem;
 }
 .booking-card h3 {
-    color: red; /* Red text for Oxi Clinic and Oxi Wheel */
+    color: #FC000E; /* Red text for Oxi Clinic and Oxi Wheel */
     margin: 0;
     font-size: 20px;
     text-align: left;
@@ -203,12 +203,12 @@ body.performance{
 
 .status {
     background-color: #f7f7f7;
-    color: #0a9e2d;
+    color: #34C759;
     padding: 0.25rem 0.5rem;
     border-radius: 20px;
     font-size: 10px;
     margin-bottom: 0.5rem;
-    border: 2px solid #1dc143
+    border: 2px solid #34C759
 }
 .date-time {
     display: flex;
@@ -218,11 +218,11 @@ body.performance{
 }
 
 .date {
-    color: red;
+    color: #FC000E;
 }
 
 .time {
-    color: red;
+    color: #FC000E;
     display: flex;
     align-items: center;
 }
@@ -247,7 +247,7 @@ body.performance{
     text-align: center;
     border: 1px solid #ddd;
     margin-bottom: 1rem;
-    color: rgb(241, 8, 8);
+    color: #FC000E;
     width: 45%;
     font-weight: bold;
     margin-left: 100px;
@@ -292,7 +292,7 @@ body.performance{
 }
 
 .footer-icon.selected {
-    color: red;
+    color: #FC000E;
 }
 
 .footer-icon span {

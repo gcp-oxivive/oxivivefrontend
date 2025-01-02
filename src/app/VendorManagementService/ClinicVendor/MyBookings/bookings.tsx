@@ -241,7 +241,7 @@ const handleSendOtp = async () => {
 
       <div className="gray-section">
         {loading ? (
-          <p>Loading bookings...</p>
+          <div className="spinner0"></div>
         ) : filteredBookings.length > 0 ? (
           filteredBookings.map((booking, index) => (
             <div className="booking-card" key={index} onClick={() => handleCardClick(booking)}>

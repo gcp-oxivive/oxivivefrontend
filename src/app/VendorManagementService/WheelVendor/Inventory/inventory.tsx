@@ -9,6 +9,7 @@ const Inventory: React.FC = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [approvedItems, setApprovedItems] = useState<any[]>([]);
   const [inventoryItems, setInventoryItems] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   // Fetch vendor_id from local storage
@@ -21,7 +22,7 @@ const Inventory: React.FC = () => {
         console.error('Vendor ID not found. Please log in again.');
         return;
       }
-  
+      setIsLoading(true);
       try {
         const response = await fetch(`https://inventorymanagementservice-69668940637.asia-east1.run.app/api/approved_inventorydetails/?vendor_id=${vendorId}`);
         if (response.ok) {
@@ -32,6 +33,8 @@ const Inventory: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching approved items:', error);
+      }finally {
+        setIsLoading(false); // Stop loader
       }
     };
   
@@ -42,6 +45,7 @@ const Inventory: React.FC = () => {
   // Fetch inventory data when the popup is triggered
   useEffect(() => {
     const fetchInventoryItems = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch('https://inventorymanagementservice-69668940637.asia-east1.run.app/api/fetchinventory/');
         if (response.ok) {
@@ -52,6 +56,8 @@ const Inventory: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching inventory items:', error);
+      }finally {
+        setIsLoading(false); // Stop loader
       }
     };
 
@@ -135,9 +141,14 @@ const Inventory: React.FC = () => {
         />
         <h1>Inventory</h1>
       </header>
+      {isLoading && (
+        <div className="spinner-overlay">
+          <div className="spinner7"></div>
+        </div>
+      )}
 
       {/* Approved Items Section */}
-      {!showPopup && (
+      {!isLoading && !showPopup && (
         <div className="approved-items-section">
           <h2>Approved Items</h2>
           <div className="approved-items">

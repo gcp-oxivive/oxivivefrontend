@@ -14,6 +14,7 @@ const InvoicePage: React.FC = () => {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [savedItems, setSavedItems] = useState<{ id: number; name: string; price: string }[]>([]);
   const [vendorId, setVendorId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
   const router = useRouter();
@@ -42,6 +43,8 @@ const InvoicePage: React.FC = () => {
         setInvoices(response.data);
       } catch (error) {
         console.error('Error fetching invoices:', error);
+      }finally {
+        setLoading(false); // Set loading to false after data is fetched or error occurs
       }
     };
   
@@ -77,14 +80,35 @@ const InvoicePage: React.FC = () => {
   const handleItemChange = (id: number, field: string, value: string) =>
     setItems(items.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
 
+  const validateItems = (itemList: { name: string; price: string }[]) => {
+    return itemList.every((item) => item.name.trim() !== '' && item.price.trim() !== '');
+  };
+
   const handleSave = () => {
+    if (!validateItems(items)) {
+      alert('Please ensure all items have a name and price before saving.');
+      return;
+    }
     setSavedItems([...savedItems, ...items]);
     setItems([]);
   };
 
   const handleRaiseClaim = async () => {
+    const allItems = [...savedItems, ...items];
+    if (allItems.length === 0) {
+      alert('Please add at least one item before raising an invoice.');
+      return;
+    }
+    if (!validateItems(allItems)) {
+      alert('Please ensure all items have a name and price before raising an invoice.');
+      return;
+    }
     if (!vendorId) {
       alert('Vendor ID is not available. Please ensure it is set.');
+      return;
+    }
+    if (!validateItems(savedItems)) {
+      alert('Please ensure all saved items have a name and price before raising an invoice.');
       return;
     }
 
@@ -112,6 +136,7 @@ const InvoicePage: React.FC = () => {
 
       setInvoices((prevInvoices) => [...prevInvoices, response.data]);
       setSavedItems([]);
+      setItems([]);
       toggleModal();
       alert('Claim raised and data saved successfully!');
     } catch (error) {
@@ -143,29 +168,37 @@ const InvoicePage: React.FC = () => {
       {/* Invoice Cards */}
       <div className="new-invoice-card2">
         <div className="cards1">
-          {invoices.map((invoice) => {
-            const items = invoice.invoice_details ? invoice.invoice_details.split(',') : [];
-            const prices = invoice.invoice_price ? invoice.invoice_price.split(',') : [];
-            return (
-              <div key={invoice.invoice_id} className="invoice-card">
-                <div className="invoice-info">
-                  {items.map((item, index) => (
-                    <div key={index} className="item-row">
-                      <span className="item-name">{item}</span>
-                      <span className="item-price">Rs {prices[index] ? prices[index] : '0'}</span>
+          {loading ? (
+            <div className="spinner">
+              <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          ) : (
+            invoices.map((invoice) => {
+              const items = invoice.invoice_details ? invoice.invoice_details.split(',') : [];
+              const prices = invoice.invoice_price ? invoice.invoice_price.split(',') : [];
+              return (
+                <div key={invoice.invoice_id} className="invoice-card">
+                  <div className="invoice-info">
+                    {items.map((item, index) => (
+                      <div key={index} className="item-row">
+                        <span className="item-name">{item}</span>
+                        <span className="item-price">Rs {prices[index] ? prices[index] : '0'}</span>
+                      </div>
+                    ))}
+                    <div className="total-row">
+                      <span className="total-label">Total:</span>
+                      <span className="total-price">Rs {invoice.total || '0'}</span>
                     </div>
-                  ))}
-                  <div className="total-row">
-                    <span className="total-label">Total:</span>
-                    <span className="total-price">Rs {invoice.total || '0'}</span>
-                  </div>
-                  <div className={`status ${invoice.status ? invoice.status.toLowerCase() : ''}`}>
-                    {invoice.status || 'Unknown'}
+                    <div className={`status ${invoice.status ? invoice.status.toLowerCase() : ''}`}>
+                      {invoice.status || 'Unknown'}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
 
         <button className="new-invoice-button1" onClick={toggleModal}>

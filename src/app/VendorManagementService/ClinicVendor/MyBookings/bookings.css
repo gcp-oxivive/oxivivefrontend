@@ -43,13 +43,13 @@ height: 100vh;
     position: absolute;
     left: 1rem;
     cursor: pointer;
-    color: red;
+    color: #FC000E;
     font-size: 24px;
 }
 
 h1 {
     font-size: 24px;
-    color: red;
+    color: #FC000E;
     font-weight: bold;
 }
 
@@ -73,9 +73,9 @@ h1 {
 
 .week-day {
     font-size: 16px;
-    color: red;
+    color: #FC000E;
     font-weight: bold;
-    border: 2px solid #ef0808;
+    border: 2px solid #FC000E;
     padding: 10px;
     border-radius: 5px;
     width: 70px;
@@ -87,7 +87,7 @@ h1 {
 }
 
 .week-day.selected {
-    background-color: red;
+    background-color: #FC000E;
     color: white;
 }
 
@@ -116,14 +116,14 @@ h1 {
 
 .tab-item {
     cursor: pointer;
-    color: red;
+    color: #FC000E;
     position: relative;
     flex-grow: 1;
     text-align: center;
 }
 
 .tab-item.active {
-    color: red;
+    color: #FC000E;
     font-weight: bold;
     text-decoration: underline;
 }
@@ -145,7 +145,7 @@ h1 {
     display: none; /* For Webkit browsers (Chrome, Safari) */
   }
 p{
-    color: red;
+    color: #FC000E;
 }
 .booking-card {
     background-color: white;
@@ -164,7 +164,7 @@ p{
     cursor: pointer;
 }
 .booking-card h3 {
-    color: red; /* Red text for the heading */
+    color: #FC000E; /* Red text for the heading */
     margin: 0;
     font-size: 16px;
     font-weight: bold;
@@ -192,12 +192,12 @@ p{
 
 .status {
     background-color: #f7f7f7;
-    color: #0a9e2d;
+    color: #34C759;
     padding: 0.25rem 0.5rem;
     border-radius: 20px;
     font-size: 10px;
     margin-bottom: 0.5rem;
-    border: 2px solid #1dc143
+    border: 2px solid #34C759
 }
 
 .booking-card .email {
@@ -291,14 +291,14 @@ p{
 
 .popup-content h3 {
   margin-bottom: 20px;
-  color: red;
+  color: #FC000E;
 }
 
 .popup-content button {
   margin: 5px;
   padding: 10px 20px;
   border: none;
-  background-color: red;
+  background-color: #FC000E;
   color: white;
   border-radius: 5px;
   cursor: pointer;
@@ -306,7 +306,7 @@ p{
 }
 
 .popup-content button:hover {
-  background-color: red;
+  background-color: #FC000E;
 }
 
 /* Footer Styles */
@@ -333,7 +333,7 @@ p{
 }
 
 .footer-icon.selected {
-    color: red;
+    color: #FC000E;
 }
 
 .footer-icon span {
@@ -375,7 +375,7 @@ p{
       padding: 15px;
     }
     .week-day {
-      border: 2px solid #ff0000;
+      border: 2px solid #FC000E;
       padding: 12px;
       width: 75px;
     }
@@ -409,7 +409,7 @@ p{
       padding: 10px;
     }
     .week-day {
-      border: 2px solid #00ff00;
+      border: 2px solid #34C759;
       padding: 10px;
       width: 70px;
     }
@@ -432,5 +432,19 @@ p{
     .footer-icon {
       font-size: 22px;
     }
+  }
+  .spinner0 {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #FC000E;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   
