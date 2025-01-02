@@ -252,6 +252,28 @@ body {
 }
 
 
+.toast-container .toast {
+  background-color: #28a745; /* Green color */
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.toast-container .toast .green-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: green;
+  animation: slideGreenLine 2s forwards;
+}
+
+.toast-container .toast .toast-message {
+  position: relative;
+  z-index: 1;
+}
+
 /* Responsive adjustments */
 @media (max-width: 400px) {
   .cancel-booking-container {

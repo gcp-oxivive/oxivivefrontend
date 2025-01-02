@@ -5,6 +5,12 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaRupeeSign } from "react-icons/fa";
 import { useRouter, useSearchParams } from 'next/navigation';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for the Toast notifications
+import { showToast } from "../../DashBoard/customtoast/page";
+
+
+
 
 const CancelBooking = () => {
   const router = useRouter();
@@ -20,7 +26,13 @@ const CancelBooking = () => {
   const name = searchParams.get('name') || 'Tyrone Mitchell';
   const location = searchParams.get('location') || '1534 Single Street, USA';
   const serviceprice = searchParams.get('service_price');
-  const [bookingData, setSelectedData] = useState<{ service_type: string; address: string; name: string; user_id: string; booking_id: string; phone_number: string; email: string; service_price: string; } | null>(null);
+  interface BookingData {
+    user_id: string;
+    // Add other properties if needed
+  }
+
+  const [bookingData, setSelectedData] = useState<BookingData | null>(null);
+
   useEffect(() => {
     const savedData = localStorage.getItem('bookingData');
     if (savedData) {
@@ -37,7 +49,7 @@ const CancelBooking = () => {
       const bookingDateTime = new Date(`${appointmentDate} ${appointmentTime}`);
       const interval = setInterval(() => {
         const now = new Date();
-        const timeDiff = bookingDateTime - now;
+        const timeDiff = bookingDateTime.getTime() - now.getTime();
 
         if (timeDiff > 0) {
           const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
@@ -62,24 +74,23 @@ const CancelBooking = () => {
   // Function to handle cancel booking
   const handleCancelBooking = async () => {
     try {
-      // Send the booking `id` in the body to specify which booking to cancel
       const response = await fetch(`https://bookingservice-69668940637.asia-east1.run.app/api/bookingapp-bookingservice/${user_id}/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ bookingid, status: 'cancel' }), // send `id` and update status to 'Cancelled'
+        body: JSON.stringify({ bookingid, status: 'cancel' }),
       });
 
       if (response.ok) {
-        alert("Booking status updated to 'Cancelled'");
+        showToast("Booking status updated to 'Cancelled'", "top-center");
         router.push(`/Booking?oxi_id=${userId}`);
       } else {
-        alert("Failed to cancel booking. Please try again.");
+        showToast("Failed to cancel booking. Please try again.", "top-center");
       }
     } catch (error) {
       console.error("Error cancelling booking:", error);
-      alert("An error occurred. Please try again later.");
+      showToast("An error occurred. Please try again later.", "top-center");
     }
   };
 
@@ -92,7 +103,6 @@ const CancelBooking = () => {
       <main className='cancel-booking-main-container'>
         <section className="cancel-booking-item">
           <h2>{serviceType}</h2>
-          {/* <span className="cancel-booking-price"><FaRupeeSign />49</span> */}
         </section>
 
         <div className="cancel-booking-details">
@@ -118,6 +128,8 @@ const CancelBooking = () => {
         </footer>
         <button className="cancel-booking-button" onClick={handleCancelBooking}>Cancel Booking</button>
       </main>
+
+      <ToastContainer className="toast-container"/>
     </div>
   );
 };

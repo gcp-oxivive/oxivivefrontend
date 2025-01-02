@@ -4,6 +4,9 @@ import React from "react";
 import "./PaymentMethod.css";
 import { useRouter } from 'next/navigation';
 import { IoChevronBackSharp } from "react-icons/io5";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for the Toast notifications
+import { showToast } from "../customtoast/page";  // Import the custom showToast function
 
 interface appointmentData {
   name: string;
@@ -25,6 +28,8 @@ const PaymentMethod: React.FC = () => {
   const [appointmentData, setAppointmentData] = useState<any | null>(null); // Add state for appointmentData
   const [countdown, setCountdown] = useState<string>(""); // State for countdown
   const [loading, setLoading] = useState<boolean>(true); // State for loading
+  const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // Add state for success popup message
+
   const router = useRouter();
 
   // Fetch and parse appointmentData from localStorage
@@ -152,7 +157,7 @@ const PaymentMethod: React.FC = () => {
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
     document.body.appendChild(script);
-
+  
     script.onload = () => {
       // Initialize Razorpay
       const options = {
@@ -164,24 +169,29 @@ const PaymentMethod: React.FC = () => {
         image: "/images/shot(1).png",
         handler: (response: any) => {
           const paymentId = response.razorpay_payment_id;
-
-          // Redirect to TickPage immediately
-          router.push("/DashBoard/TickPage");
-
+  
+          // Show success toast using custom showToast function
+          showToast("Payment Successful!", "success");  // Call the custom showToast here
+  
+          // Redirect to TickPage after 2-3 seconds
+          setTimeout(() => {
+            router.push("/DashBoard/TickPage");
+          }, 3000); // Adjust the time to match the duration of the green line animation
+  
           // Fetch data from localStorage (appointment details, user details, etc.)
           const storedAppointmentData = localStorage.getItem("appointmentData");
           if (!storedAppointmentData) return;
-
+  
           const appointmentData = JSON.parse(storedAppointmentData);
-          console.log(appointmentData.appointmentTime, 'appointmentData')
           const vendorId = localStorage.getItem("vendor_id"); // Retrieve vendor_id
+  
           // Collect all the necessary data
           const appointmentTime = parseAppointmentTime(appointmentData?.appointmentTime);
           if (!appointmentTime) {
             alert("Invalid appointment time format. Please check your input.");
             return;
           }
-
+  
           const bookingData = {
             name: vendorDetails?.name,
             clinic_name: vendorDetails?.clinic_name || vendorDetails?.wheel_name || "N/A", // Save clinic_name or wheel_name
@@ -197,7 +207,7 @@ const PaymentMethod: React.FC = () => {
             booking_status: "upcoming",
             service_price: vendorDetails?.service_price
           };
-
+  
           // Send booking data to backend API to save it in the database
           const saveBooking = async () => {
             try {
@@ -209,10 +219,9 @@ const PaymentMethod: React.FC = () => {
                 body: JSON.stringify(bookingData),
               });
               const data = await response.json();
-
+  
               if (response.ok) {
-                // Redirect to TickPage on successful booking
-                // router.push("/DashBoard/TickPage");
+                // Booking saved successfully
               } else {
                 alert("Failed to save booking: " + data.message || "Error");
               }
@@ -224,7 +233,7 @@ const PaymentMethod: React.FC = () => {
               }
             }
           };
-
+  
           saveBooking();
         },
         prefill: {
@@ -239,50 +248,48 @@ const PaymentMethod: React.FC = () => {
           color: "#3399cc",
         },
       };
-
+  
       const rzp = new (window as any).Razorpay(options);
-
+  
       rzp.on("payment.failed", function (response: any) {
         alert(`Payment Failed. Error: ${response.error.description}`);
       });
-
+  
       rzp.open();
-
+  
       const customStyles = `
-      .razorpay-checkout-frame {
-        width: 350px !important; /* Adjust the width to match the payment container */
-        height: 500px !important; /* Adjust the height to match your container's height */
-        max-width: 100% !important;
-        margin: auto !important;
-        position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        overflow: hidden !important; /* Hide overflow to prevent scrollbars */
-      }
-
-      .razorpay-checkout-frame iframe {
-        width: 100% !important;
-        height: 100% !important;
-        margin: 0 !important;
-        overflow: hidden !important; /* Hide overflow within iframe */
-      }
-
-      /* Ensure no scrollbars appear on the iframe (for WebKit browsers) */
-      .razorpay-checkout-frame iframe::-webkit-scrollbar {
-        display: none;
-      }
-
-      /* Also hide scrollbar on iframe for other browsers */
-      .razorpay-checkout-frame iframe {
-        scrollbar-width: none; /* Firefox */
-      }
+        .razorpay-checkout-frame {
+          width: 350px !important;
+          height: 500px !important;
+          max-width: 100% !important;
+          margin: auto !important;
+          position: fixed !important;
+          top: 50% !important;
+          left: 50% !important;
+          transform: translate(-50%, -50%) !important;
+          overflow: hidden !important;
+        }
+  
+        .razorpay-checkout-frame iframe {
+          width: 100% !important;
+          height: 100% !important;
+          margin: 0 !important;
+          overflow: hidden !important;
+        }
+  
+        .razorpay-checkout-frame iframe::-webkit-scrollbar {
+          display: none;
+        }
+  
+        .razorpay-checkout-frame iframe {
+          scrollbar-width: none;
+        }
       `;
       const styleTag = document.createElement('style');
       styleTag.innerHTML = customStyles;
       document.head.appendChild(styleTag);
     };
-
+  
     document.body.appendChild(script);
   };
 
@@ -380,6 +387,9 @@ const PaymentMethod: React.FC = () => {
             </div>
             <button className="pay-now-button" onClick={handlePayment}>Pay Now</button>
           </div>
+         
+          <ToastContainer className="toast-container"/>
+          {/* Other components */}
         </>
       )}
     </div>

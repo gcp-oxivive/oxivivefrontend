@@ -61,27 +61,23 @@ const handleBookingClick = () => {
 
 
 useEffect(() => {
-  // Assuming oxi_id is stored in localStorage (adjust this to your actual logic)
-  const storedOxiId = localStorage.getItem('oxi_id');
-  
-  // Check if oxi_id is available in localStorage (or use another method to get it)
-  if (storedOxiId) {
-    fetchUserDetails(storedOxiId).then((details) => {
-      if (details) {
-        setUserDetails(details);
-      }
-    });
-  } else {
-    console.log("oxi_id is not available in localStorage.");
+  // Check if window object is available (i.e., we are on the client-side)
+  if (typeof window !== 'undefined') {
+    const storedUserId = localStorage.getItem('user_id'); // Fetch user_id from localStorage
+    if (storedUserId) {
+      fetchUserDetails(storedUserId); // Pass the user_id for fetching details
+    } else {
+      console.log("user_id is not available in localStorage.");
+    }
   }
-}, []);
+}, []); // Empty dependency array to run this only once after component mounts
 
-const fetchUserDetails = async (oxiId: string) => {
+// Fetch user details based on user_id
+const fetchUserDetails = async (userId: string) => {
   try {
-    console.log("Fetching user details for oxi_id:", oxiId);
+    console.log("Fetching user details for user_id:", userId);
     
-    // Adjust URL to match your backend API
-    const response = await fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/user-details/${oxiId}`);
+    const response = await fetch(`https://drivermanagementservice-69668940637.asia-east1.run.app/api/user-details/${userId}`); // Modify API endpoint accordingly
     
     if (!response.ok) {
       throw new Error("Failed to fetch user details");
@@ -90,15 +86,14 @@ const fetchUserDetails = async (oxiId: string) => {
     const userDetails = await response.json();
     console.log("Fetched user details:", userDetails);
     
-    // Return the user details if successful
-    return userDetails;
+    // Store the fetched details in state
+    setUserDetails(userDetails);
   } catch (error) {
     console.error("Error fetching user details:", error);
-    return null; // Return null if there's an error
   }
 };
 
-  useEffect(() => {
+useEffect(() => {
   const fetchData = async () => {
     try {
       const response = await fetch('https://drivermanagementservice-69668940637.asia-east1.run.app/api/user-booking-details/');
@@ -111,34 +106,34 @@ const fetchUserDetails = async (oxiId: string) => {
       console.log('Fetched bookings data:', result);
 
       if (Array.isArray(result) && result.length > 0) {
-        // Sort bookings by appointment date and time
-        const sortedBookings = result.sort((a: Booking, b: Booking) => {
-          const dateA = new Date(`${a.appointment_date}T${a.appointment_time}`);
-          const dateB = new Date(`${b.appointment_date}T${b.appointment_time}`);
-          return dateA.getTime() - dateB.getTime();
-        });
+        // Store the user_id from the booking response to localStorage
+        const userId = result[0]?.user_id; // Assuming user_id exists in the booking details
+        if (userId) {
+          localStorage.setItem('user_id', userId); // Store user_id in localStorage
+          console.log('Stored user_id in localStorage:', userId);
+          // Sort bookings by appointment date and time
+          const sortedBookings = result.sort((a: Booking, b: Booking) => {
+            const dateA = new Date(`${a.appointment_date}T${a.appointment_time}`);
+            const dateB = new Date(`${b.appointment_date}T${b.appointment_time}`);
+            return dateA.getTime() - dateB.getTime();
+          });
 
-        setBookings(sortedBookings);
+          setBookings(sortedBookings);
 
-        
-        // Determine the most recent booking that is within the allowed range
-        const now = new Date();
-        const timeThreshold = 30 * 60 * 1000; // 30 minutes in milliseconds
-        const recentBooking = sortedBookings.find((booking) => {
-          const bookingTime = new Date(`${booking.appointment_date}T${booking.appointment_time}`).getTime();
-          return (
-            booking.booking_status === 'completed' &&
-            bookingTime >= now.getTime() - timeThreshold && // Appointment is not too far in the past
-            bookingTime <= now.getTime() + timeThreshold // Appointment is near or upcoming
-          );
-        });
+          // Determine the most recent booking that is within the allowed range
+          const now = new Date();
+          const timeThreshold = 30 * 60 * 1000; // 30 minutes in milliseconds
+          const recentBooking = sortedBookings.find((booking) => {
+            const bookingTime = new Date(`${booking.appointment_date}T${booking.appointment_time}`).getTime();
+            return (
+              booking.booking_status === 'completed' &&
+              bookingTime >= now.getTime() - timeThreshold && // Appointment is not too far in the past
+              bookingTime <= now.getTime() + timeThreshold // Appointment is near or upcoming
+            );
+          });
 
-        setMostRecentBooking(recentBooking || null);
-        
-        
-
-
-
+          setMostRecentBooking(recentBooking || null);
+        }
       } else {
         setBookings([]);
       }
