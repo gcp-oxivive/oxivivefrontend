@@ -27,6 +27,7 @@ interface InvoiceDetails {
 
 const Invoicedetails: React.FC = () => {
   const [invoiceData, setInvoiceData] = useState<InvoiceDetails | null>(null);
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
   const router = useRouter();
   const searchParams = useSearchParams();
   const invoice_id = searchParams.get("invoice_id");
@@ -35,84 +36,86 @@ const Invoicedetails: React.FC = () => {
     if (invoice_id) {
       fetch(`https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoice-details/?invoice_id=${invoice_id}`)
         .then((response) => response.json())
-        .then((data) => setInvoiceData(data))
-        .catch((error) => console.error("Error fetching invoice details:", error));
+        .then((data) => {
+          setInvoiceData(data);
+          setLoading(false); // Set loading to false once data is fetched
+        })
+        .catch((error) => {
+          console.error("Error fetching invoice details:", error);
+          setLoading(false); // Stop loading on error
+        });
     }
   }, [invoice_id]);
 
-  if (!invoiceData) {
-    return <div>Loading...</div>;
-  }
-
-  const { vendor, issued_date, due_date, total, invoice_details, invoice_price } = invoiceData;
-  const invoiceDetailsArray = invoice_details.split(",");
-  const invoicePricesArray = invoice_price.split(",");
+  
 
   return (
     <div className="invoice-page">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
       <div className="invoice-content">
-        {/* Header Section */}
-        <div className="invoice-header1">
-          <div className="header-left">
-            <h1>{invoiceData.invoice_id}</h1>
-            <p>{total} USD Paid at {issued_date}</p>
+        {loading ? ( // Show spinner while loading
+          <div className="spinner-container">
+            <div className="spinner"></div>
           </div>
-          <div className="header-right">
-            <div className="status-box paid">Paid</div>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <hr className="divider" />
-
-        {/* Payment Details Section */}
-        <div className="border-2 rounded-lg border-gray-300 p-5 mt-5">
-        <div className="payment-details4">
-          <h2 className="payment-details5">Payment Batch October 2024</h2>
-          <div className="details-grid3">
-            <div>
-              <p><strong>Name</strong>: {vendor.name}</p>
-              <p><strong>Email</strong>: {vendor.email}</p>
-              <p><strong>Mobile Number</strong>: {vendor.phone}</p>
-              <p><strong>Location</strong>: {vendor.address}</p>
-              <p><strong>Clinic Name</strong>: {vendor.clinic_name || vendor.wheel_name}</p>
+        ) : (
+          <>
+            <div className="invoice-header1">
+              <div className="header-left">
+                <h1>{invoiceData?.invoice_id}</h1>
+                <p>{invoiceData?.total} USD Paid at {invoiceData?.issued_date}</p>
+              </div>
+              <div className="header-right">
+                <div className="status-box paid">Paid</div>
+              </div>
             </div>
-            <div>
-              <p><strong>Invoice Number</strong>: {invoiceData.invoice_id}</p>
-              <p><strong>Issued</strong>: {issued_date}</p>
-              <p><strong>Due Date</strong>: {due_date}</p>
-            </div>
-          </div>
-        </div>
 
-        {/* Table Section */}
-        <table className="invoice-table0">
-          <thead>
-            <tr>
-              <th>PRODUCT</th>
-              <th>AMOUNT</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoiceDetailsArray.map((item, index) => (
-              <tr key={index}>
-                <td>{item}</td>
-                <td>{invoicePricesArray[index] || "0"}</td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={1}><strong>Total</strong></td>
-              <td><strong>{total}</strong></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+            <hr className="divider" />
+
+            <div className="border-2 rounded-lg border-gray-300 p-5 mt-5">
+              <div className="payment-details4">
+                <h2 className="payment-details5">Payment Batch October 2024</h2>
+                <div className="details-grid3">
+                  <div>
+                    <p><strong>Name</strong>: {invoiceData?.vendor.name}</p>
+                    <p><strong>Email</strong>: {invoiceData?.vendor.email}</p>
+                    <p><strong>Mobile Number</strong>: {invoiceData?.vendor.phone}</p>
+                    <p><strong>Location</strong>: {invoiceData?.vendor.address}</p>
+                    <p><strong>Clinic Name</strong>: {invoiceData?.vendor.clinic_name || invoiceData?.vendor.wheel_name}</p>
+                  </div>
+                  <div>
+                    <p><strong>Invoice Number</strong>: {invoiceData?.invoice_id}</p>
+                    <p><strong>Issued</strong>: {invoiceData?.issued_date}</p>
+                    <p><strong>Due Date</strong>: {invoiceData?.due_date}</p>
+                  </div>
+                </div>
+              </div>
+
+              <table className="invoice-table0">
+                <thead>
+                  <tr>
+                    <th>PRODUCT</th>
+                    <th>AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoiceData?.invoice_details.split(",").map((item, index) => (
+                    <tr key={index}>
+                      <td>{item}</td>
+                      <td>{invoiceData.invoice_price.split(",")[index] || "0"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan={1}><strong>Total</strong></td>
+                    <td><strong>{invoiceData?.total}</strong></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

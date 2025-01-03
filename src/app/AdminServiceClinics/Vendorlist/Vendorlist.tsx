@@ -54,7 +54,17 @@ const Vendorlist = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="vendorlist-container">
+        <Sidebar />
+        <div className="content">
+          {/* Add a spinner here */}
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

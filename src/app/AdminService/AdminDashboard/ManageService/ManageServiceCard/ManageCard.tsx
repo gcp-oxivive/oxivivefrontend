@@ -15,7 +15,7 @@ const ManageCard: React.FC = () => {
   return (
     <div className="manage-service">
       <Sidebar />
-      <main className="content">
+      <main className="managecontent">
         <header className="header2">
           <h2 className="page-title1">Manage Service</h2>
         </header>

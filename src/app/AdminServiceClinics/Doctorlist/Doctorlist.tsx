@@ -15,6 +15,7 @@ const Doctorlist: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [location, setLocation] = useState<string>("Unknown"); // Default location
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -43,12 +44,13 @@ const Doctorlist: React.FC = () => {
         setDoctors(data);
       } catch (error) {
         console.error("Failed to fetch doctors:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false after data is fetched
       }
     };
   
     fetchDoctors();
   }, []);
-  
 
   const filteredDoctors = doctors.filter((doctor) => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -69,50 +71,58 @@ const Doctorlist: React.FC = () => {
     <div className="doctorlist-container">
       <Sidebar />
       <main className="doctorlist-content">
-        <h1>Doctors List</h1>
-        <p>The following table consists of doctors' details</p>
-        <div className="header">
-          {/* Location Button with dynamic location */}
-          <button className="location-btn">
-            <i className="location"></i> {location}
-          </button>
-          {/* Search Input */}
-          <input
-            type="text"
-            placeholder="Search"
-            className="search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Sl.No</th>
-              <th>Clinic Name</th> {/* Display clinic name */}
-              <th>Doctor's Name</th>
-              <th>Contact No</th>
-              <th>Email</th>
-              <th>Block this Info</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredDoctors.map((doctor, index) => (
-              <tr key={doctor.id}>
-                <td>{index + 1}</td>
-                <td>{doctor.clinic || "N/A"}</td> {/* Display "N/A" if null */}
-                <td>{doctor.name}</td>
-                <td>{doctor.phone}</td>
-                <td>{doctor.email || "N/A"}</td> {/* Display "N/A" if null */}
-                <td>
-                  <button className="block-button">
-                    <span>Block</span>
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {isLoading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
+        ) : (
+          <>
+            <h1>Doctors List</h1>
+            <p>The following table consists of doctors' details</p>
+            <div className="header">
+              {/* Location Button with dynamic location */}
+              <button className="location-btn">
+                <i className="location"></i> {location}
+              </button>
+              {/* Search Input */}
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Sl.No</th>
+                  <th>Clinic Name</th> {/* Display clinic name */}
+                  <th>Doctor's Name</th>
+                  <th>Contact No</th>
+                  <th>Email</th>
+                  <th>Block this Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredDoctors.map((doctor, index) => (
+                  <tr key={doctor.id}>
+                    <td>{index + 1}</td>
+                    <td>{doctor.clinic || "N/A"}</td> {/* Display "N/A" if null */}
+                    <td>{doctor.name}</td>
+                    <td>{doctor.phone}</td>
+                    <td>{doctor.email || "N/A"}</td> {/* Display "N/A" if null */}
+                    <td>
+                      <button className="block-button">
+                        <span>Block</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
       </main>
     </div>
   );

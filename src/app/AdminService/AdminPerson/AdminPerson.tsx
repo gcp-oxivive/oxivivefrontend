@@ -16,12 +16,23 @@ const AdminPerson = () => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [admins, setAdmins] = useState([]);
-  const [filteredAdmins, setFilteredAdmins] = useState([]); // New state for filtered admins
+  const [filteredAdmins, setFilteredAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [editAdminId, setEditAdminId] = useState(null); // To track the admin being edited
-  const [searchTerm, setSearchTerm] = useState(''); // New state for search term
+  const [editAdminId, setEditAdminId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
+
+
+
+  const showAlert = (message, type) => {
+    setCustomAlert({ visible: true, message, type });
+    setTimeout(() => {
+      setCustomAlert({ visible: false, message: '', type: '' });
+    }, 3000); // Alert will disappear after 3 seconds
+  };
+  
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -30,7 +41,7 @@ const AdminPerson = () => {
         if (response.ok) {
           const data = await response.json();
           setAdmins(data);
-          setFilteredAdmins(data); // Set filteredAdmins with all admins initially
+          setFilteredAdmins(data);
         } else {
           setError('Failed to fetch data');
         }
@@ -44,16 +55,15 @@ const AdminPerson = () => {
     fetchAdminData();
   }, []);
 
-  // Update the filteredAdmins when search term changes
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    
+
     if (value.trim() === '') {
-      setFilteredAdmins(admins); // If search term is empty, show all admins
+      setFilteredAdmins(admins);
     } else {
       const filtered = admins.filter((admin) =>
-        admin.name.toLowerCase().startsWith(value.toLowerCase()) // Case-insensitive search
+        admin.name.toLowerCase().startsWith(value.toLowerCase())
       );
       setFilteredAdmins(filtered);
     }
@@ -61,7 +71,7 @@ const AdminPerson = () => {
 
   const handleAddAdminClick = () => {
     setShowAddAdminForm(true);
-    setEditMode(false); // Reset edit mode
+    setEditMode(false);
     setFormValues({
       name: '',
       contact: '',
@@ -77,33 +87,31 @@ const AdminPerson = () => {
     setShowAddAdminForm(true);
     setEditMode(true);
     setEditAdminId(admin.admin_id);
-    setFormValues(admin); // Pre-fill form with the selected admin's data
+    setFormValues(admin);
   };
 
   const handleDeleteClick = async (adminId) => {
-    if (!window.confirm('Are you sure you want to delete this admin?')) {
-      return; // Exit if the user cancels the confirmation dialog
-    }
-  
+    // if (!window.confirm('Are you sure you want to delete this admin?')) {
+    //   return;
+    // }
+
     try {
       const response = await fetch(`https://adminservice-69668940637.asia-east1.run.app/api/delete_superadmins/${adminId}/`, {
         method: 'DELETE',
       });
-  
+
       if (response.ok) {
-        // Remove the deleted admin from the state
         const updatedAdmins = admins.filter((admin) => admin.admin_id !== adminId);
         setAdmins(updatedAdmins);
         setFilteredAdmins(updatedAdmins);
-        alert('Admin deleted successfully!');
+        showAlert('Admin deleted successfully!', 'success');
       } else {
-        alert('Failed to delete admin. Please try again.');
+        showAlert('Failed to delete admin. Please try again.', 'error');
       }
     } catch (error) {
-      alert('An error occurred while deleting the admin.');
+      showAlert('An error occurred while deleting the admin.' , 'error');
     }
   };
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -133,10 +141,10 @@ const AdminPerson = () => {
     } else {
       try {
         const url = editMode
-          ? `https://adminservice-69668940637.asia-east1.run.app/api/update_superadmins/${editAdminId}/` // PUT URL for updating
-          : 'https://adminservice-69668940637.asia-east1.run.app/api/superadmins/'; // POST URL for creating
+          ? `https://adminservice-69668940637.asia-east1.run.app/api/update_superadmins/${editAdminId}/`
+          : 'https://adminservice-69668940637.asia-east1.run.app/api/superadmins/';
         const method = editMode ? 'PUT' : 'POST';
-
+  
         const response = await fetch(url, {
           method,
           headers: {
@@ -144,12 +152,11 @@ const AdminPerson = () => {
           },
           body: JSON.stringify(formValues),
         });
-
+  
         if (response.ok) {
           const updatedAdmin = await response.json();
-
+  
           if (editMode) {
-            // Update the admin list with the edited admin data
             setAdmins(
               admins.map((admin) =>
                 admin.admin_id === editAdminId ? updatedAdmin : admin
@@ -160,11 +167,13 @@ const AdminPerson = () => {
                 admin.admin_id === editAdminId ? updatedAdmin : admin
               )
             );
+            showAlert('Data has been updated successfully!', 'success'); // Update success message
           } else {
-            setAdmins([...admins, updatedAdmin]); // Add new admin to the list
-            setFilteredAdmins([...filteredAdmins, updatedAdmin]); // Add new admin to filtered list
+            setAdmins([...admins, updatedAdmin]);
+            setFilteredAdmins([...filteredAdmins, updatedAdmin]);
+            showAlert('Data has been submitted successfully!', 'success'); // Add success message
           }
-
+  
           setShowAddAdminForm(false);
           setEditMode(false);
           setFormValues({
@@ -177,115 +186,127 @@ const AdminPerson = () => {
             pincode: '',
           });
           setFormErrors({});
-          alert('Data has been submitted successfully!');
         } else {
           const errorData = await response.json();
-          alert(`Failed to save admin: ${JSON.stringify(errorData)}`);
+          showAlert(`Failed to save admin: ${JSON.stringify(errorData)}`, 'error');
         }
       } catch (error) {
-        alert('An error occurred while saving the admin details.');
+        showAlert('An error occurred while saving the admin details.', 'error');
       }
     }
   };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  
 
   return (
     <div className="admin-person-container">
       <Sidebar />
+      {customAlert.visible && (
+      <div className={`custom-alert ${customAlert.type}`}>
+        {customAlert.message}
+      </div>
+    )}
       <main className="content">
-        <header>
-          <div className="header-content">
-            <div className="header-text">
-              <h2>{showAddAdminForm ? 'Add/Edit Admin Details' : 'Admin Persons'}</h2>
-              <p>
-                {showAddAdminForm
-                  ? 'Fill the following details to add or edit person'
-                  : 'The following table consists of Admins details'}
-              </p>
-            </div>
+        {loading ? (
+          <div className="loading-container">
+            <div className="spinner"></div>
+          </div>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <>
+            <header>
+              <div className="header-content">
+                <div className="header-text">
+                  <h2>{showAddAdminForm ? 'Add/Edit Admin Details' : 'Admin Persons'}</h2>
+                  <p>
+                    {showAddAdminForm
+                      ? 'Fill the following details to add or edit person'
+                      : 'The following table consists of Admins details'}
+                  </p>
+                </div>
+                {!showAddAdminForm && (
+                  <input
+                    type="text"
+                    placeholder="Search Admin"
+                    className="search-input"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                )}
+              </div>
+            </header>
+
             {!showAddAdminForm && (
-              <input
-                type="text"
-                placeholder="Search Admin"
-                className="search-input"
-                value={searchTerm}
-                onChange={handleSearchChange} // Update search on input change
-              />
-            )}
-          </div>
-        </header>
-
-        {!showAddAdminForm && (
-          <div className="actions">
-            <button className="add-details-btn" onClick={handleAddAdminClick}>
-              + Add Admin
-            </button>
-          </div>
-        )}
-
-        {!showAddAdminForm && (
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Sl.No</th>
-                <th>Admin's Name</th>
-                <th>Contact No</th>
-                <th>Location</th>
-                <th>Edit Info</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAdmins.map((admin, index) => (
-                <tr key={admin.admin_id}>
-                  <td>{index + 1}</td>
-                  <td>{admin.name}</td>
-                  <td>{admin.contact}</td>
-                  <td>{`${admin.address}, ${admin.state}`}</td>
-                  <td>
-                    <button className="edit-btn" onClick={() => handleEditClick(admin)}>
-                      Edit
-                    </button>
-                    <button className="delete-btn" onClick={() => handleDeleteClick(admin.admin_id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-
-        {showAddAdminForm && (
-          <div className="add-admin-form">
-            <h3>{editMode ? 'Edit Admin' : 'Add New Admin'}</h3>
-            <form onSubmit={handleSubmit}>
-              {['name', 'contact', 'email', 'address', 'state', 'district', 'pincode'].map(
-                (field) => (
-                  <div className="form-group" key={field}>
-                    <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
-                    <input
-                      type="text"
-                      name={field}
-                      placeholder={`Enter ${field}`}
-                      value={formValues[field]}
-                      onChange={handleInputChange}
-                    />
-                    {formErrors[field] && <p className="error">{formErrors[field]}</p>}
-                  </div>
-                )
-              )}
-              <div className="form-actions">
-                <button type="submit" className="save1-btn">
-                  {editMode ? 'Update Admin' : 'Save Admin'}
-                </button>
-                <button type="button" className="cancel-btn" onClick={() => setShowAddAdminForm(false)}>
-                  Cancel
+              <div className="actions">
+                <button className="add-details-btn" onClick={handleAddAdminClick}>
+                  + Add Admin
                 </button>
               </div>
-            </form>
-          </div>
+            )}
+
+            {!showAddAdminForm && (
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Sl.No</th>
+                    <th>Admin's Name</th>
+                    <th>Contact No</th>
+                    <th>Location</th>
+                    <th>Edit Info</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredAdmins.map((admin, index) => (
+                    <tr key={admin.admin_id}>
+                      <td>{index + 1}</td>
+                      <td>{admin.name}</td>
+                      <td>{admin.contact}</td>
+                      <td>{`${admin.address}, ${admin.state}`}</td>
+                      <td>
+                        <button className="edit-btn" onClick={() => handleEditClick(admin)}>
+                          Edit
+                        </button>
+                        <button className="delete-btn" onClick={() => handleDeleteClick(admin.admin_id)}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            {showAddAdminForm && (
+              <div className="add-admin-form">
+                <h3>{editMode ? 'Edit Admin' : 'Add New Admin'}</h3>
+                <form onSubmit={handleSubmit}>
+                  {['name', 'contact', 'email', 'address', 'state', 'district', 'pincode'].map(
+                    (field) => (
+                      <div className="form-group" key={field}>
+                        <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+                        <input
+                          type="text"
+                          name={field}
+                          placeholder={`Enter ${field}`}
+                          value={formValues[field]}
+                          onChange={handleInputChange}
+                        />
+                        {formErrors[field] && <p className="error">{formErrors[field]}</p>}
+                      </div>
+                    )
+                  )}
+                  <div className="form-actions">
+                    <button type="submit" className="save1-btn">
+                      {editMode ? 'Update Admin' : 'Save Admin'}
+                    </button>
+                    <button type="button" className="cancel-btn" onClick={() => setShowAddAdminForm(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>

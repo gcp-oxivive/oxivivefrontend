@@ -22,6 +22,7 @@ const InvoiceList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [activeTab, setActiveTab] = useState<"all" | "paid" | "unpaid">("all");
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const router = useRouter();
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const InvoiceList: React.FC = () => {
       .then((data) => {
         setInvoices(data);
         setFilteredInvoices(data);
+        setIsLoading(false); // Set loading to false when data is fetched
       })
       .catch((error) => console.error("Error fetching invoices:", error));
   }, []);
@@ -53,7 +55,7 @@ const InvoiceList: React.FC = () => {
       result = result.filter((invoice) =>
         [
           invoice.invoice_id,
-          invoice.vendor_email || "",
+          invoice.vendor?.email || "",
           invoice.service_type,
           invoice.status,
           invoice.issued_date, // Filter by date
@@ -103,74 +105,83 @@ const InvoiceList: React.FC = () => {
     <div className="invoice-page">
       <Sidebar />
       <div className="invoice-content">
-        <div className="invoice-header0">
-          <h1>Invoice Lists</h1>
-        </div>
-        <div className="invoice-tabs">
-          <div className="invoice-tab1">
-            <button
-              className={`tab-button ${activeTab === "all" ? "active" : ""}`}
-              onClick={() => handleTabClick("all")}
-            >
-              All ({invoices.length})
-            </button>
-            <button
-              className={`tab-button ${activeTab === "paid" ? "active" : ""}`}
-              onClick={() => handleTabClick("paid")}
-            >
-              Paid ({getCountByStatus("paid")})
-            </button>
-            <button
-              className={`tab-button ${activeTab === "unpaid" ? "active" : ""}`}
-              onClick={() => handleTabClick("unpaid")}
-            >
-              Unpaid ({getCountByStatus("unpaid")})
-            </button>
+        
+        {isLoading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
           </div>
-          <div className="invoice-filters">
-            <input
-              type="text"
-              className={`search-input ${isSearchActive ? "search-active" : ""}`}
-              placeholder="Search anything.."
-              onFocus={() => setIsSearchActive(true)}
-              onBlur={() => setIsSearchActive(false)}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              value={searchTerm}
-            />
+        ) : (
+          <>
+          <div className="invoice-header0">
+            <h1>Invoice Lists</h1>
           </div>
-        </div>
-        <table className="invoice-table">
-          <thead>
-            <tr className="border-2 border-gray-400">
-              <th>INVOICE NUMBER</th>
-              <th>EMAIL</th>
-              <th>SERVICE TYPE</th>
-              <th>DATE</th>
-              <th>AMOUNT</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
-          <div className="h-[25px]"></div>
-          <tbody className="mt-6 border-2 border-gray-400">
-            {filteredInvoices.map((invoice) => (
-              <tr
-                key={invoice.invoice_id}
-                onClick={() => handleRowClick(invoice)}
-              >
-                <td className="invoice-number">
-                  <a href="#">{invoice.invoice_id}</a>
-                </td>
-                <td>{invoice.vendor_email || "N/A"}</td>
-                <td>{invoice.service_type}</td>
-                <td>{invoice.issued_date}</td>
-                <td>{invoice.total}</td>
-                <td className={getStatusClass(invoice.status)}>
-                  {invoice.status}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <div className="invoice-tabs">
+              <div className="invoice-tab1">
+                <button
+                  className={`tab-button ${activeTab === "all" ? "active" : ""}`}
+                  onClick={() => handleTabClick("all")}
+                >
+                  All ({invoices.length})
+                </button>
+                <button
+                  className={`tab-button ${activeTab === "paid" ? "active" : ""}`}
+                  onClick={() => handleTabClick("paid")}
+                >
+                  Paid ({getCountByStatus("paid")})
+                </button>
+                <button
+                  className={`tab-button ${activeTab === "unpaid" ? "active" : ""}`}
+                  onClick={() => handleTabClick("unpaid")}
+                >
+                  Unpaid ({getCountByStatus("unpaid")})
+                </button>
+              </div>
+              <div className="invoice-filters">
+                <input
+                  type="text"
+                  className={`search-input ${isSearchActive ? "search-active" : ""}`}
+                  placeholder="Search anything.."
+                  onFocus={() => setIsSearchActive(true)}
+                  onBlur={() => setIsSearchActive(false)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchTerm}
+                />
+              </div>
+            </div>
+            <table className="invoice-table">
+              <thead>
+                <tr className="border-2 border-gray-400">
+                  <th>INVOICE NUMBER</th>
+                  <th>EMAIL</th>
+                  <th>SERVICE TYPE</th>
+                  <th>DATE</th>
+                  <th>AMOUNT</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <div className="h-[25px]"></div>
+              <tbody className="mt-6 border-2 border-gray-400">
+                {filteredInvoices.map((invoice) => (
+                  <tr
+                    key={invoice.invoice_id}
+                    onClick={() => handleRowClick(invoice)}
+                  >
+                    <td className="invoice-number">
+                      <a href="#">{invoice.invoice_id}</a>
+                    </td>
+                    <td>{invoice.vendor?.email || "N/A"}</td>
+                    <td>{invoice.service_type}</td>
+                    <td>{invoice.issued_date}</td>
+                    <td>{invoice.total}</td>
+                    <td className={getStatusClass(invoice.status)}>
+                      {invoice.status}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,22 +1,32 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // For navigation
 import "./Inventory.css";
 import Sidebar from "../Sidebar/page";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-
 const Inventory = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
   const [inventory, setInventory] = useState([]);
   const [filteredInventory, setFilteredInventory] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
   const [formData, setFormData] = useState({
     product_name: "",
     stock: "",
     product_price: "",
     product_image: null, // New field for image
   });
+  const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
+
+
+  const showAlert = (message, type) => {
+    setCustomAlert({ visible: true, message, type });
+    setTimeout(() => {
+      setCustomAlert({ visible: false, message: '', type: '' });
+    }, 3000); // Alert will disappear after 3 seconds
+  };
+  
 
   // Fetch existing inventory data from the backend
   useEffect(() => {
@@ -25,8 +35,12 @@ const Inventory = () => {
       .then((data) => {
         setInventory(data);
         setFilteredInventory(data); // Initialize filtered data
+        setLoading(false); // Stop loading once data is fetched
       })
-      .catch((err) => console.error("Error fetching inventory:", err));
+      .catch((err) => {
+        console.error("Error fetching inventory:", err);
+        setLoading(false); // Stop loading in case of an error
+      });
   }, []);
 
   const handleAddItemsClick = () => {
@@ -86,13 +100,14 @@ const Inventory = () => {
 
       if (response.ok) {
         const result = await response.json();
-        alert(response.status === 200 ? "Product updated successfully!" : "Product added successfully!");
+        showAlert(response.status === 200 ? "Product updated successfully!" : "Product added successfully!", 'success');
 
         // Fetch the updated inventory list
         const updatedInventory = await fetch("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventory/")
           .then((res) => res.json())
           .catch((err) => {
-            console.error("Error fetching updated inventory:", err);
+            console.error("Error fetching the updated inventory:", err);
+            showAlert("Error fetching the updated inventory.", "error");
             return inventory; // fallback to current inventory if fetching fails
           });
 
@@ -101,9 +116,12 @@ const Inventory = () => {
         setFormData({ product_name: "", stock: "", product_price: "", product_image: null });
         setShowPopup(false);
       } else {
+        const errorMessage = await response.text();
+        showAlert(`Failed to add or update item: ${errorMessage}`, "error");
         console.error("Failed to add or update item");
       }
     } catch (error) {
+      showAlert("An unexpected error occurred while adding or updating the item.", "error");
       console.error("Error adding or updating item:", error);
     }
   };
@@ -123,107 +141,119 @@ const Inventory = () => {
   return (
     <div className="inventory-container">
       <Sidebar />
+      {customAlert.visible && (
+      <div className={`custom-alert ${customAlert.type}`}>
+        {customAlert.message}
+      </div>
+    )}
       <main className="main-content1">
-        <header className="header">
-          <h1>Recent Activity</h1>
-          <input
-            type="text"
-            placeholder="Search by product name..."
-            className="search-bar2"
-            onChange={handleSearch}
-          />
-        </header>
-
-        {/* Summary Cards */}
-        <div className="summary-cards">
-          <div className="card1">
-            <p className="count">{itemCategoriesCount}</p>
-            <p>Total</p>
-            <span>NEW ITEMS</span>
+        {loading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
           </div>
-          <div
-            className="card1"
-            onClick={() => router.push('/AdminService/Inventorys')} // Navigate to the inventorys page
-            style={{ cursor: 'pointer' }} // Makes the card look clickable
-          >
-            <p className="count">4</p>
-            <p>Vendors</p>
-            <span>NEW MESSAGE</span>
-          </div>
-          <div className="card1">
-            <p className="count">1</p>
-            <p>Vendor</p>
-            <span>REFUNDS</span>
-          </div>
-        </div>
-
-        <div className="content-section">
-          <section className="inventory-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Sl.No</th>
-                  <th>Product Name</th>
-                  <th>Stock</th>
-                  <th>Product Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredInventory.map((item, index) => (
-                  <tr key={item._id}>
-                    <td>{index + 1}</td>
-                    <td>{item.product_name}</td>
-                    <td>{item.stock}</td>
-                    <td>{item.product_price} Rs</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-          <div className="side-panel">
-            {/* Item Categories */}
-            <div className="categories">
-              <h2>Item Categories List</h2>
-              {/* <p>{itemCategoriesCount}</p> */}
-              <div className="icons-grid">
-                {inventory.map((item) => (
-                  <div key={item.product_id} className="category-item">
-                    <img src={item.product_image} alt={item.product_name} className="category-image" />
-                    <p>{item.product_name}</p>
-                  </div>
-                ))}
+        ) : (
+          <>
+            <header className="header">
+              <h1>Recent Activity</h1>
+              <input
+                type="text"
+                placeholder="Search by product name..."
+                className="search-bar2"
+                onChange={handleSearch}
+              />
+            </header>
+  
+            {/* Summary Cards */}
+            <div className="summary-cards">
+              <div className="card1">
+                <p className="count">{itemCategoriesCount}</p>
+                <p>Total</p>
+                <span>NEW ITEMS</span>
               </div>
-
-              <button
-                className="add-items"
-                onClick={handleAddItemsClick}
+              <div
+                className="card1"
+                onClick={() => router.push('/AdminService/Inventorys')}
+                style={{ cursor: 'pointer' }}
               >
-                + Add Items
-              </button>
+                <p className="count">4</p>
+                <p>Vendors</p>
+                <span>NEW MESSAGE</span>
+              </div>
+              <div className="card1">
+                <p className="count">1</p>
+                <p>Vendor</p>
+                <span>REFUNDS</span>
+              </div>
             </div>
-
-            {/* Stock Numbers */}
-            <div className="stock-numbers">
-              <h2>Stock Numbers</h2>
-              <p>
-                Low Stock Items:{" "}
-                {lowStockItems.length > 0 ? (
-                  lowStockItems.map((item) => (
-                    <span key={item._id}>
-                      {item.product_name}: {item.stock}{" "}
-                    </span>
-                  ))
-                ) : (
-                  <span className="highlight">0</span>
-                )}
-              </p>
-              <p>Item Categories: <span className="highlight">{itemCategoriesCount}</span></p>
-              <p>Refunded Items: <span className="highlight">2</span></p>
+  
+            <div className="content-section">
+              <section className="inventory-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Sl.No</th>
+                      <th>Product Name</th>
+                      <th>Stock</th>
+                      <th>Product Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredInventory.map((item, index) => (
+                      <tr key={item._id}>
+                        <td>{index + 1}</td>
+                        <td>{item.product_name}</td>
+                        <td>{item.stock}</td>
+                        <td>{item.product_price} Rs</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+              <div className="side-panel">
+                {/* Item Categories */}
+                <div className="categories">
+                  <h2>Item Categories List</h2>
+                  <div className="icons-grid">
+                    {inventory.map((item) => (
+                      <div key={item.product_id} className="category-item">
+                        <img src={item.product_image} alt={item.product_name} className="category-image" />
+                        <p>{item.product_name}</p>
+                      </div>
+                    ))}
+                  </div>
+  
+                  <button
+                    className="add-items"
+                    onClick={handleAddItemsClick}
+                  >
+                    + Add Items
+                  </button>
+                </div>
+  
+                {/* Stock Numbers */}
+                <div className="stock-numbers">
+                  <h2>Stock Numbers</h2>
+                  <p>
+                    Low Stock Items:{" "}
+                    {lowStockItems.length > 0 ? (
+                      lowStockItems.map((item) => (
+                        <span key={item._id}>
+                          {item.product_name}: {item.stock}{" "}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="highlight">0</span>
+                    )}
+                  </p>
+                  <p>Item Categories: <span className="highlight">{itemCategoriesCount}</span></p>
+                  <p>Refunded Items: <span className="highlight">2</span></p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </main>
-
+  
       {showPopup && (
         <div className="popup-overlay" onClick={handleClosePopup}>
           <div
@@ -267,7 +297,6 @@ const Inventory = () => {
               </label>
               <label>
                 Product Image:
-                
                 <div
                   className={`input-field upload-field ${
                     formData.product_image ? "has-image" : ""
@@ -284,20 +313,17 @@ const Inventory = () => {
                     id="product-image"
                     accept="image/*"
                     onChange={handleImageChange}
-                    style={{ display: 'none' }} 
+                    style={{ display: 'none' }}
                   />
                 </div>
               </label>
               <button type="submit">Add</button>
             </form>
-            {/* <button className="close-popup" onClick={handleClosePopup}>
-              Close
-            </button> */}
           </div>
         </div>
       )}
     </div>
   );
-};
+};  
 
 export default Inventory;

@@ -62,26 +62,20 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (!isLoading && vendors.length > 0) {
       const filtered = vendors.filter((vendor) => {
-        // Check if `selectedService` is defined before trimming
         const matchesCategory = activeCategory === "OxiviveClinic"
           ? vendor.selected_service?.trim() === "Oxi Clinic"
           : vendor.selected_service?.trim() === "Oxi Wheel";
-  
-        // Check if `name` is defined before calling `.toLowerCase()`
         const matchesSearch = vendor.name?.toLowerCase().includes(searchQuery.toLowerCase());
-  
-        // Check if `document_status` is defined before trimming
         const underProcessStatus = vendor.document_status?.trim() === "UnderProcess";
-  
+
         return matchesCategory && matchesSearch && underProcessStatus;
       });
-  
+
       setFilteredVendors(filtered);
     } else {
       setFilteredVendors([]);
     }
   }, [vendors, activeCategory, searchQuery, isLoading]);
-  
 
   const handleCardClick = (vendor: Vendor) => {
     router.push(`/AdminService/AdminDetails?id=${vendor.id}&name=${vendor.name}&state=${vendor.state}&district=${vendor.district}&pincode=${vendor.pincode}&profile_photo=${vendor.profile_photo}&selected_service=${vendor.selected_service}&address=${vendor.address}&email=${vendor.email}&phone=${vendor.phone}&pan_front_side=${vendor.pan_front_side}&gstNumber=${vendor.gstNumber}&aadhar_front_side=${vendor.aadhar_front_side}&aadhar_back_side=${vendor.aadhar_back_side}&pan_back_side=${vendor.pan_back_side}&medical_front_side=${vendor.medical_front_side}&medical_back_side=${vendor.medical_back_side}&medical_licence_number=${vendor.medical_licence_number}&licence_end_date=${vendor.licence_end_date}&driving_front_side=${vendor.driving_front_side}&driving_back_side=${vendor.driving_back_side}&driving_licence_number=${vendor.driving_licence_number}&vehicle_rc_front_side=${vendor.vehicle_rc_front_side}&vehicle_rc_back_side=${vendor.vehicle_rc_back_side}`);
@@ -89,51 +83,57 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <Sidebar/>
-      
+      <Sidebar />
+
       <main className="admin-content">
-        <div className="admin-header">
-          <h2 className="admin-title">Vendors Applications</h2>
-        </div>
-
-        <div className="admin-categories">
-          <div className="categories-container">
-            {categories.map((category) => (
-              <button
-                key={category}
-                className={`category-button ${activeCategory === category ? 'active' : ''}`}
-                onClick={() => setActiveCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
+        {isLoading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
           </div>
+        ) : (
+          <>
+            <div className="admin-header">
+              <h2 className="admin-title">Vendors Applications</h2>
+            </div>
 
-          <input
-            type="text"
-            placeholder="Search by vendor name..."
-            className="search-bar"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        <div className="cards-container">
-          {isLoading ? (
-            <p>Loading vendors...</p>
-          ) : filteredVendors.length > 0 ? (
-            filteredVendors.map((vendor, index) => (
-              <div key={index} className="card" onClick={() => handleCardClick(vendor)}>
-                <img src={`${vendor.profile_photo}`} alt={vendor.name} className="vendor-image" />
-                <p className="vendor-name">Name: {vendor.name}</p>
-                <p className="vendor-info">Applied: {vendor.selected_service}</p>
-                <p className="vendor-info">Location: {vendor.address}</p>
+            <div className="admin-categories">
+              <div className="categories-container">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    className={`category-button ${activeCategory === category ? 'active' : ''}`}
+                    onClick={() => setActiveCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
               </div>
-            ))
-          ) : (
-            <p className="no-vendors-message">No vendors available for {activeCategory}.</p>
-          )}
-        </div>
+
+              <input
+                type="text"
+                placeholder="Search by vendor name..."
+                className="search-bar"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="cards-container">
+              {filteredVendors.length > 0 ? (
+                filteredVendors.map((vendor, index) => (
+                  <div key={index} className="card" onClick={() => handleCardClick(vendor)}>
+                    <img src={`${vendor.profile_photo}`} alt={vendor.name} className="vendor-image" />
+                    <p className="vendor-name">Name: {vendor.name}</p>
+                    <p className="vendor-info">Applied: {vendor.selected_service}</p>
+                    <p className="vendor-info">Location: {vendor.address}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="no-vendors-message">No vendors available for {activeCategory}.</p>
+              )}
+            </div>
+          </>
+        )}
       </main>
     </div>
   );

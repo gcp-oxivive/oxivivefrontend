@@ -10,6 +10,7 @@ const Inventorys = () => {
     const [groupedRequests, setGroupedRequests] = useState({});
     const [filter, setFilter] = useState("Pending");
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [loading, setLoading] = useState(true); // New state to handle loading
 
     const dropdownRef = useRef(null); // Reference for the dropdown container
 
@@ -89,8 +90,10 @@ const Inventorys = () => {
                     return acc;
                 }, {});
                 setGroupedRequests(groupedData);
+                setLoading(false); // Set loading to false after data is fetched
             } catch (error) {
                 console.error("Error fetching inventory data:", error);
+                setLoading(false); // Set loading to false in case of an error
             }
         };
 
@@ -140,133 +143,140 @@ const Inventorys = () => {
         <div className="inventory-container">
             <Sidebar />
             <main className="main-content">
-                <header className="header1">
-                    <h1>Recent Activity</h1>
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="search-bar1"
-                        value={searchTerm}
-                        onChange={handleSearch}
-                    />
-                </header>
-
-                <div className="filters-container">
-                    <button
-                        className={`filter-button ${filter === "Pending" ? "active" : ""}`}
-                        onClick={() => setFilter("Pending")}
-                    >
-                        Pending
-                    </button>
-                    <button
-                        className={`filter-button ${filter === "Approved" ? "active" : ""}`}
-                        onClick={() => setFilter("Approved")}
-                    >
-                        Approved
-                    </button>
-                    <button
-                        className={`filter-button ${filter === "Rejected" ? "active" : ""}`}
-                        onClick={() => setFilter("Rejected")}
-                    >
-                        Rejected
-                    </button>
-                </div>
-
-                <div className="card-container">
-                <div className="cards-header">
-                        <div className="requests">
-                            <span>Requests</span>
-                        </div>
-                        <div className="filters1" onClick={() => setIsDropdownVisible(!isDropdownVisible)}>
-                            <i className="filter-icon1"><LuFilter /></i>
-                            <span>Filters</span>
-                        </div>
+                {loading ? ( // Show spinner while loading
+                    <div className="spinner-container">
+                        <div className="spinner"></div>
                     </div>
-                    
-                    {/* Dropdown for months */}
-                    {isDropdownVisible && (
-                        <div className="dropdown" ref={dropdownRef}>
-                            {months.map((month, index) => (
-                                <div key={index} className="dropdown-item">
-                                    {month}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                ) : (
+                    <>
+                        <header className="header1">
+                            <h1>Recent Activity</h1>
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                className="search-bar1"
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                        </header>
 
-                    {/* Dynamically Render Card Header Based on Filter */}
-                    <div className="request-card card-header">
-                        <div className="card-column">
-                            <span className="card-label">Items and Category</span>
+                        <div className="filters-container">
+                            <button
+                                className={`filter-button ${filter === "Pending" ? "active" : ""}`}
+                                onClick={() => setFilter("Pending")}
+                            >
+                                Pending
+                            </button>
+                            <button
+                                className={`filter-button ${filter === "Approved" ? "active" : ""}`}
+                                onClick={() => setFilter("Approved")}
+                            >
+                                Approved
+                            </button>
+                            <button
+                                className={`filter-button ${filter === "Rejected" ? "active" : ""}`}
+                                onClick={() => setFilter("Rejected")}
+                            >
+                                Rejected
+                            </button>
                         </div>
-                        
-                        <div className="card-column">
-                            <span className="card-label">Status</span>
-                        </div>
-                        <div className="card-column">
-                            <span className="card-label">Request Time</span>
-                        </div>
-                        {/* Show this column only for Pending filter */}
-                        {filter === "Pending" && (
-                            <div className="card-column">
-                                <span className="card-label">Send items to vendor</span>
+
+                        <div className="card-container">
+                            <div className="cards-header">
+                                <div className="requests">
+                                    <span>Requests</span>
+                                </div>
+                                <div className="filters1" onClick={() => setIsDropdownVisible(!isDropdownVisible)}>
+                                    <i className="filter-icon1"><LuFilter /></i>
+                                    <span>Filters</span>
+                                </div>
                             </div>
-                        )}
-                    </div>
-
-
-                    {Object.entries(filteredRequests).map(([key, group]) => (
-                        <div key={key} className="date-group">
-                            <h3 className="date-header">
-                                Vendor: <span className="vendor">{group.vendor}</span> |
-                                Location: <span className="location">{group.location}</span> |
-                                Date: <span className="date">{group.req_date}</span>
-                            </h3>
-                            {group.requests.map((request, index) => (
-                                <div className="request-card" key={index}>
-                                    <div className="card-column1">
-                                        <div className="product-info">
-                                            <span>{request.product_name}</span>
-                                            <span className="category">{request.request_quantity}</span>
+                            
+                            {/* Dropdown for months */}
+                            {isDropdownVisible && (
+                                <div className="dropdown" ref={dropdownRef}>
+                                    {months.map((month, index) => (
+                                        <div key={index} className="dropdown-item">
+                                            {month}
                                         </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Dynamically Render Card Header Based on Filter */}
+                            <div className="request-card card-header">
+                                <div className="card-column">
+                                    <span className="card-label">Items and Category</span>
+                                </div>
+                                
+                                <div className="card-column">
+                                    <span className="card-label">Status</span>
+                                </div>
+                                <div className="card-column">
+                                    <span className="card-label">Request Time</span>
+                                </div>
+                                {/* Show this column only for Pending filter */}
+                                {filter === "Pending" && (
+                                    <div className="card-column">
+                                        <span className="card-label">Send items to vendor</span>
                                     </div>
-                                    <div className="card-column1">
-                                        <span className={`status ${request.request_status?.toLowerCase()}`}>
-                                            {request.request_status || "No Status"}
-                                        </span>
-                                    </div>
-                                    <div className="card-column1">
-                                        <span>{request.request_time}</span>
-                                    </div>
-                                    {filter === "Pending" && (
-                                        <div className="card-column1">
-                                            <div className="button-container">
-                                                <button
-                                                    className="action-button approve"
-                                                    onClick={() =>
-                                                        handleApproveButton(request.vendor_identifier, request.product_id)
-                                                    }
-                                                    disabled={request.request_status === "Approved"}
-                                                >
-                                                    Approve
-                                                </button>
-                                                <button
-                                                    className="action-button reject"
-                                                    onClick={() =>
-                                                        handleRejectButton(request.vendor_identifier, request.product_id)
-                                                    }
-                                                    disabled={request.request_status === "Rejected"}
-                                                >
-                                                    Reject
-                                                </button>
+                                )}
+                            </div>
+
+                            {Object.entries(filteredRequests).map(([key, group]) => (
+                                <div key={key} className="date-group">
+                                    <h3 className="date-header">
+                                        Vendor: <span className="vendor">{group.vendor}</span> |
+                                        Location: <span className="location">{group.location}</span> |
+                                        Date: <span className="date">{group.req_date}</span>
+                                    </h3>
+                                    {group.requests.map((request, index) => (
+                                        <div className="request-card" key={index}>
+                                            <div className="card-column1">
+                                                <div className="product-info">
+                                                    <span>{request.product_name}</span>
+                                                    <span className="category">{request.request_quantity}</span>
+                                                </div>
                                             </div>
+                                            <div className="card-column1">
+                                                <span className={`status ${request.request_status?.toLowerCase()}`}>
+                                                    {request.request_status || "No Status"}
+                                                </span>
+                                            </div>
+                                            <div className="card-column1">
+                                                <span>{request.request_time}</span>
+                                            </div>
+                                            {filter === "Pending" && (
+                                                <div className="card-column1">
+                                                    <div className="button-container">
+                                                        <button
+                                                            className="action-button approve"
+                                                            onClick={() =>
+                                                                handleApproveButton(request.vendor_identifier, request.product_id)
+                                                            }
+                                                            disabled={request.request_status === "Approved"}
+                                                        >
+                                                            Approve
+                                                        </button>
+                                                        <button
+                                                            className="action-button reject"
+                                                            onClick={() =>
+                                                                handleRejectButton(request.vendor_identifier, request.product_id)
+                                                            }
+                                                            disabled={request.request_status === "Rejected"}
+                                                        >
+                                                            Reject
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
                             ))}
                         </div>
-                    ))}
-                </div>
+                    </>
+                )}
             </main>
         </div>
     );

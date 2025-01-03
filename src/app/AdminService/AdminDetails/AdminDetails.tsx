@@ -1,12 +1,14 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import './AdminDetails.css';
 import Sidebar from '../Sidebar/page';
 
 const AdminDetails = () => {
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
+  
   const id = searchParams.get('id');
   const name = searchParams.get('name');
   const profile_photo = searchParams.get('profile_photo');
@@ -30,8 +32,24 @@ const AdminDetails = () => {
   const driving_licence_number = searchParams.get('driving_licence_number');
   const vehicle_rc_front_side = searchParams.get('vehicle_rc_front_side');
   const vehicle_rc_back_side = searchParams.get('vehicle_rc_back_side');
+  const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
 
-  if (!name) return <p>Loading...</p>;
+
+  const showAlert = (message, type) => {
+    setCustomAlert({ visible: true, message, type });
+    setTimeout(() => {
+      setCustomAlert({ visible: false, message: '', type: '' });
+    }, 3000); // Alert will disappear after 3 seconds
+  };
+  
+
+  // Simulate loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // 1 second delay
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleApprove = async () => {
     try {
@@ -40,11 +58,11 @@ const AdminDetails = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'approved', email }),
       });
-      alert('Approved successfully');
+      showAlert('Approved successfully' , 'success');
       router.push('/AdminService/AdminDashboard');
     } catch (error) {
       console.error(error);
-      alert('Error approving the document');
+      showAlert('Error approving the document', 'error');
     }
   };
 
@@ -55,19 +73,33 @@ const AdminDetails = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'rejected', email }),
       });
-      alert('Rejected successfully');
+      showAlert('Rejected successfully', 'success');
       router.push('/AdminService/AdminDashboard');
     } catch (error) {
       console.error(error);
-      alert('Error rejecting the document');
+      showAlert('Error rejecting the document', 'error');
     }
   };
 
+  if (loading) {
+    return (
+      <div className="spinner-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-details">
-      <Sidebar/>
+      <Sidebar />
+      {customAlert.visible && (
+          <div className={`custom-alert ${customAlert.type}`}>
+            {customAlert.message}
+          </div>
+        )}
+
       
-      <main className="content">
+      <main className="content0">
         <h2 className="page-title">Vendor Details</h2>
 
         <section className="vendor-info-page">
@@ -89,11 +121,12 @@ const AdminDetails = () => {
             <p><strong>Email ID:</strong> {email}</p>
             <p><strong>Phone:</strong> {phone}</p>
             <div className="action-buttons">
-            <button className="approve" onClick={handleApprove}>Approve</button>
-            <button className="reject" onClick={handleReject}>Reject</button>
+              <button className="approve" onClick={handleApprove}>Approve</button>
+              <button className="reject" onClick={handleReject}>Reject</button>
             </div>
           </div>
 
+          {/* Documents Section */}
           <section className="documents">
             <h3>Aadhar Card</h3>
             <div className="document-row">
@@ -120,7 +153,7 @@ const AdminDetails = () => {
                     <img src={`${medical_back_side}`} alt="Medical Back" />
                     <span>Medical Licence Exp Date:</span>
                     <span>{licence_end_date}</span>
-                    </p>
+                  </p>
                 </div>
               </>
             )}
@@ -129,11 +162,11 @@ const AdminDetails = () => {
               <>
                 <h3>Driving License</h3>
                 <div className="document-row">
-                <p>
-                  <img src={`${driving_front_side}`} alt="Driving Front" />
-                  <span>Driving Licence Number:</span>
-                  <span>{driving_licence_number}</span>
-                </p>
+                  <p>
+                    <img src={`${driving_front_side}`} alt="Driving Front" />
+                    <span>Driving Licence Number:</span>
+                    <span>{driving_licence_number}</span>
+                  </p>
                   <p><img src={`${driving_back_side}`} alt="Driving Back" /></p>
                 </div>
 

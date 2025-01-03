@@ -15,6 +15,7 @@ const DriverList: React.FC = () => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [location, setLocation] = useState("Mumbai"); // Default location
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -45,6 +46,8 @@ const DriverList: React.FC = () => {
         setDrivers(data);
       } catch (error) {
         console.error("Failed to fetch drivers:", error);
+      } finally {
+        setLoading(false); // Set loading to false once data is fetched
       }
     };
   
@@ -69,50 +72,58 @@ const DriverList: React.FC = () => {
     <div className="driverlist-container">
       <Sidebar />
       <main className="driverlist-content">
-        <h1>Drivers List</h1>
-        <p>The following table consists of drivers' details</p>
-        <div className="header">
-          {/* Location Button with dynamic location */}
-          <button className="location-btn">
-            <i className="location"></i> {location}
-          </button>
-          {/* Search Input */}
-          <input
-            type="text"
-            placeholder="Search"
-            className="search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Sl.No</th>
-              <th>Wheel Name</th>
-              <th>Driver's Name</th>
-              <th>Contact No</th>
-              <th>Email</th>
-              <th>Block this Info</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredDrivers.map((driver, index) => (
-              <tr key={driver.driver_id}>
-                <td>{index + 1}</td>
-                <td>{driver.wheel || "N/A"}</td>
-                <td>{driver.name}</td>
-                <td>{driver.phone}</td>
-                <td>{driver.email}</td>
-                <td>
-                  <button className="block-button">
-                    <span>Block</span>
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {loading ? (
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
+        ) : (
+          <>
+            <h1>Drivers List</h1>
+            <p>The following table consists of drivers' details</p>
+            <div className="header">
+              {/* Location Button with dynamic location */}
+              <button className="location-btn">
+                <i className="location"></i> {location}
+              </button>
+              {/* Search Input */}
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Sl.No</th>
+                  <th>Wheel Name</th>
+                  <th>Driver's Name</th>
+                  <th>Contact No</th>
+                  <th>Email</th>
+                  <th>Block this Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredDrivers.map((driver, index) => (
+                  <tr key={driver.driver_id}>
+                    <td>{index + 1}</td>
+                    <td>{driver.wheel || "N/A"}</td>
+                    <td>{driver.name}</td>
+                    <td>{driver.phone}</td>
+                    <td>{driver.email}</td>
+                    <td>
+                      <button className="block-button">
+                        <span>Block</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
       </main>
     </div>
   );

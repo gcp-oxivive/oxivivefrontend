@@ -4,10 +4,13 @@ body {
     background-color: #ffffff;
 }
 
-.content {
+.managecontent {
     margin-left: 150px;
     padding: 20px;
-    width: calc(100% - 260px);
+    /* width: calc(100% - 260px); */
+    background-color: #fff;
+    height: 100vh;
+    /* width: 100%; */
 }
 
 .header2 {
@@ -138,104 +141,4 @@ body {
     color: #FC000E;
 }
 
-@media (max-width: 1440px) and (min-width: 1024px) {
-    .content {
-        margin-left: 150px; 
-        width: calc(100% - 220px);
-        padding: 15px;
-    }
 
-    .page-title {
-        font-size: 22px; 
-        margin-left: 300px; 
-    }
-
-    .service-image {
-        width: 420px; 
-        height: 260px;
-    }
-
-    .service-name {
-        font-size: 20px; 
-        margin-left: 150px;
-    }
-
-    .details-content p,
-    .benefits li {
-        font-size: 16px; 
-    }
-
-    .service-price {
-        font-size: 18px; 
-    }
-
-    .sessions-container {
-        font-size: 16px; 
-    }
-
-    .head6 {
-        font-size: 18px;
-        margin-left: -12px; 
-    }
-
-    .benefits {
-        margin-left: 0; 
-    }
-
-    .right-section,
-    .left-section {
-        flex: 1;
-        margin: 10px;
-    }
-}
-
-@media (min-width: 1441px) and (max-width: 1920px) {
-    .content {
-        margin-left: 150px;
-        width: calc(100% - 260px);
-        padding: 20px;
-    }
-
-    .page-title {
-        font-size: 24px;
-        margin-left: 350px;
-    }
-
-    .service-image {
-        width: 500px;
-        height: 300px;
-    }
-
-    .service-name {
-        font-size: 22px;
-        margin-left: 200px;
-    }
-
-    .details-content p,
-    .benefits li {
-        font-size: 18px;
-    }
-
-    .service-price {
-        font-size: 20px;
-    }
-
-    .sessions-container {
-        font-size: 18px;
-    }
-
-    .head6 {
-        font-size: 20px;
-        margin-left: -15px;
-    }
-
-    .benefits {
-        margin-left: 0;
-    }
-
-    .right-section,
-    .left-section {
-        flex: 1;
-        margin: 15px;
-    }
-}

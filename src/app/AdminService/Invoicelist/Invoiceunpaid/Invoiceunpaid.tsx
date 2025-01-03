@@ -29,13 +29,28 @@ const Invoiceunpaid: React.FC = () => {
 
   const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);  // State to track loading
+  const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
+
+  const showAlert = (message: string, type: string) => {
+    setCustomAlert({ visible: true, message, type });
+    setTimeout(() => {
+      setCustomAlert({ visible: false, message: '', type: '' });
+    }, 3000); // Alert will disappear after 3 seconds
+  };
 
   useEffect(() => {
     if (invoice_id) {
       fetch(`https://paymentandbillingservice-69668940637.asia-east1.run.app/api/invoice-details/?invoice_id=${invoice_id}`)
         .then((res) => res.json())
-        .then((data) => setInvoiceData(data))
-        .catch((err) => console.error("Error fetching invoice details:", err));
+        .then((data) => {
+          setInvoiceData(data);
+          setLoading(false);  // Data fetched, stop loading
+        })
+        .catch((err) => {
+          console.error("Error fetching invoice details:", err);
+          setLoading(false);  // Stop loading even on error
+        });
     }
   }, [invoice_id]);
 
@@ -50,7 +65,7 @@ const Invoiceunpaid: React.FC = () => {
 
   const handlePayment = async () => {
     if (!invoiceData || !isRazorpayLoaded) {
-      alert("Razorpay is not loaded yet. Please try again later.");
+      showAlert("Razorpay is not loaded yet. Please try again later.", "error");
       return;
     }
 
@@ -76,8 +91,10 @@ const Invoiceunpaid: React.FC = () => {
           });
 
           if (res.ok) {
-            alert("Payment successful and updated in backend!");
-            router.push("/AdminService/Invoicelist");
+            showAlert("Payment successful", "success");
+            setTimeout(() => {
+              router.push("/AdminService/Invoicelist");
+            }, 3000); // Delay of 5000 milliseconds (5 seconds)
           } else {
             console.error("Failed to update payment status:", await res.json());
           }
@@ -101,7 +118,7 @@ const Invoiceunpaid: React.FC = () => {
     const razorpay = new (window as any).Razorpay(options);
 
     razorpay.on("payment.failed", async (response: any) => {
-      alert("Payment failed!");
+      showAlert("Payment failed!", "error");
       // Update backend on payment failure
       try {
         const res = await fetch("https://paymentandbillingservice-69668940637.asia-east1.run.app/api/update-payment-status/", {
@@ -126,9 +143,7 @@ const Invoiceunpaid: React.FC = () => {
     razorpay.open();
   };
 
-  if (!invoiceData) return <div>Loading...</div>;
-
-  const { vendor, issued_date, due_date, total, invoice_details, invoice_price } = invoiceData;
+  const { vendor, issued_date, due_date, total, invoice_details, invoice_price } = invoiceData || {};
 
   const invoiceDetailsArray = invoice_details && typeof invoice_details === "string" ? invoice_details.split(",") : [];
   const invoicePricesArray = invoice_price && typeof invoice_price === "string" ? invoice_price.split(",") : [];
@@ -136,67 +151,80 @@ const Invoiceunpaid: React.FC = () => {
   return (
     <div className="invoice-page">
       <Sidebar />
+      {customAlert.visible && (
+          <div className={`custom-alert ${customAlert.type}`}>
+            {customAlert.message}
+          </div>
+        )}
       <div className="invoice-content">
-        <div className="invoice-header">
-          <div className="header-left">
-            <h1>{invoiceData.invoice_id}</h1>
-            <p>{total} USD Unpaid as of {issued_date}</p>
+        {loading ? ( // Show spinner inside invoice-content
+          <div className="spinner-container">
+            <div className="spinner"></div>
           </div>
-          <div className="header-right">
-            <div className="status-box unpaid">UnPaid</div>
-          </div>
-        </div>
-
-        <hr className="divider" />
-        
-        <div className="border-2 rounded-lg border-gray-300 p-5 mt-5">
-        <div className="payment-details2">
-          <h2 className="payment-details3">Payment Batch</h2>
-          <div className="details-grid1">
-            <div>
-              <p><strong>Name</strong>: {vendor.name}</p>
-              <p><strong>Email</strong>: {vendor.email}</p>
-              <p><strong>Mobile Number</strong>: {vendor.phone}</p>
-              <p><strong>Location</strong>: {vendor.address}</p>
-              <p><strong>Service Name</strong>: {vendor.clinic_name || vendor.wheel_name}</p>
+        ) : (
+          <>
+            <div className="invoice-header">
+              <div className="header-left">
+                <h1>{invoiceData?.invoice_id}</h1>
+                <p>{invoiceData?.total} USD Unpaid as of {invoiceData?.issued_date}</p>
+              </div>
+              <div className="header-right">
+                <div className="status-box unpaid">UnPaid</div>
+              </div>
             </div>
-            <div>
-              <p><strong>Invoice Number</strong>: {invoiceData.invoice_id}</p>
-              <p><strong>Issued Date</strong>: {issued_date}</p>
-              <p><strong>Due Date</strong>: {due_date}</p>
+
+            <hr className="divider" />
+            
+            <div className="border-2 rounded-lg border-gray-300 p-5 mt-5">
+              <div className="payment-details2">
+                <h2 className="payment-details3">Payment Batch</h2>
+                <div className="details-grid1">
+                  <div>
+                    <p><strong>Name</strong>: {vendor?.name}</p>
+                    <p><strong>Email</strong>: {vendor?.email}</p>
+                    <p><strong>Mobile Number</strong>: {vendor?.phone}</p>
+                    <p><strong>Location</strong>: {vendor?.address}</p>
+                    <p><strong>Service Name</strong>: {vendor?.clinic_name || vendor?.wheel_name}</p>
+                  </div>
+                  <div>
+                    <p><strong>Invoice Number</strong>: {invoiceData?.invoice_id}</p>
+                    <p><strong>Issued Date</strong>: {issued_date}</p>
+                    <p><strong>Due Date</strong>: {due_date}</p>
+                  </div>
+                </div>
+              </div>
+
+              <table className="invoice-table2">
+                <thead>
+                  <tr>
+                    <th>INVOICE</th>
+                    <th>AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoiceDetailsArray.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item}</td>
+                      <td>{invoicePricesArray[index] || "0"} </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan={1}><strong>Total</strong></td>
+                    <td><strong>{total} </strong></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <div className="pay-now-section">
+                <button className="pay-now-button" onClick={handlePayment}>
+                  Pay Now
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <table className="invoice-table2">
-          <thead>
-            <tr>
-              <th>INVOICE</th>
-              <th>AMOUNT</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoiceDetailsArray.map((item, index) => (
-              <tr key={index}>
-                <td>{item}</td>
-                <td>{invoicePricesArray[index] || "0"} </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={1}><strong>Total</strong></td>
-              <td><strong>{total} </strong></td>
-            </tr>
-          </tfoot>
-        </table>
-
-        <div className="pay-now-section">
-          <button className="pay-now-button" onClick={handlePayment}>
-            Pay Now
-          </button>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

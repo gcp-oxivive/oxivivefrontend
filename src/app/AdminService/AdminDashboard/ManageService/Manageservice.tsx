@@ -36,6 +36,7 @@ const Manageservice: React.FC = () => {
   });
   const [services, setServices] = useState<Service[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
   const router = useRouter();
 
   // Fetch services from the backend when the component mounts
@@ -46,12 +47,14 @@ const Manageservice: React.FC = () => {
         throw new Error('Failed to fetch services');
       }
       const data = await response.json();
-      // Reverse the service list to ensure the newest service appears at the end
       setServices(data.reverse());
     } catch (error) {
       console.error('Error fetching services:', error);
+    } finally {
+      setLoading(false); // Set loading to false after the data is fetched
     }
   };
+  
 
   useEffect(() => {
     fetchServices();
@@ -185,130 +188,139 @@ const Manageservice: React.FC = () => {
   };
 
   return (
-    <div className="manage-service">
-      <Sidebar />
+  <div className="manage-service">
+    <Sidebar />
 
-      <main className="content">
-        <header className="header0">
-          <h2 className="page-title">Manage Service</h2>
-          <input
-            type="text"
-            className="search-bar"
-            placeholder="Search services..."
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-        </header>
+    <main className="content">
+      {loading ? (
+        <div className="spinner"></div> // Show spinner while loading
+      ) : (
+        <>
+          <header className="header0">
+            <h2 className="page-title">Manage Service</h2>
+            <input
+              type="text"
+              className="search-bar3"
+              placeholder="Search services..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </header>
 
-        <div className="actions">
-          <button className="add-service-btn" onClick={() => setShowModal(true)}>
-            <MdOutlineAddToPhotos className="add-icon" /> Add Service
-          </button>
-        </div>
+          <div className="actions">
+            <button className="add-service-btn" onClick={() => setShowModal(true)}>
+              <MdOutlineAddToPhotos className="add-icon" /> Add Service
+            </button>
+          </div>
 
-        <section className="service-cards">
-          {filteredServices.map((service) => (
-            <div key={service.service_id} className="card" onClick={() => handleCardClick(service)}>
-              <div className="card-image">
-                <img src={service.service_image} alt={service.service} />
-                <h3 className="head1">{service.service_type}</h3>
+          <section className="service-cards">
+            {filteredServices.map((service) => (
+              <div key={service.service_id} className="card2" onClick={() => handleCardClick(service)}>
+                <div className="card-image">
+                  <img src={service.service_image} alt={service.service} />
+                  <h3 className="head1">{service.service_type}</h3>
+                </div>
+
+                <div className="card-content">
+                  <p><strong>Service:</strong> {service.service}</p>
+                  <p><strong>Description:</strong> {service.description}</p>
+                  <p>
+                    <strong>Price:</strong> <span style={{ color: 'red' }}>{service.price} Rs.</span>
+                  </p>
+                  <button
+                    className="remove-btn"
+                    onClick={(e) => { e.stopPropagation(); handleRemove(service.service_id); }}
+                  >
+                    <CgRemoveR className="remove-icon" /> Remove
+                  </button>
+                </div>
               </div>
-              
-              <div className="card-content">
-                <p><strong>Service:</strong> {service.service}</p>
-                <p><strong>Description:</strong> {service.description}</p>
-                <p>
-                  <strong>Price:</strong> <span style={{ color: 'red' }}>{service.price} Rs.</span>
-                </p>
-                <button className="remove-btn" onClick={(e) => { e.stopPropagation(); handleRemove(service.service_id); }}>
-                  <CgRemoveR className="remove-icon" /> Remove
+            ))}
+          </section>
+        </>
+      )}
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3 className="heading5">Add New Service</h3>
+            <form>
+              <label>Service Name:</label>
+              <input
+                type="text"
+                name="serviceName"
+                value={formData.serviceName}
+                onChange={handleInputChange}
+                placeholder="Enter service name"
+              />
+              <label>Description:</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Enter service description"
+              ></textarea>
+              <label>Price:</label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                placeholder="Enter price"
+              />
+              <label>Service Type:</label>
+              <input
+                type="text"
+                name="serviceType"
+                value={formData.serviceType}
+                onChange={handleInputChange}
+                placeholder="Enter service type"
+              />
+              <label>Upload Image:</label>
+              <div className="upload-container">
+                <button
+                  type="button"
+                  className="upload-btn"
+                  onClick={() => document.getElementById('fileInput')?.click()}
+                >
+                  <IoCameraOutline className="camera-icon" />
+                  {formData.image ? (
+                    <span className="file-name">{formData.image.name}</span>
+                  ) : (
+                    <span className='place'>Upload Image</span>
+                  )}
+                </button>
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleImageUpload}
+                />
+              </div>
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="save-btn"
+                  onClick={handleSubmit}
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
                 </button>
               </div>
-            </div>
-          ))}
-        </section>
-
-        {showModal && (
-          <div className="modal">
-            <div className="modal-content">
-              <h3 className="heading5">Add New Service</h3>
-              <form>
-                <label>Service Name:</label>
-                <input
-                  type="text"
-                  name="serviceName"
-                  value={formData.serviceName}
-                  onChange={handleInputChange}
-                  placeholder="Enter service name"
-                />
-                <label>Description:</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  placeholder="Enter service description"
-                ></textarea>
-                <label>Price:</label>
-                <input
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder="Enter price"
-                />
-                <label>Service Type:</label>
-                <input
-                  type="text"
-                  name="serviceType"
-                  value={formData.serviceType}
-                  onChange={handleInputChange}
-                  placeholder="Enter service type"
-                />
-                <label>Upload Image:</label>
-                <div className="upload-container">
-                  <button
-                    type="button"
-                    className="upload-btn"
-                    onClick={() => document.getElementById('fileInput')?.click()}
-                  >
-                    <IoCameraOutline className="camera-icon" />
-                    {formData.image ? (
-                      <span className="file-name">{formData.image.name}</span>
-                    ) : (
-                      <span className='place'>Upload Image</span>
-                    )}
-                  </button>
-                  <input
-                    type="file"
-                    id="fileInput"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleImageUpload}
-                  />
-                </div>
-                <div className="modal-actions">
-                  <button
-                    type="button"
-                    className="save-btn"
-                    onClick={handleSubmit}
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel-btn"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+            </form>
           </div>
-        )}
-      </main>
-    </div>
-  );
+        </div>
+      )}
+    </main>
+  </div>
+);
 };
 
 export default Manageservice;
