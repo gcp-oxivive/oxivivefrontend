@@ -18,6 +18,16 @@ const Inventory = () => {
   });
   const [isLoading, setIsLoading] = useState(true); // State for loading
 
+  const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
+
+
+  const showAlert = (message, type) => {
+    setCustomAlert({ visible: true, message, type });
+    setTimeout(() => {
+      setCustomAlert({ visible: false, message: '', type: '' });
+    }, 3000); // Alert will disappear after 3 seconds
+  };
+
   // Fetch existing inventory data from the backend
   useEffect(() => {
     fetch("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventory/")
@@ -90,13 +100,14 @@ const Inventory = () => {
 
       if (response.ok) {
         const result = await response.json();
-        alert(response.status === 200 ? "Product updated successfully!" : "Product added successfully!");
+        showAlert(response.status === 200 ? "Product updated successfully!" : "Product added successfully!", 'success');
 
         // Fetch the updated inventory list
         const updatedInventory = await fetch("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventory/")
           .then((res) => res.json())
           .catch((err) => {
-            console.error("Error fetching updated inventory:", err);
+            console.error("Error fetching the updated inventory:", err);
+            showAlert("Error fetching the updated inventory.", "error");
             return inventory; // fallback to current inventory if fetching fails
           });
 
@@ -105,9 +116,12 @@ const Inventory = () => {
         setFormData({ product_name: "", stock: "", product_price: "", product_image: null });
         setShowPopup(false);
       } else {
+        const errorMessage = await response.text();
+        showAlert(`Failed to add or update item: ${errorMessage}`, "error");
         console.error("Failed to add or update item");
       }
     } catch (error) {
+      showAlert("An unexpected error occurred while adding or updating the item.", "error");
       console.error("Error adding or updating item:", error);
     }
   };
@@ -127,6 +141,11 @@ const Inventory = () => {
   return (
     <div className="inventory-container">
       <Sidebar />
+      {customAlert.visible && (
+      <div className={`custom-alert ${customAlert.type}`}>
+        {customAlert.message}
+      </div>
+    )}
       <main className="main-content1">
         {isLoading ? (
           <div className="spinner-container">

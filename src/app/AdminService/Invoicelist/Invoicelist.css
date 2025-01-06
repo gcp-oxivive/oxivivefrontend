@@ -167,10 +167,11 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: rgba(182, 181, 181, 0.2);
   }
   
   .spinner {
-    border: 4px solid rgba(255, 255, 255, 0.3);
+    border: 4px solid #f3f3f3;
     border-top: 4px solid #db3439;
     border-radius: 50%;
     width: 50px;

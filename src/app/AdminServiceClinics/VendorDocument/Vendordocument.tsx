@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiUploadCloud } from "react-icons/fi";
 import { BsPersonCircle } from "react-icons/bs";
 import axios from "axios";
@@ -10,6 +10,26 @@ const Vendordocument: React.FC = () => {
   const [selectedService, setSelectedService] = useState<'Oxivive Clinic' | 'Oxivive Wheel'>('Oxivive Clinic');
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [documentImages, setDocumentImages] = useState<{ [key: string]: string | null }>({});
+  const [loading, setIsLoading] = useState(true);
+
+  const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
+
+
+  const showAlert = (message, type) => {
+    setCustomAlert({ visible: true, message, type });
+    setTimeout(() => {
+      setCustomAlert({ visible: false, message: '', type: '' });
+    }, 3000); // Alert will disappear after 3 seconds
+  };
+
+
+  useEffect(() => {
+    // Simulating a delay for demonstration purposes.
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Adjust the delay time as needed
+    return () => clearTimeout(timer);
+  }, []);
 
   const documents = {
     'Oxivive Clinic': [
@@ -74,7 +94,7 @@ const Vendordocument: React.FC = () => {
   
     // Validate required fields
     if (!name || !phone || !email || !profilePhoto || !documentsUploaded) {
-      alert("Please fill in all fields and upload the required documents!");
+      showAlert("Please fill in all fields and upload the required documents!" , 'error');
       return;
     }
     const profilePhotoData = {
@@ -114,150 +134,165 @@ const Vendordocument: React.FC = () => {
       .post("https://vendormanagementservice-69668940637.asia-east1.run.app/api/vendor-details/", formData)
       .then((response) => {
         console.log("Data saved successfully:", response.data);
-        alert("Documents uploaded successfully!");
+        showAlert("Documents uploaded successfully!", 'success');
       })
       .catch((error) => {
         console.error("Error saving data:", error);
-        alert("An error occurred while uploading documents.");
+        showAlert("An error occurred while uploading documents.", 'error');
       });
   };
+
+ 
 
   return (
     <div className="manage-service">
       {/* Sidebar */}
       <Sidebar />
-
-      {/* Main Content */}
-      <main className="content">
-      <header className="header">
-  <div className="header-wrapper">
-    <div className="header-text">
-      <h1 className="heading">Vendor Documents</h1>
-      <p className="sub-heading">Fill the following details to add person</p>
-    </div>
-    <div className="tabs-buttons">
-      <button
-        className={`service-toggle ${selectedService === 'Oxivive Clinic' ? 'active' : ''}`}
-        onClick={() => setSelectedService('Oxivive Clinic')}
-      >
-        Oxivive Clinic
-      </button>
-      <button
-        className={`service-toggle ${selectedService === 'Oxivive Wheel' ? 'active' : ''}`}
-        onClick={() => setSelectedService('Oxivive Wheel')}
-      >
-        Oxivive Wheel
-      </button>
-      <button className="upload-main-btn" onClick={handleSubmit}>
-        Upload
-      </button>
-    </div>
-  </div>
-</header>
-        <section className="form-section">
-          <form className="vendor-form">
-            <div className="profile-section">
-              <div className="profile-photo">
-                {/* Display the profile image if available */}
-                <div
-                  className="profile-icon"
-                  style={{
-                    backgroundImage: profileImage ? `url(${profileImage})` : undefined,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                >
-                  {!profileImage && <BsPersonCircle size={100} className="profile-icon" />}
-                </div>
-                <p className="profile-text">Profile Photo</p>
-                <label htmlFor="profile-photo-upload" className="upload-btn">
-                   Upload Photo
-                </label>
-                <input
-                  id="profile-photo-upload"
-                  type="file"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleProfilePhotoUpload}
-                />
-              </div>
-              <div className="profile-details">
-                <label htmlFor="name">Name</label>
-                <input id="name" type="text" placeholder="Name" />
-                <label htmlFor="phone">Phone Number</label>
-                <input id="phone" type="text" placeholder="Phone Number" />
-                <label htmlFor="email">Email</label>
-                <input id="email" type="text" placeholder="Email" />
-                <label htmlFor="state">State</label>
-                <input id="state" type="text" placeholder="State" />
-                <label htmlFor="district">District</label>
-                <input id="district" type="text" placeholder="District" />
-                <label htmlFor="pincode">Pincode</label>
-                <input id="pincode" type="text" placeholder="Pincode" />
-                <label htmlFor="address">Address</label>
-                <input id="address" type="text" placeholder="Address" />
-                {selectedService === 'Oxivive Wheel' && (
-                  <>
-                    <label htmlFor="wheelName">Wheel Name</label>
-                    <input id="wheelName" type="text" placeholder="Wheel Name" />
-                  </>
-                )}
-                {selectedService === 'Oxivive Clinic' && (
-                  <>
-                    <label htmlFor="clinicName">Clinic Name</label>
-                    <input id="clinicName" type="text" placeholder="Clinic Name" />
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Document Upload */}
-            <h2 className="head5">Upload The Documents</h2>
-
-            <div className="grid-container">
-    {documents[selectedService].map(({ title, type }) => (
-      <div key={title} className="document-card">
-        <p className="document-title">{title}</p>
-        <div className="document-card-group">
-          {type.map((side) => (
-            <div key={`${title}-${side}`} className="document-card-item">
-              <div
-                className="upload-area"
-                onClick={() => document.getElementById(`${title}-${side}-upload`)?.click()}
-              >
-                {!documentImages[`${title}-${side}`] && (
-                  <>
-                    <div className="upload-icon-container">
-                      <FiUploadCloud size={30} />
-                    </div>
-                    <p className="para">Upload {side} Side</p>
-                  </>
-                )}
-                {documentImages[`${title}-${side}`] && (
-                  <img
-                    src={documentImages[`${title}-${side}`] as string}
-                    alt={`${title} ${side}`}
-                    className="preview-image"
-                  />
-                )}
-              </div>
-
-              <input
-                id={`${title}-${side}-upload`}
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={(e) => handleDocumentUpload(title, side, e)}
-              />
-            </div>
-          ))}
-        </div>
+      {customAlert.visible && (
+      <div className={`custom-alert ${customAlert.type}`}>
+        {customAlert.message}
       </div>
-    ))}
-  </div>
-          </form>
-        </section>
-      </main>
+    )}
+      {loading ? (
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        <>
+          {/* Main Content */}
+          <main className="content01">
+            <header className="header01">
+              <div className="header-wrapper">
+                <div className="header-text">
+                  <h1 className="heading">Vendor Documents</h1>
+                  <p className="sub-heading">Fill the following details to add person</p>
+                </div>
+                <div className="tabs-buttons">
+                  <button
+                    className={`service-toggle ${
+                      selectedService === "Oxivive Clinic" ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedService("Oxivive Clinic")}
+                  >
+                    Oxivive Clinic
+                  </button>
+                  <button
+                    className={`service-toggle ${
+                      selectedService === "Oxivive Wheel" ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedService("Oxivive Wheel")}
+                  >
+                    Oxivive Wheel
+                  </button>
+                  <button className="upload-main-btn" onClick={handleSubmit}>
+                    Upload
+                  </button>
+                </div>
+              </div>
+            </header>
+            <section className="form-section">
+              <form className="vendor-form">
+                <div className="profile-section">
+                  <div className="profile-photo">
+                    <div
+                      className="profile-icon"
+                      style={{
+                        backgroundImage: profileImage ? `url(${profileImage})` : undefined,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    >
+                      {!profileImage && <BsPersonCircle size={100} className="profile-icon" />}
+                    </div>
+                    <p className="profile-text">Profile Photo</p>
+                    <label htmlFor="profile-photo-upload" className="upload-btn">
+                      Upload Photo
+                    </label>
+                    <input
+                      id="profile-photo-upload"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={handleProfilePhotoUpload}
+                    />
+                  </div>
+                  <div className="profile-details">
+                    <label htmlFor="name">Name</label>
+                    <input id="name" type="text" placeholder="Name" />
+                    <label htmlFor="phone">Phone Number</label>
+                    <input id="phone" type="text" placeholder="Phone Number" />
+                    <label htmlFor="email">Email</label>
+                    <input id="email" type="text" placeholder="Email" />
+                    <label htmlFor="state">State</label>
+                    <input id="state" type="text" placeholder="State" />
+                    <label htmlFor="district">District</label>
+                    <input id="district" type="text" placeholder="District" />
+                    <label htmlFor="pincode">Pincode</label>
+                    <input id="pincode" type="text" placeholder="Pincode" />
+                    <label htmlFor="address">Address</label>
+                    <input id="address" type="text" placeholder="Address" />
+                    {selectedService === "Oxivive Wheel" && (
+                      <>
+                        <label htmlFor="wheelName">Wheel Name</label>
+                        <input id="wheelName" type="text" placeholder="Wheel Name" />
+                      </>
+                    )}
+                    {selectedService === "Oxivive Clinic" && (
+                      <>
+                        <label htmlFor="clinicName">Clinic Name</label>
+                        <input id="clinicName" type="text" placeholder="Clinic Name" />
+                      </>
+                    )}
+                  </div>
+                </div>
+                <h2 className="head5">Upload The Documents</h2>
+                <div className="grid-container">
+                  {documents[selectedService].map(({ title, type }) => (
+                    <div key={title} className="document-card">
+                      <p className="document-title">{title}</p>
+                      <div className="document-card-group">
+                        {type.map((side) => (
+                          <div key={`${title}-${side}`} className="document-card-item">
+                            <div
+                              className="upload-area"
+                              onClick={() =>
+                                document.getElementById(`${title}-${side}-upload`)?.click()
+                              }
+                            >
+                              {!documentImages[`${title}-${side}`] && (
+                                <>
+                                  <div className="upload-icon-container">
+                                    <FiUploadCloud size={30} />
+                                  </div>
+                                  <p className="para">Upload {side} Side</p>
+                                </>
+                              )}
+                              {documentImages[`${title}-${side}`] && (
+                                <img
+                                  src={documentImages[`${title}-${side}`]}
+                                  alt={`${title} ${side}`}
+                                  className="preview-image"
+                                />
+                              )}
+                            </div>
+                            <input
+                              id={`${title}-${side}-upload`}
+                              type="file"
+                              accept="image/*"
+                              style={{ display: "none" }}
+                              onChange={(e) => handleDocumentUpload(title, side, e)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </form>
+            </section>
+          </main>
+        </>
+      )}
     </div>
   );
 };

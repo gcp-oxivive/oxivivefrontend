@@ -163,7 +163,7 @@ const SignupForm: React.FC = () => {
   return (
     <div className="signup-container">
       <div className="logoContainer">
-        <img src="/images/shot(1).png" alt="Logo" className="logo" />
+        <img src="/images/shot(1).png" alt="Logo" className="logo21" />
         <h1 className="welcomeText">Oxivive</h1>
       </div>
       <div className="signup-card">
@@ -262,7 +262,7 @@ const SignupForm: React.FC = () => {
           {errors.apiError && <span className="error">{errors.apiError}</span>}
 
 
-          <button type="submit">Sign Up</button>
+          <button type="submit" className='submit-button'>Sign Up</button>
           <p className="sign-in-link">
             Already have an account?{' '}
             <span className="sign-in-button" onClick={handleSignInClick}>

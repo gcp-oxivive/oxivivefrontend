@@ -38,9 +38,11 @@ const Inventorys = () => {
                     });
                     return updatedGroupedRequests;
                 });
+                showAlert("Request approved successfully!", "success");
             }
         } catch (error) {
             console.error("Error approving request status:", error);
+            showAlert("Failed to approve the request.", "error");
         }
     };
 
@@ -64,9 +66,11 @@ const Inventorys = () => {
                     });
                     return updatedGroupedRequests;
                 });
+                showAlert("Request rejected successfully!", "success");
             }
         } catch (error) {
             console.error("Error rejecting request status:", error);
+            showAlert("Failed to reject the request.", "error");
         }
     };
 
@@ -93,12 +97,22 @@ const Inventorys = () => {
                 setLoading(false); // Set loading to false after data is fetched
             } catch (error) {
                 console.error("Error fetching inventory data:", error);
+                showAlert("Failed to fetch inventory data.", "error");
                 setLoading(false); // Set loading to false in case of an error
             }
         };
 
         fetchInventoryData();
     }, []);
+
+    const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
+
+    const showAlert = (message, type) => {
+        setCustomAlert({ visible: true, message, type });
+        setTimeout(() => {
+          setCustomAlert({ visible: false, message: '', type: '' });
+        }, 3000); // Alert will disappear after 3 seconds
+      };
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -142,6 +156,11 @@ const Inventorys = () => {
     return (
         <div className="inventory-container">
             <Sidebar />
+            {customAlert.visible && (
+      <div className={`custom-alert ${customAlert.type}`}>
+        {customAlert.message}
+      </div>
+    )}
             <main className="main-content">
                 {loading ? ( // Show spinner while loading
                     <div className="spinner-container">

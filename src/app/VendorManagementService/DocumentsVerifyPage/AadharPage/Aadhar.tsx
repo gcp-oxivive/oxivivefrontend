@@ -4,6 +4,9 @@ import { FiUpload, FiArrowLeft } from 'react-icons/fi';
 import './Aadhar.css';
 import { BiArrowBack } from "react-icons/bi";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/VendorManagementService/customtoast/page";
+  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
 
 const Aadhar: React.FC = () => {
   const Router = useRouter();
@@ -22,34 +25,27 @@ const Aadhar: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, side: string) => {
     if (e.target.files && e.target.files.length > 0) {
-        const file = e.target.files[0];
-        const fileURL = URL.createObjectURL(file);
-        
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const base64String = reader.result as string;
-            if (side === 'front') {
-                setFrontSide(file);
-                setFrontPreview(fileURL);
-                localStorage.setItem("aadharFrontPreview", fileURL);
-                localStorage.setItem("aadharFrontFile", base64String); // Store Base64 string
-            } else {
-                setBackSide(file);
-                setBackPreview(fileURL);
-                localStorage.setItem("aadharBackPreview", fileURL);
-                localStorage.setItem("aadharBackFile", base64String); // Store Base64 string
-            }
-        };
-        
-        reader.readAsDataURL(file); // Convert file to Base64
+      const file = e.target.files[0];
+      const fileURL = URL.createObjectURL(file);
+  
+      if (side === 'front') {
+        setFrontSide(file);
+        setFrontPreview(fileURL);
+        localStorage.setItem("aadharFrontPreview", fileURL); // Store only the file URL
+      } else {
+        setBackSide(file);
+        setBackPreview(fileURL);
+        localStorage.setItem("aadharBackPreview", fileURL); // Store only the file URL
+      }
     }
-};
+  };
+  
 
 
   const handleSubmit = () => {
     if (frontSide && backSide) {
       localStorage.setItem("isAadharUploaded", "true");
-      alert('Files uploaded successfully!');
+      showToast('Files uploaded successfully!', 'success');
       Router.push("/VendorManagementService/DocumentsVerifyPage");
     } else {
       alert('Please upload both sides of the Aadhar card');
@@ -57,7 +53,8 @@ const Aadhar: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container17">
+      <ToastContainer className="toast-container"/>
       <div className="back-arrow">
         <BiArrowBack className="arrow-icon" onClick={() => Router.back()}/>
       </div>

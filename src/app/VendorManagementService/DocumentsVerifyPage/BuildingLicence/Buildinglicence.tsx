@@ -4,6 +4,9 @@ import { FiUpload } from "react-icons/fi";
 import "./Buildinglicence.css"; 
 import { BiArrowBack } from "react-icons/bi";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/VendorManagementService/customtoast/page";
+  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
 
 const Buildinglicence: React.FC = () => {
   const router = useRouter();
@@ -38,7 +41,7 @@ const Buildinglicence: React.FC = () => {
         localStorage.setItem("buildingFrontPreview", frontPreview as string); // Save preview for consistent display
         localStorage.setItem("isBuildingLicenceUploaded", "true");
 
-        alert("File uploaded successfully!");
+        showToast("File uploaded successfully!",'success');
         router.push("/VendorManagementService/DocumentsVerifyPage");
       };
 
@@ -49,7 +52,8 @@ const Buildinglicence: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container18">
+      <ToastContainer className="toast-container"/>
       <div className="back-arrow">
         <BiArrowBack className="arrow-icon" onClick={() => router.back()} />
       </div>

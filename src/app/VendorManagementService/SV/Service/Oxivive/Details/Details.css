@@ -5,7 +5,7 @@ body {
 }
 
 /* Container for the entire form */
-.container {
+.container123 {
     height: 100vh;
     width: 100%;
     max-width: 350px;
@@ -125,7 +125,7 @@ body {
 
   /* Responsive Styles */
 @media (max-width: 480px) { /* Small screens, like mobile */
-    .container {
+    .container123 {
         max-width: 100%;
         padding: 10px;
     }
@@ -142,7 +142,7 @@ body {
 }
 
 @media (min-width: 481px) and (max-width: 768px) { /* Medium screens, like tablets */
-    .container {
+    .container123 {
         max-width: 100%;
     }
     .heading {
@@ -157,7 +157,7 @@ body {
 }
 
 @media (min-width: 768px) and (max-width: 1200px) { /* Large screens */
-    .container {
+    .container123 {
         max-width: 100%;
     }
     .heading {

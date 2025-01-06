@@ -193,7 +193,9 @@ const Manageservice: React.FC = () => {
 
     <main className="content">
       {loading ? (
-        <div className="spinner"></div> // Show spinner while loading
+        <div className="spinnerContainer">
+        <div className="spinner"></div>
+      </div>
       ) : (
         <>
           <header className="header0">

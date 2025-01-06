@@ -75,12 +75,13 @@ const Vendorlist = () => {
     <div className="vendorlist-container">
       <Sidebar />
       <div className="content">
-        <h2 className="title">Vendors List</h2>
+        {/* <h2 className="title">Vendors List</h2> */}
         <div className="header4">
           {/* Location Button with dynamic location */}
           <button className="location-btn2">
             <i className="location"></i> {location}
           </button>
+          <h2 className="title">Vendors List</h2>
           {/* Search Input */}
           <input
             type="text"

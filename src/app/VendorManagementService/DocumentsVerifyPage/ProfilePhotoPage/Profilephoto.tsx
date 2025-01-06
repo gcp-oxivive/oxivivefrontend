@@ -5,6 +5,9 @@ import { CgProfile } from "react-icons/cg";
 import { PiPlusCircleFill } from 'react-icons/pi';
 import './Profilephoto.css';
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/VendorManagementService/customtoast/page";
+  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
 
 const ProfilePhoto: React.FC = () => {
   const Router = useRouter();
@@ -53,7 +56,7 @@ const ProfilePhoto: React.FC = () => {
         const base64String = reader.result as string;
         localStorage.setItem("profilePhotoFile", base64String);
 
-        alert('Profile photo uploaded successfully!');
+        showToast('Profile photo uploaded successfully!', 'success');
         Router.push("/VendorManagementService/DocumentsVerifyPage"); // Redirect to the verification page
       };
       reader.onerror = () => {
@@ -69,7 +72,8 @@ const ProfilePhoto: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container22">
+      <ToastContainer className="toast-container"/>
       <div className="back-arrow">
         <FiArrowLeft className="arrow-icon" onClick={() => Router.back()} />
       </div>

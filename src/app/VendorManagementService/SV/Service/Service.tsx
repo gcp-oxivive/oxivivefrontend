@@ -106,16 +106,20 @@ const Service: React.FC = () => {
     router.push('/VendorManagementService/SV/Service/Oxivive');
   };
 
+  const handleBackClick = () => {
+    router.back();
+};
+
   return (
     <div className="service-container">
-      <div className="header">
-        <button className="back-button"><BiArrowBack /></button>
-        <div className="logo">
+      <div className="header123">
+        <button className="backbutton123"><BiArrowBack onClick={handleBackClick}/></button>
+        <div className="logo123">
           <img src="/images/circle.png" alt="Oxivive Logo" />
         </div>
-        <h1 className="title">
-          <span className="welcome">Welcome to</span>
-          <span className="oxivive">Oxivive</span>
+        <h1 className="title123">
+          <span className="welcome123">Welcome to</span>
+          <span className="oxivive123">Oxivive</span>
         </h1>
       </div>
 

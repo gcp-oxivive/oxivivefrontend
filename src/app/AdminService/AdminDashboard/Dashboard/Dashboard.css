@@ -24,7 +24,7 @@ body {
 }
 
 /* Header Section */
-.header {
+.header32 {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* Align content to the left */
@@ -37,7 +37,7 @@ body {
   color: #000000; /* Black text */
 }
 
-.header h2 {
+.header32 h2 {
   font-size: 1.3rem;
   margin: 0; /* Remove default margin */
   color: #000000; /* Black text */
@@ -514,11 +514,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
+  background-color: rgba(182, 181, 181, 0.2);
 }
 
 .spinner {
-  border: 4px solid rgba(255, 255, 255, 0.3);
+  border: 4px solid #f3f3f3;
   border-top: 4px solid #db3434;
   border-radius: 50%;
   width: 40px;

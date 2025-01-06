@@ -4,6 +4,9 @@ import { FiUpload } from 'react-icons/fi';
 import { BiArrowBack } from "react-icons/bi";
 import './Vehiclerc.css';
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/VendorManagementService/customtoast/page";
+  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
 
 const Vehiclerc: React.FC = () => {
   const Router = useRouter();
@@ -58,7 +61,7 @@ const Vehiclerc: React.FC = () => {
       localStorage.setItem("vehicleBackFile", backBase64);
       localStorage.setItem("isVehicleRCUploaded", "true");
 
-      alert("Vehicle RC uploaded successfully!");
+      showToast("Vehicle RC uploaded successfully!",'success');
       Router.push("/VendorManagementService/DocumentsVerifyPage");
     } else {
       alert("Please upload both sides of the Vehicle RC");
@@ -66,7 +69,8 @@ const Vehiclerc: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container23">
+      <ToastContainer className="toast-container"/>
       <div className="back-arrow">
         <BiArrowBack className="arrow-icon" onClick={() => Router.back()} />
       </div>

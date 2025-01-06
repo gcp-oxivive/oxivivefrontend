@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
         ) : (
           <>
             {/* Header Section */}
-            <header className="header">
+            <header className="header32">
               <h2>Hey, Person</h2>
               <p className="date">Thursday, October 23, 2024</p>
             </header>

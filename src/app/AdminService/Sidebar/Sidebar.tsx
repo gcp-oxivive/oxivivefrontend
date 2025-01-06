@@ -1,36 +1,27 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import { FaHome, FaCartPlus, FaSignOutAlt } from 'react-icons/fa';
+'use client';
+import React, { useState, useCallback } from 'react';
+import {
+  FaHome, FaCartPlus, FaSignOutAlt,
+} from 'react-icons/fa';
 import { BiSolidBookAdd } from 'react-icons/bi';
 import { MdManageAccounts, MdOutlineInventory, MdOutlinePeopleAlt } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
-import { FaPeopleGroup } from "react-icons/fa6";
-import { IoMdPersonAdd } from "react-icons/io";
+import { FaPeopleGroup } from 'react-icons/fa6';
+import { IoMdPersonAdd } from 'react-icons/io';
 import './Sidebar.css';
 
 const Sidebar = () => {
   const router = useRouter();
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
-  // Prefetch critical routes when the component mounts
-  useEffect(() => {
-    router.prefetch('/AdminService/AdminDashboard/Dashboard');
-    router.prefetch('/AdminService/Invoicelist');
-    router.prefetch('/AdminService/Booking/');
-    router.prefetch('/AdminService/AdminDashboard/');
-    router.prefetch('/AdminService/AdminPerson/');
-    router.prefetch('/AdminService/AdminDashboard/ManageService/');
-    router.prefetch('/AdminService/Inventory/');
-    router.prefetch('/AdminService/VendorsList/');
+  const navigateWithPreload = useCallback((route) => {
+    router.prefetch(route); // Prefetch the route
+    router.push(route); // Navigate immediately
   }, [router]);
 
   const handleLogout = () => {
-    console.log("User logged out");
+    console.log('User logged out');
     router.push('/AdminService/AdminDashboard/AccountPage');
-  };
-
-  const navigateWithPreload = (route) => {
-    router.push(route); // Navigate directly
   };
 
   return (
@@ -41,36 +32,40 @@ const Sidebar = () => {
           <p>Super Admin</p>
         </div>
         <nav className="sidebar-icons">
-          <div className="sidebar-icon" data-name="DashBoard" >
-            <FaHome onClick={() => navigateWithPreload('/AdminService/AdminDashboard/Dashboard')}/>
+          <div className="sidebar-icon" data-name="DashBoard">
+            <FaHome onMouseEnter={() => router.prefetch('/AdminService/AdminDashboard/Dashboard')}
+                    onClick={() => navigateWithPreload('/AdminService/AdminDashboard/Dashboard')} />
           </div>
-          <div className="sidebar-icon" data-name="Invoice" >
-            <FaCartPlus onClick={() => navigateWithPreload('/AdminService/Invoicelist')}/>
+          <div className="sidebar-icon" data-name="Invoice">
+            <FaCartPlus onMouseEnter={() => router.prefetch('/AdminService/Invoicelist')}
+                        onClick={() => navigateWithPreload('/AdminService/Invoicelist')} />
           </div>
-          <div className="sidebar-icon" data-name="Booking" >
-            <BiSolidBookAdd onClick={() => navigateWithPreload('/AdminService/Booking/')}/>
+          <div className="sidebar-icon" data-name="Booking">
+            <BiSolidBookAdd onMouseEnter={() => router.prefetch('/AdminService/Booking/')}
+                            onClick={() => navigateWithPreload('/AdminService/Booking/')} />
           </div>
-          <div className="sidebar-icon" data-name="Vendor Approval" >
-            <FaPeopleGroup onClick={() => navigateWithPreload('/AdminService/AdminDashboard/')}/>
+          <div className="sidebar-icon" data-name="Vendor Approval">
+            <FaPeopleGroup onMouseEnter={() => router.prefetch('/AdminService/AdminDashboard/')}
+                           onClick={() => navigateWithPreload('/AdminService/AdminDashboard/')} />
           </div>
-          <div className="sidebar-icon" data-name="Add Admin" >
-            <IoMdPersonAdd onClick={() => navigateWithPreload('/AdminService/AdminPerson/')}/>
+          <div className="sidebar-icon" data-name="Add Admin">
+            <IoMdPersonAdd onMouseEnter={() => router.prefetch('/AdminService/AdminPerson/')}
+                           onClick={() => navigateWithPreload('/AdminService/AdminPerson/')} />
           </div>
-          <div className="sidebar-icon" data-name="Manage Service" >
-            <MdManageAccounts onClick={() => navigateWithPreload('/AdminService/AdminDashboard/ManageService/')}/>
+          <div className="sidebar-icon" data-name="Manage Service">
+            <MdManageAccounts onMouseEnter={() => router.prefetch('/AdminService/AdminDashboard/ManageService/')}
+                              onClick={() => navigateWithPreload('/AdminService/AdminDashboard/ManageService/')} />
           </div>
-          <div className="sidebar-icon" data-name="Inventory" >
-            <MdOutlineInventory onClick={() => navigateWithPreload('/AdminService/Inventory/')}/>
+          <div className="sidebar-icon" data-name="Inventory">
+            <MdOutlineInventory onMouseEnter={() => router.prefetch('/AdminService/Inventory/')}
+                                onClick={() => navigateWithPreload('/AdminService/Inventory/')} />
           </div>
-          <div className="sidebar-icon" data-name="Vendor" >
-            <MdOutlinePeopleAlt onClick={() => navigateWithPreload('/AdminService/VendorsList/')}/>
+          <div className="sidebar-icon" data-name="Vendor">
+            <MdOutlinePeopleAlt onMouseEnter={() => router.prefetch('/AdminService/VendorsList/')}
+                                onClick={() => navigateWithPreload('/AdminService/VendorsList/')} />
           </div>
-          <div
-            className="sidebar-icon logout-icon"
-            data-name="Logout"
-            
-          >
-            <FaSignOutAlt onClick={() => setShowLogoutPopup(true)}/>
+          <div className="sidebar-icon logout-icon" data-name="Logout">
+            <FaSignOutAlt onClick={() => setShowLogoutPopup(true)} />
           </div>
         </nav>
       </aside>

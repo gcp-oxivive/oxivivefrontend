@@ -4,6 +4,9 @@ import { FiUpload } from "react-icons/fi";
 import { BiArrowBack } from "react-icons/bi";
 import "./Drivinglicence.css";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/VendorManagementService/customtoast/page";
+  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
 
 const DrivingLicence: React.FC = () => {
     const Router = useRouter();
@@ -70,7 +73,7 @@ const DrivingLicence: React.FC = () => {
             localStorage.setItem("dateOfBirth", dateOfBirth);
             localStorage.setItem("isDrivingLicenceUploaded", "true"); // Update the status in localStorage
 
-            alert("Files uploaded successfully!");
+            showToast("Files uploaded successfully!",'success');
             Router.push("/VendorManagementService/DocumentsVerifyPage");
         } else {
             alert("Please complete all fields and upload both sides of the licence.");
@@ -78,7 +81,8 @@ const DrivingLicence: React.FC = () => {
     };
 
     return (
-        <div className="container1">
+        <div className="container19">
+            <ToastContainer className="toast-container"/>
             <div className="back-arrow1">
                 <BiArrowBack className="arrow-icon1" onClick={() => Router.back()} />
             </div>

@@ -84,7 +84,7 @@ const Details = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container123">
       <div className="details-back">
         <button className="back-icon" onClick={handleBackClick}>
           <BiArrowBack />

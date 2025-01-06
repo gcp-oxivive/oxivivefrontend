@@ -1,16 +1,15 @@
 'use client';
 import React, { useState } from 'react';
 import './AccountPage.css';
-import { FaEnvelope } from 'react-icons/fa';
-import { FaLock } from 'react-icons/fa';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const AccountPage: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [identifier, setIdentifier] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,43 +20,36 @@ const AccountPage: React.FC = () => {
       return;
     }
 
+    setIsLoading(true); // Start loading
+    const payload = { email, identifier };
+
     try {
-      setIsLoading(true); // Start loading
-      const payload = { email, identifier };
-      console.log("Payload Sent to Backend:", payload);
+      const { data } = await axios.post('https://adminservice-69668940637.asia-east1.run.app/api/login/', payload);
 
-      const response = await axios.post('https://adminservice-69668940637.asia-east1.run.app/api/login/', payload);
+      if (data.success) {
+        const { usertype, user } = data;
 
-      console.log("Response from Backend:", response.data);
-
-      if (response.data.success) {
-        const { usertype, user } = response.data;
-
-        console.log("User Details Received:", user);
-        console.log("Admin ID Passed:", user.admin_id);
-        console.log("State Passed:", user.state);
-
-        // Save user details to localStorage
-        localStorage.setItem('userDetails', JSON.stringify({
-          usertype,
-          email: user.email,
-          identifier: user.contact || user.username,
-          admin_id: user.admin_id, // Add admin_id
-          state: user.state,       // Add state here
-        }));
-
-        console.log("Saved to LocalStorage:", localStorage.getItem('userDetails'));
-
+        // Navigate immediately to avoid delay
         const navigateTo = usertype === 'SuperAdmin'
           ? '/AdminService/AdminDashboard/Dashboard/'
           : '/AdminServiceClinics/Dashboard/';
         router.push(navigateTo);
+
+        // Store user details asynchronously
+        setTimeout(() => {
+          localStorage.setItem('userDetails', JSON.stringify({
+            usertype,
+            email: user.email,
+            identifier: user.contact || user.username,
+            admin_id: user.admin_id,
+            state: user.state,
+          }));
+        }, 0); // Offload to the next tick
       } else {
-        console.log("Error Message:", response.data.message);
-        setError(response.data.message);
+        setError(data.message);
       }
     } catch (error) {
-      console.error("An error occurred while logging in:", error);
+      console.error("An error occurred during login:", error);
       setError('An error occurred while logging in.');
     } finally {
       setIsLoading(false); // Stop loading

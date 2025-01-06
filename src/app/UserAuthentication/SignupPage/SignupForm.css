@@ -37,7 +37,7 @@ body {
   padding-bottom: 20px;
 }
 
-.logo {
+.logo21 {
   width: 80px;
   height: 80px;
  
@@ -172,7 +172,7 @@ body {
   display: none;
 }
 
-button {
+.submit-button {
   background-color: #FC000E;
   color: white;
   padding: 10px;
@@ -184,7 +184,7 @@ button {
   margin-bottom: 5px;
 }
 
-button:hover {
+.submit-button:hover {
   background-color: #FC000E;
 }
 
@@ -253,7 +253,7 @@ button:hover {
     padding: 8px;
   }
 
-  button {
+  .submit-button {
     font-size: 14px;
     padding: 8px;
   }
@@ -262,7 +262,7 @@ button:hover {
     font-size: 22px;
   }
 
-  .logo {
+  .logo21 {
     width: 60px;
     height: 60px;
   }
@@ -284,7 +284,7 @@ button:hover {
     border-radius: 20px;
   }
 
-  .logo {
+  .logo21 {
     width: 50px;
     height: 50px;
   }
@@ -298,7 +298,7 @@ button:hover {
     text-align: center;
   }
 
-  button {
+  .submit-button {
     padding: 10px;
     font-size: 14px;
     border-radius: 8px;
@@ -326,7 +326,7 @@ button:hover {
     border-radius: 25px;
   }
 
-  .logo {
+  .logo21 {
     width: 60px;
     height: 60px;
   }
@@ -340,7 +340,7 @@ button:hover {
     text-align: center;
   }
 
-  button {
+  .submit-button {
     padding: 12px;
     font-size: 15px;
     border-radius: 10px;
@@ -368,7 +368,7 @@ button:hover {
     border-radius: 30px;
   }
 
-  .logo {
+  .logo21 {
     width: 70px;
     height: 70px;
   }
@@ -382,7 +382,7 @@ button:hover {
     text-align: center;
   }
 
-  button {
+  .submit-button {
     padding: 14px;
     font-size: 16px;
     border-radius: 12px;
@@ -410,7 +410,7 @@ button:hover {
     border-radius: 35px;
   }
 
-  .logo {
+  .logo21 {
     width: 80px;
     height: 80px;
   }
@@ -424,7 +424,7 @@ button:hover {
     text-align: center;
   }
 
-  button {
+  .submit-button {
     padding: 16px;
     font-size: 18px;
     border-radius: 14px;
@@ -452,7 +452,7 @@ button:hover {
     border-radius: 40px;
   }
 
-  .logo {
+  .logo21 {
     width: 90px;
     height: 90px;
   }
@@ -466,7 +466,7 @@ button:hover {
     text-align: center;
   }
 
-  button {
+  .submit-button {
     padding: 18px;
     font-size: 20px;
     border-radius: 16px;

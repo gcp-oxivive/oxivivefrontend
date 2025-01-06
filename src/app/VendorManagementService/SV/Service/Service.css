@@ -15,7 +15,7 @@ body {
   justify-content: space-between;
   }
   
-  .header {
+  .header123 {
     background-color: #ff0000;
     color: white;
     padding: 10px;
@@ -25,7 +25,7 @@ body {
     font-family: Arial, sans-serif;
   }
   
-  .back-button {
+  .backbutton123 {
     position: absolute;
     left: 30px;
     top: 15px;
@@ -36,18 +36,18 @@ body {
     cursor: pointer;
   }
 
-  .logo {
+  .logo123 {
     position: absolute;
   top: 50px;
   left: 20px;
   }
   
-  .logo img {
+  .logo123 img {
     width: 110px; /* Adjust to desired size */
   height: 110px; /* Adjust to desired size */
   }
   
-  .title {
+  .title123 {
     display: flex;
     flex-direction: column; /* Stack the text vertically */
     align-items: center; /* Center the text horizontally */
@@ -56,14 +56,14 @@ body {
     top: 20px; /* Adjust for vertical spacing */
   }
   
-  .welcome {
+  .welcome123 {
     font-size: 14px; /* Font size for 'Welcome to' */
     margin: 0; /* No margin */
     margin-left: -10px;
     margin-top: 50px;
   }
   
-  .oxivive {
+  .oxivive123 {
     font-size: 40px; /* Font size for 'OxiWheel' */
     margin: 0; /* No margin */
     margin-left: 75px;
@@ -131,12 +131,12 @@ body {
       max-width: 100%;
     }
   
-    .logo img {
+    .logo123 img {
       width: 80px;
       height: 80px;
     }
   
-    .oxivive {
+    .oxivive123 {
       font-size: 28px;
     }
   
@@ -151,12 +151,12 @@ body {
       max-width: 1200px;
     }
   
-    .logo img {
+    .logo123 img {
       width: 100px;
       height: 100px;
     }
   
-    .oxivive {
+    .oxivive123 {
       font-size: 35px;
     }
   

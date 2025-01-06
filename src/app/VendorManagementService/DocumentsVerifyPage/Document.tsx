@@ -7,6 +7,8 @@ import { BiArrowBack } from "react-icons/bi";
 import { useRouter } from 'next/navigation';
 import { TiTick } from 'react-icons/ti';
 import axios from 'axios';
+import { showToast } from "../customtoast/page";  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
 
 const Document: React.FC = () => {
     const router = useRouter();
@@ -196,18 +198,24 @@ const Document: React.FC = () => {
             });
             console.log(formDataToSend)
             if (response.status === 201) {
-                alert("Documents uploaded successfully!");
+                showToast("Documents uploaded successfully!",'success');
                 localStorage.clear();
                 router.push('/VendorManagementService/paymentPage/paymentSuccess');
             }
         } catch (error) {
             console.error("Error uploading documents:", error);
-            alert("Please upload all required documents.");
+            showToast("Please upload all required documents.", 'error');
         }
     };
+    
+    useEffect(() => {
+        router.prefetch('/VendorManagementService/DocumentsVerifyPage/VehicleRC');
+    }, []);
+    
 
     return (
         <div className="document-container">
+            <ToastContainer className="toast-container"/>
             <header className="header">
                 <BiArrowBack className="back-icon1" onClick={() => router.back()} />
                 <h1>Upload documents</h1>

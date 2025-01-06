@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from 'next/navigation';
 import Sidebar from "../../../Sidebar/Sidebar";
 import './ManageCard.css';
@@ -11,10 +11,26 @@ const ManageCard: React.FC = () => {
   const price = searchParams.get('price') || '0'; // Default price
   const service = searchParams.get('service') || 'N/A'; // Default service
   const description = searchParams.get('description') || 'No description available'; // Default description
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Step 2: Simulate a delay (replace this with your actual data fetching)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false); // Set loading to false after 2 seconds (simulated)
+    }, 2000);
+
+    return () => clearTimeout(timer); // Cleanup timer on component unmount
+  }, []);
 
   return (
     <div className="manage-service">
       <Sidebar />
+      {isLoading ? (
+          <div className="spinnerContainer">
+            <div className="spinner"></div>
+          </div>
+        ) : (
+          <>
       <main className="managecontent">
         <header className="header2">
           <h2 className="page-title1">Manage Service</h2>
@@ -73,6 +89,8 @@ const ManageCard: React.FC = () => {
           </div>
         </section>
       </main>
+      </>
+        )}
     </div>
   );
 };

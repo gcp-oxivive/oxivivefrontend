@@ -4,6 +4,9 @@ import { FiUpload } from 'react-icons/fi';
 import { BiArrowBack } from "react-icons/bi";
 import './PanCard.css';
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/VendorManagementService/customtoast/page";
+  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
 
 const PanCard: React.FC = () => {
   const Router = useRouter();
@@ -58,7 +61,7 @@ const PanCard: React.FC = () => {
       localStorage.setItem("panBackFile", backBase64);
       localStorage.setItem("isPancardUploaded", "true");
 
-      alert("Pan Card uploaded successfully!");
+      showToast("Pan Card uploaded successfully!",'success');
       Router.push("/VendorManagementService/DocumentsVerifyPage");
     } else {
       alert("Please upload both sides of the Pan card");
@@ -66,7 +69,8 @@ const PanCard: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container21">
+      <ToastContainer className="toast-container"/>
       <div className="back-arrow">
         <BiArrowBack className="arrow-icon" onClick={() => Router.back()}/>
       </div>

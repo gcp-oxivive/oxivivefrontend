@@ -344,6 +344,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: auto;
+    background-color: rgba(182, 181, 181, 0.2);
   }
   
   .spinner {

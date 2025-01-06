@@ -2,6 +2,7 @@
 body{
   display: flex;
   justify-content: center;
+  background-color: rgb(226, 222, 222);
 }
 
 .logo-section{
