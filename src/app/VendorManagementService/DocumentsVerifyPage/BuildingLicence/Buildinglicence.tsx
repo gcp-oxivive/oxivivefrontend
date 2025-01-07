@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
-import "./Buildinglicence.css"; 
+import "./Buildinglicence.css";
 import { BiArrowBack } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/app/VendorManagementService/customtoast/page";
-  // Import the custom showToast function
 import { ToastContainer, toast } from "react-toastify";
 
 const Buildinglicence: React.FC = () => {
@@ -19,13 +18,35 @@ const Buildinglicence: React.FC = () => {
     if (storedFront) setFrontPreview(storedFront);
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Function to compress the image
+  const compressImage = async (file: File): Promise<File> => {
+    const image = await createImageBitmap(file);
+    const canvas = document.createElement("canvas");
+    canvas.width = image.width / 2; // Compress to half the original width
+    canvas.height = image.height / 2;
+    const ctx = canvas.getContext("2d");
+    if (ctx) ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(new File([blob], file.name, { type: file.type }));
+        } else {
+          resolve(file); // Fallback to original file if compression fails
+        }
+      }, file.type);
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      setFrontSide(file); // Set file to state for submission
+      const compressedFile = await compressImage(file);
 
-      // Generate a URL for preview without saving to local storage yet
-      const previewURL = URL.createObjectURL(file);
+      setFrontSide(compressedFile); // Use compressed file for submission
+
+      // Generate a URL for preview
+      const previewURL = URL.createObjectURL(compressedFile);
       setFrontPreview(previewURL);
     }
   };
@@ -41,7 +62,7 @@ const Buildinglicence: React.FC = () => {
         localStorage.setItem("buildingFrontPreview", frontPreview as string); // Save preview for consistent display
         localStorage.setItem("isBuildingLicenceUploaded", "true");
 
-        showToast("File uploaded successfully!",'success');
+        showToast("File uploaded successfully!", "success");
         router.push("/VendorManagementService/DocumentsVerifyPage");
       };
 
@@ -53,7 +74,7 @@ const Buildinglicence: React.FC = () => {
 
   return (
     <div className="container18">
-      <ToastContainer className="toast-container"/>
+      <ToastContainer className="toast-container" />
       <div className="back-arrow">
         <BiArrowBack className="arrow-icon" onClick={() => router.back()} />
       </div>

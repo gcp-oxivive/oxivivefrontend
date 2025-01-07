@@ -5,8 +5,8 @@ import { BiArrowBack } from "react-icons/bi";
 import "./Medicallicence.css";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/app/VendorManagementService/customtoast/page";
-  // Import the custom showToast function
 import { ToastContainer, toast } from "react-toastify";
+import imageCompression from "browser-image-compression"; // Add this import
 
 const Medicallicence: React.FC = () => {
     const router = useRouter();
@@ -16,6 +16,7 @@ const Medicallicence: React.FC = () => {
     const [backPreview, setBackPreview] = useState<string | null>(null);
     const [licenceNumber, setLicenceNumber] = useState("");
     const [licenceEndDate, setLicenceEndDate] = useState("");
+    const [licenceNumberError, setLicenceNumberError] = useState<string | null>(null); // For validation error
 
     // Load preview data and fields from localStorage on mount
     useEffect(() => {
@@ -30,24 +31,49 @@ const Medicallicence: React.FC = () => {
         if (storedLicenceEndDate) setLicenceEndDate(storedLicenceEndDate);
     }, []);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, side: string) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, side: string) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-            const previewURL = URL.createObjectURL(file);
 
-            // Update preview image
-            if (side === "front") {
-                setFrontSide(file);
-                setFrontPreview(previewURL);
-            } else {
-                setBackSide(file);
-                setBackPreview(previewURL);
+            // Compress the image before processing
+            const options = {
+                maxSizeMB: 0.5, // Compress to under 0.5 MB
+                maxWidthOrHeight: 1920,
+                useWebWorker: true,
+            };
+
+            try {
+                const compressedFile = await imageCompression(file, options);
+                const previewURL = URL.createObjectURL(compressedFile);
+
+                if (side === "front") {
+                    setFrontSide(compressedFile);
+                    setFrontPreview(previewURL);
+                } else {
+                    setBackSide(compressedFile);
+                    setBackPreview(previewURL);
+                }
+            } catch (error) {
+                console.error("Error compressing image:", error);
+                showToast("Failed to process the image. Please try again.", "error");
             }
         }
     };
 
+    const validateLicenceNumber = (number: string) => {
+        const regex = /^[A-Za-z0-9]{6,10}$/; // Example: Alphanumeric, 6-10 characters long
+        if (!regex.test(number)) {
+            setLicenceNumberError("Licence number must be 6-10 alphanumeric characters.");
+            return false;
+        }
+        setLicenceNumberError(null);
+        return true;
+    };
+
     const handleLicenceNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLicenceNumber(e.target.value.replace(/[^0-9]/g, ""));
+        const value = e.target.value.replace(/[^A-Za-z0-9]/g, ""); // Allow only alphanumeric characters
+        setLicenceNumber(value);
+        validateLicenceNumber(value);
     };
 
     const handleLicenceEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +81,10 @@ const Medicallicence: React.FC = () => {
     };
 
     const handleSubmit = () => {
+        if (!validateLicenceNumber(licenceNumber)) {
+            alert("Please provide a valid licence number.");
+            return;
+        }
         if (frontSide && backSide && licenceNumber && licenceEndDate) {
             const readerFront = new FileReader();
             const readerBack = new FileReader();
@@ -80,7 +110,7 @@ const Medicallicence: React.FC = () => {
             localStorage.setItem("licenceEndDate", licenceEndDate);
             localStorage.setItem("isMedicalUploaded", "true");
 
-            showToast("Files and data uploaded successfully!", 'success');
+            showToast("Files and data uploaded successfully!", "success");
             router.push("/VendorManagementService/DocumentsVerifyPage");
         } else {
             alert("Please complete all fields and upload both sides of the licence.");
@@ -89,7 +119,7 @@ const Medicallicence: React.FC = () => {
 
     return (
         <div className="container20">
-            <ToastContainer className="toast-container"/>
+            <ToastContainer className="toast-container" />
             <div className="back-arrow">
                 <BiArrowBack className="arrow-icon" onClick={() => router.back()} />
             </div>
@@ -154,10 +184,11 @@ const Medicallicence: React.FC = () => {
                 <input
                     type="text"
                     placeholder="Medical Practitioner Licence Number"
-                    className="inputField"
+                    className={`inputField ${licenceNumberError ? "error" : ""}`}
                     value={licenceNumber}
                     onChange={handleLicenceNumberChange}
                 />
+                {licenceNumberError && <p className="errorText">{licenceNumberError}</p>}
 
                 <label className="formLabel">Licence End Date</label>
                 <input
@@ -165,6 +196,7 @@ const Medicallicence: React.FC = () => {
                     className="inputField"
                     value={licenceEndDate}
                     onChange={handleLicenceEndDateChange}
+                    min={new Date().toISOString().split("T")[0]} // Set the minimum date to today's date
                 />
             </div>
 

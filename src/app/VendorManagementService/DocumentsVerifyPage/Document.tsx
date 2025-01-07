@@ -213,6 +213,10 @@ const Document: React.FC = () => {
     }, []);
     
 
+    useEffect(() => {
+        router.prefetch('/VendorManagementService/DocumentsVerifyPage/ProfilePhotoPage');
+    }, []);
+
     return (
         <div className="document-container">
             <ToastContainer className="toast-container"/>

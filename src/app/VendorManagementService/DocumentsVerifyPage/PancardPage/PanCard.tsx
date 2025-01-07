@@ -4,9 +4,9 @@ import { FiUpload } from 'react-icons/fi';
 import { BiArrowBack } from "react-icons/bi";
 import './PanCard.css';
 import { useRouter } from "next/navigation";
-import { showToast } from "@/app/VendorManagementService/customtoast/page";
-  // Import the custom showToast function
+import { showToast } from "@/app/VendorManagementService/customtoast/page"; // Import the custom showToast function
 import { ToastContainer, toast } from "react-toastify";
+import imageCompression from "browser-image-compression"; // Import the image compression library
 
 const PanCard: React.FC = () => {
   const Router = useRouter();
@@ -24,44 +24,59 @@ const PanCard: React.FC = () => {
     if (storedBack) setBackPreview(storedBack);
   }, []);
 
+  // Helper function to compress the image
+  const compressImage = async (file: File): Promise<File> => {
+    const options = {
+      maxSizeMB: 1, // Limit the file size to 1MB
+      maxWidthOrHeight: 1024, // Limit the image dimensions
+      useWebWorker: true,
+    };
+    return await imageCompression(file, options);
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, side: string) => {
     if (e.target.files && e.target.files.length > 0) {
-        const file = e.target.files[0];
-        const previewUrl = URL.createObjectURL(file);
+      const file = e.target.files[0];
+      const compressedFile = await compressImage(file); // Compress the image
+      const previewUrl = URL.createObjectURL(compressedFile);
 
-        if (side === 'front') {
-            setFrontSide(file);
-            setFrontPreview(previewUrl);
-        } else {
-            setBackSide(file);
-            setBackPreview(previewUrl);
-        }
+      if (side === 'front') {
+        setFrontSide(compressedFile);
+        setFrontPreview(previewUrl);
+      } else {
+        setBackSide(compressedFile);
+        setBackPreview(previewUrl);
+      }
     }
   };
 
   // Helper function to convert file to base64
   const convertFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
     });
   };
 
   const handleSubmit = async () => {
     if (frontSide && backSide) {
-      // Convert files to base64 and save to local storage when "Done" is clicked
-      const frontBase64 = await convertFileToBase64(frontSide);
-      const backBase64 = await convertFileToBase64(backSide);
-      
+      // Compress files before converting to base64
+      const compressedFront = await compressImage(frontSide);
+      const compressedBack = await compressImage(backSide);
+
+      // Convert compressed files to base64 and save to local storage
+      const frontBase64 = await convertFileToBase64(compressedFront);
+      const backBase64 = await convertFileToBase64(compressedBack);
+
       localStorage.setItem("pancardFrontSidePreview", frontPreview || "");
       localStorage.setItem("pancardBackSidePreview", backPreview || "");
       localStorage.setItem("panFrontFile", frontBase64);
       localStorage.setItem("panBackFile", backBase64);
       localStorage.setItem("isPancardUploaded", "true");
 
-      showToast("Pan Card uploaded successfully!",'success');
+      showToast("Pan Card uploaded successfully!", 'success');
       Router.push("/VendorManagementService/DocumentsVerifyPage");
     } else {
       alert("Please upload both sides of the Pan card");

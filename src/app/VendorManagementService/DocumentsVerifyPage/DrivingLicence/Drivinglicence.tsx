@@ -4,8 +4,7 @@ import { FiUpload } from "react-icons/fi";
 import { BiArrowBack } from "react-icons/bi";
 import "./Drivinglicence.css";
 import { useRouter } from "next/navigation";
-import { showToast } from "@/app/VendorManagementService/customtoast/page";
-  // Import the custom showToast function
+import { showToast } from "@/app/VendorManagementService/customtoast/page";  // Import the custom showToast function
 import { ToastContainer, toast } from "react-toastify";
 
 const DrivingLicence: React.FC = () => {
@@ -30,22 +29,46 @@ const DrivingLicence: React.FC = () => {
         if (storedDateOfBirth) setDateOfBirth(storedDateOfBirth);
     }, []);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, side: string) => {
+    // Resize image before storing in localStorage
+    const resizeImage = (file: File, maxWidth: number, maxHeight: number) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    if (ctx) {
+                        const scale = Math.min(maxWidth / img.width, maxHeight / img.height);
+                        const width = img.width * scale;
+                        const height = img.height * scale;
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const resizedDataUrl = canvas.toDataURL("image/jpeg", 0.8); // 0.8 to compress image
+                        resolve(resizedDataUrl);
+                    }
+                };
+                img.src = event.target?.result as string;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, side: string) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-    
-            const reader = new FileReader();
-            reader.onload = () => {
-                const fileBase64 = reader.result as string;
-                if (side === "front") {
-                    setFrontSide(file);
-                    setFrontPreview(fileBase64);
-                } else {
-                    setBackSide(file);
-                    setBackPreview(fileBase64);
-                }
-            };
-            reader.readAsDataURL(file);
+
+            // Resize image before storing
+            const resizedImage = await resizeImage(file, 500, 500); // Limit size to 500x500 pixels
+            if (side === "front") {
+                setFrontSide(file);
+                setFrontPreview(resizedImage);
+            } else {
+                setBackSide(file);
+                setBackPreview(resizedImage);
+            }
         }
     };
 
@@ -73,7 +96,7 @@ const DrivingLicence: React.FC = () => {
             localStorage.setItem("dateOfBirth", dateOfBirth);
             localStorage.setItem("isDrivingLicenceUploaded", "true"); // Update the status in localStorage
 
-            showToast("Files uploaded successfully!",'success');
+            showToast("Files uploaded successfully!", 'success');
             Router.push("/VendorManagementService/DocumentsVerifyPage");
         } else {
             alert("Please complete all fields and upload both sides of the licence.");
@@ -82,7 +105,7 @@ const DrivingLicence: React.FC = () => {
 
     return (
         <div className="container19">
-            <ToastContainer className="toast-container"/>
+            <ToastContainer className="toast-container" />
             <div className="back-arrow1">
                 <BiArrowBack className="arrow-icon1" onClick={() => Router.back()} />
             </div>

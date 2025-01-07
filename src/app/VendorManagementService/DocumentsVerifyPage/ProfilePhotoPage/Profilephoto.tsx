@@ -6,8 +6,8 @@ import { PiPlusCircleFill } from 'react-icons/pi';
 import './Profilephoto.css';
 import { useRouter } from "next/navigation";
 import { showToast } from "@/app/VendorManagementService/customtoast/page";
-  // Import the custom showToast function
 import { ToastContainer, toast } from "react-toastify";
+import imageCompression from 'browser-image-compression'; // Import the library
 
 const ProfilePhoto: React.FC = () => {
   const Router = useRouter();
@@ -23,17 +23,31 @@ const ProfilePhoto: React.FC = () => {
     }
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+
       // Validate file type
       if (!file.type.startsWith("image/")) {
         alert("Please upload a valid image file.");
         return;
       }
-      const fileURL = URL.createObjectURL(file);
-      setProfileImage(file);
-      setProfilePreview(fileURL);
+
+      try {
+        // Compress the image
+        const options = {
+          maxSizeMB: 0.5, // Compress to 0.5MB
+          maxWidthOrHeight: 1920, // Maintain quality
+        };
+        const compressedFile = await imageCompression(file, options);
+        const compressedFileURL = URL.createObjectURL(compressedFile);
+
+        setProfileImage(compressedFile);
+        setProfilePreview(compressedFileURL);
+      } catch (error) {
+        console.error("Image compression failed:", error);
+        alert("Failed to compress the image. Please try again.");
+      }
     }
   };
 
@@ -50,7 +64,7 @@ const ProfilePhoto: React.FC = () => {
       localStorage.setItem("profilePhotoPreview", profilePreview || "");
       localStorage.setItem("isProfilePhotoUploaded", "true"); // Mark as uploaded
 
-      // Convert the file to base64 and store it for backend upload
+      // Convert the compressed file to base64 and store it
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result as string;

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { showToast } from "@/app/VendorManagementService/customtoast/page";
   // Import the custom showToast function
 import { ToastContainer, toast } from "react-toastify";
+import { openDB } from 'idb';
 
 const Vehiclerc: React.FC = () => {
   const Router = useRouter();
@@ -49,19 +50,32 @@ const Vehiclerc: React.FC = () => {
     });
   };
 
+  // Store in IndexedDB
+  const storeInIndexedDB = async (key: string, data: string) => {
+    const db = await openDB('vehicleRC', 1, {
+      upgrade(db) {
+        db.createObjectStore('files');
+      },
+    });
+    await db.put('files', data, key);
+  };
+
   const handleSubmit = async () => {
     if (frontSide && backSide) {
-      // Convert files to base64 and save to local storage on submit
+      // Convert files to base64 and save to IndexedDB
       const frontBase64 = await convertFileToBase64(frontSide);
       const backBase64 = await convertFileToBase64(backSide);
 
+      // Save to IndexedDB
+      await storeInIndexedDB('vehicleFrontFile', frontBase64);
+      await storeInIndexedDB('vehicleBackFile', backBase64);
+
+      // Save previews to localStorage
       localStorage.setItem("vehicleFrontSidePreview", frontPreview || "");
       localStorage.setItem("vehicleBackSidePreview", backPreview || "");
-      localStorage.setItem("vehicleFrontFile", frontBase64);
-      localStorage.setItem("vehicleBackFile", backBase64);
       localStorage.setItem("isVehicleRCUploaded", "true");
 
-      showToast("Vehicle RC uploaded successfully!",'success');
+      showToast("Vehicle RC uploaded successfully!", 'success');
       Router.push("/VendorManagementService/DocumentsVerifyPage");
     } else {
       alert("Please upload both sides of the Vehicle RC");
