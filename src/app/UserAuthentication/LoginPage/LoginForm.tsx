@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-// Centralized error messages
 const errorMessages = {
   invalidIdentifier: 'Please enter a valid email or phone number.',
   invalidPassword: 'Password must be at least 8 characters long.',
@@ -35,6 +34,7 @@ function LoginForm() {
   const [identifierError, setIdentifierError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);  // Loading state
 
   const isValidIdentifier = (input: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,6 +67,8 @@ function LoginForm() {
 
     if (!isValid) return;
 
+    setLoading(true);  // Show loading spinner
+
     const redirectToPage = (data: ResponseData) => {
       if (data.user_type === 'customer') {
         localStorage.setItem('oxi_id', data.oxi_id);
@@ -97,13 +99,16 @@ function LoginForm() {
 
       const data: ResponseData = await response.json();
 
+      setLoading(false);  // Hide loading spinner after response
+
       if (response.ok) {
-        redirectToPage(data); // Use callback function for routing
+        redirectToPage(data);
       } else {
         setErrorMessage(data.message || errorMessages.loginFailed);
         setShowPopup(true);
       }
     } catch (error) {
+      setLoading(false);  // Hide loading spinner on error
       setErrorMessage(errorMessages.errorOccurred);
       setShowPopup(true);
     }
@@ -155,7 +160,7 @@ function LoginForm() {
               required
             />
             <span className="togglePassword" onClick={() => setShowPassword(!showPassword)}>
-            <FontAwesomeIcon icon={faEye as IconProp} style={{ fontSize: '16px' }} />
+              <FontAwesomeIcon icon={faEye as IconProp} style={{ fontSize: '16px' }} />
             </span>
             {passwordError && <p className="errorMessage">{passwordError}</p>}
           </div>
@@ -180,6 +185,13 @@ function LoginForm() {
             <p>{errorMessage}</p>
             <button onClick={() => setShowPopup(false)}>OK</button>
           </div>
+        </div>
+      )}
+
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
         </div>
       )}
     </div>

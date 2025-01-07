@@ -4,6 +4,9 @@ import './EditProfile.css';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { IoChevronBackSharp } from 'react-icons/io5';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { showToast } from "../../DashBoard/customtoast/page";
 
 const EditProfile = () => {
   const [name, setName] = useState('');
@@ -14,18 +17,19 @@ const EditProfile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [originalData, setOriginalData] = useState(null);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
   const oxiId = localStorage.getItem('oxi_id');
   if (!oxiId || oxiId === 'Unknown') {
-   alert('Invalid user session.');
-   return;
+    showToast('Invalid user session.', 'error');
+    return;
   }
 
   useEffect(() => {
     const oxiId = localStorage.getItem('oxi_id') || 'Unknown';
     if (oxiId === 'Unknown') {
-      alert('Invalid user session.');
+      showToast('Invalid user session.', 'error');
       router.push('/login');
       return;
     }
@@ -35,7 +39,6 @@ const EditProfile = () => {
   const fetchUserData = async (oxiId) => {
     try {
       const response = await axios.get(`https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/usmapp-oxiusers/${oxiId}/`);
-      console.log(response.data);
       if (response.status === 200) {
         const data = response.data;
         setName(data.name || '');
@@ -48,30 +51,26 @@ const EditProfile = () => {
       }
     } catch (error) {
       console.log('Error fetching user data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    // Name validation
     if (!name) {
       newErrors.name = 'Name is required.';
     }
-
-    // Email validation
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email || !emailRegex.test(email)) {
       newErrors.email = 'Please enter a valid email address.';
     }
-
-    // Phone number validation (exactly 10 digits)
     const phoneRegex = /^\d{10}$/;
     if (!mobile || !phoneRegex.test(mobile)) {
       newErrors.mobile = 'Mobile number must be 10 digits.';
     }
-
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSave = async () => {
@@ -79,7 +78,7 @@ const EditProfile = () => {
     if (!oxiId || !originalData) return;
 
     if (!validateForm()) {
-      return; // Don't proceed if validation fails
+      return;
     }
 
     try {
@@ -93,7 +92,7 @@ const EditProfile = () => {
       if (profileImageFile) {
         const cloudinaryData = new FormData();
         cloudinaryData.append('file', profileImageFile);
-        cloudinaryData.append('upload_preset', 'signup image'); // Replace with your preset
+        cloudinaryData.append('upload_preset', 'signup image');
         const cloudinaryResponse = await fetch(
           'https://api.cloudinary.com/v1_1/ddtfd7o0h/image/upload',
           { method: 'POST', body: cloudinaryData }
@@ -105,19 +104,19 @@ const EditProfile = () => {
       const response = await fetch(`https://usermanagementservice-69668940637.asia-east1.run.app/usmapp/usmapp-oxi/${oxiId}/`, {
         method: 'PATCH',
         credentials: 'include',
-        body: formData, // Send FormData instead of JSON
+        body: formData,
       });
 
       if (response.status === 200) {
-        alert('Profile updated successfully!');
+        showToast('success', 'Profile updated successfully!');
         router.push('/UserProfile');
       } else {
         console.error('Failed to update profile:', response.data);
-        alert('Failed to update profile. Please try again.');
+        showToast('error', 'Failed to update profile. Please try again.');
       }
     } catch (error) {
       console.log('Error updating profile:', error);
-      alert('An error occurred. Please try again.');
+      showToast('error', 'An error occurred. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -144,57 +143,68 @@ const EditProfile = () => {
       </header>
 
       <div className="edit-profile-content">
-        <div className="plus-icon0" onClick={() => document.getElementById('profileImageInput').click()}>+</div>
-        <div className="profile-image-containerp">
-          <img src={profileImage} alt="Profile" className="profile-imageb" />
-          <input
-            type="file"
-            id="profileImageInput"
-            accept="image/*"
-            style={{ display: 'none' }}
-            onChange={handleImageChange}
-          />
-          <button onClick={() => document.getElementById('profileImageInput').click()}>
-            Change Photo
-          </button>
-        </div>
+        {isLoading ? (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+          </div>
+        ) : (
+          <>
+            <div className="plus-icon0" onClick={() => document.getElementById('profileImageInput')?.click()}>+</div>
+            <div className="profile-image-containerp">
+              <img src={profileImage} alt="Profile" className="profile-imageb" />
+              <input
+                type="file"
+                id="profileImageInput"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleImageChange}
+              />
+              <button onClick={() => document.getElementById('profileImageInput')?.click()}>
+                Change Photo
+              </button>
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            placeholder="Enter your name"
-            onChange={(e) => setName(e.target.value)}
-          />
-          {errors.name && <div className="error">{errors.name}</div>}
-        </div>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                placeholder="Enter your name"
+                onChange={(e) => setName(e.target.value)}
+              />
+              {errors.name && <div className="error">{errors.name}</div>}
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="email">Email ID</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            placeholder="Enter your email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {errors.email && <div className="error">{errors.email}</div>}
-        </div>
+            <div className="form-group">
+              <label htmlFor="email">Email ID</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                placeholder="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && <div className="error">{errors.email}</div>}
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="mobile">Mobile number</label>
-          <input
-            type="text"
-            id="mobile"
-            value={mobile}
-            placeholder="Enter your mobile number"
-            onChange={(e) => setMobile(e.target.value)}
-          />
-          {errors.mobile && <div className="error">{errors.mobile}</div>}
-        </div>
+            <div className="form-group">
+              <label htmlFor="mobile">Mobile number</label>
+              <input
+                type="text"
+                id="mobile"
+                value={mobile}
+                placeholder="Enter your mobile number"
+                onChange={(e) => setMobile(e.target.value)}
+              />
+              {errors.mobile && <div className="error">{errors.mobile}</div>}
+            </div>
+          </>
+        )}
       </div>
+
+      {/* The ToastContainer should be placed in the return to ensure it shows up properly */}
+      <ToastContainer className="toast-container" />
     </div>
   );
 };

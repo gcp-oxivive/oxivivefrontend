@@ -19,15 +19,18 @@ const ToastContent: React.FC<ToastProps> = ({ message, path, closeToast }) => {
   );
 };
 
-const showToast = (message: string, path: string) => {
-  toast.success(
-    ({ closeToast }) => <ToastContent message={message} path={path} closeToast={closeToast} />,
-    { 
-        position: "top-center", 
-        autoClose: 2000,
-        style: { backgroundColor: '#FF414C' } // Set the custom background color and white border
-      }
-  );
-};
+export const showToast = (type: 'success' | 'error', message: string, path?: string) => {
+  const options = {
+    position: "top-center",
+    autoClose: 2000,
+    style: { backgroundColor: '#FF414C' },
+  };
 
-export { showToast, ToastContainer };
+  if (type === 'success') {
+    toast.success(({ closeToast }) => <ToastContent message={message} path={path || ''} closeToast={closeToast} />, options);
+  } else if (type === 'error') {
+    toast.error(({ closeToast }) => <ToastContent message={message} path={path || ''} closeToast={closeToast} />, options);
+  } else {
+    console.error('Unsupported toast type:', type);
+  }
+};

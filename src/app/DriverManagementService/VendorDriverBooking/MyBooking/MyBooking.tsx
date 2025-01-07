@@ -37,6 +37,8 @@ const MyBooking: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [mostRecentBooking, setMostRecentBooking] = useState<Booking | null>(null);
   const [driverId, setDriverId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const [userDetails, setUserDetails] = useState<{ email: string; phone_number: string }>({
     email: '',
     phone_number: '',
@@ -140,6 +142,8 @@ useEffect(() => {
     } catch (error) {
       console.error('Error fetching data:', error);
       setError((error as Error).message);
+    } finally {
+      setLoading(false); // Stop loading after the fetch is complete
     }
   };
 
@@ -241,39 +245,43 @@ const firstEligibleBooking = activeTab === 'bookings' ? filteredBookings[0] : nu
         </div>
 
         <div className="greyBackground">
-          {filteredBookings.length > 0 ? (
-            filteredBookings.map((booking, index) => (
-              <div className="bookingContainer" key={index} onClick={() => openBookingDetails(booking)}>
-                <div className="bookingDetails">
-                  <div className="bookingInfo">
-                    <h2>{booking.name}</h2>
-                    <p>{booking.address}</p>
-                    <p>{userDetails.phone_number}</p>
-                    <p>{userDetails.email}</p> 
-                  </div>
-                  <div className="bookingActions">
-                  {booking.booking_status !== 'cancelled' && activeTab !== 'history' && (
-  <button
-    className="cancelButton"
-    onClick={(e) => {
-      e.stopPropagation(); // Prevent triggering the booking details modal
-      cancelBooking(booking);
-    }}
-  >
-                        Cancel
-                      </button>
-                    )}
-                    <p className="date">{booking.appointment_date}</p>
-                    <p className="timeLeft"> {booking.appointment_time}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No bookings available.</p>
-          )}
+  {loading ? (
+    <div className="loadingSpinner">
+      <div className="spinner"></div> {/* You can use any spinner here */}
+    </div>
+  ) : filteredBookings.length > 0 ? (
+    filteredBookings.map((booking, index) => (
+      <div className="bookingContainer" key={index} onClick={() => openBookingDetails(booking)}>
+        <div className="bookingDetails">
+          <div className="bookingInfo">
+            <h2>{booking.name}</h2>
+            <p>{booking.address}</p>
+            <p>{userDetails.phone_number}</p>
+            <p>{userDetails.email}</p> 
+          </div>
+          <div className="bookingActions">
+            {booking.booking_status !== 'cancelled' && activeTab !== 'history' && (
+              <button
+                className="cancelButton"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering the booking details modal
+                  cancelBooking(booking);
+                }}
+              >
+                Cancel
+              </button>
+            )}
+            <p className="date">{booking.appointment_date}</p>
+            <p className="timeLeft"> {booking.appointment_time}</p>
+          </div>
         </div>
+      </div>
+    ))
+  ) : (
+    <p>No bookings available.</p>
+  )}
+</div>
+
 
         {selectedBooking && (
           <div className="modalOverlay" onClick={closeBookingDetails}>

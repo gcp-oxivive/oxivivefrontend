@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter,useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { LuBookPlus } from "react-icons/lu";
 import { SlHome } from "react-icons/sl";
@@ -9,6 +9,12 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 import { BsPerson } from "react-icons/bs";
 import './DriverMap.css';
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for the Toast notifications
+import { showToast } from "../../../DashBoard/customtoast/page";
+
+
+
 
 const getGeocode = async (address: string) => {
   const apiKey = 'AIzaSyCMsV0WQ7v8ra-2e7qRXVnDr7j0vOoOcWM';  // Replace with your Google API Key
@@ -28,34 +34,40 @@ const getGeocode = async (address: string) => {
     throw new Error('Geocoding failed');
   }
 };
+
+
+
+
 const DriverMap: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const location = searchParams.get('location') || '';
   const email = searchParams.get('email') || '';  // Get email from query params
+  const bookingAddress = searchParams.get('bookingAddress') || ''; // Get booking address from query params
   const [isReached, setIsReached] = useState(false);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
   const [distance, setDistance] = useState<string | null>(null);
   const [duration, setDuration] = useState<string | null>(null);
   const [driverMarker, setDriverMarker] = useState<google.maps.Marker | null>(null);
+  const [isStarted, setIsStarted] = useState(false); // New state to track if the ride has started
 
   const initialCustomerLocation = { lat: 16.7506273, lng: 81.6904138 };
   const [customerLocation, setCustomerLocation] = useState(initialCustomerLocation);
   const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
   
-  // Fetch geocode coordinates based on the location query parameter
+  // Fetch geocode coordinates based on the booking address query parameter
   useEffect(() => {
     const fetchLocation = async () => {
       try {
-        const coordinate = await getGeocode(location);
+        const coordinate = await getGeocode(bookingAddress);
         setCoordinates(coordinate);
       } catch (error) {
         console.error('Error fetching geocode:', error);
       }
     };
     fetchLocation();
-  }, [location]);
+  }, [bookingAddress]);
 
   useEffect(() => {
     if (coordinates) {
@@ -91,7 +103,7 @@ const DriverMap: React.FC = () => {
               }
             },
             (error) => {
-              alert("Error getting location. Ensure location access is enabled.");
+              showToast('error', 'Error getting location. Ensure location access is enabled.');
               console.error("Geolocation error:", error);
             },
             { enableHighAccuracy: true, timeout: 10000 }
@@ -166,12 +178,6 @@ const DriverMap: React.FC = () => {
     }
   }, [map, directionsRenderer, driverMarker, customerLocation]);
 
-
-  
-
-
-
-
   const getCookie = (name: string | any[]) => {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -206,44 +212,68 @@ const handleReached = async () => {
 
         // Handle the response
         if (response.data.message === 'OTP sent successfully') {
-            alert('OTP has been sent to the customer');
+          showToast('success', 'OTP has been sent to the customer');
             sessionStorage.setItem('session_key', response.data.session_key); // Store session key in sessionStorage
             
             // Redirect to OTP verification page
             router.push(`/DriverManagementService/VendorDriverBooking/DriverOtp?email=${email}`);
         } else {
             console.error(response.data.error);
+            showToast('error', 'Failed to send OTP. Please try again.');
         }
     } catch (error) {
         console.error("Error sending OTP:", error);
-        alert('An error occurred while sending OTP.');
+        showToast('error', 'An error occurred while sending OTP.');
     }
 };
 
-  
+const handleStartRide = () => {
+  if (driverMarker && customerLocation && directionsRenderer) {
+    const driverPosition = driverMarker.getPosition()?.toJSON();
 
+    if (driverPosition) {
+      const directionsService = new google.maps.DirectionsService();
+      directionsService.route(
+        {
+          origin: driverPosition,
+          destination: customerLocation,
+          travelMode: google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === google.maps.DirectionsStatus.OK && result) {
+            directionsRenderer.setDirections(result);
 
-  const handleStartRide = () => {
-    router.push("/DriverManagementService/VendorDriverBooking/DriverOtp");
-  };
+            const route = result.routes[0].legs[0];
+            setDistance(route.distance?.text || null);
+            setDuration(route.duration?.text || null);
+            setIsStarted(true); // Mark ride as started
+          } else {
+            console.error("Error calculating route:", status);
+          }
+        }
+      );
+    }
+  }
+};
 
   return (
     <div className="driverMapContainer">
       <div id="map" style={{ width: "100%", height: "80vh" }}></div>
       <button className="back-button" onClick={() => router.back()}>
           <IoChevronBackSharp size={20} /> {/* Back icon */}
-        </button>
-        <label className="distance">{distance ? `${distance} | ${duration}` : "Calculating route..."}</label>
+      </button>
+      <label className="distance">{distance ? `${distance} | ${duration}` : "Calculating route..."}</label>
      
-      {isReached ? (
-        <button onClick={handleStartRide} className="startButton">
-          Start
-        </button>
-      ) : (
+      {isStarted ? (
         <button onClick={handleReached} className="reachedButton">
           Reached
         </button>
+      ) : (
+        <button onClick={handleStartRide} className="startButton">
+          Start
+        </button>
       )}
+       <ToastContainer className="toast-container"/>
 
       <footer className="footer">
         <div className="footerItem">
@@ -264,7 +294,6 @@ const handleReached = async () => {
         </div>
       </footer>
     </div>
-
   );
 };
 

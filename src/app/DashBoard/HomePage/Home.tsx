@@ -12,7 +12,9 @@ import { BsPerson } from 'react-icons/bs';
 // Lazy load the SliderComponent and Footer to optimize loading
 const SliderComponent = React.lazy(() => import('./SliderComponent'));
 const Footer = React.lazy(() => import('./Footer'));
-
+import { showToast } from "../customtoast/page";  // Import the custom showToast function
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for the Toast notifications
 
 const API_KEY = "AIzaSyCMsV0WQ7v8ra-2e7qRXVnDr7j0vOoOcWM";
 
@@ -35,14 +37,21 @@ const Home: React.FC = () => {
   const [isOxiImagesClicked, setIsOxiImagesClicked] = useState(false); // State for handling the click on oxi-images-section
   const [notificationCount, setNotificationCount] = useState(0);
   
-  
+  // Display the welcome toast message
   useEffect(() => {
     // Ensure this code only runs in the browser
     if (typeof window !== 'undefined') {
       const storedOxiId = localStorage.getItem('oxi_id') || 'Unknown';
       setOxiId(storedOxiId);
     }
-  }, []); 
+
+    // Display the welcome toast message only if it hasn't been shown in this session
+    const welcomeToastShown = sessionStorage.getItem('welcomeToastShown'); // Use sessionStorage instead
+    if (!welcomeToastShown) {
+      toast.success("Welcome to OxiVive!");
+      sessionStorage.setItem('welcomeToastShown', 'true'); // Mark as shown for this session
+    }
+  }, []);
 
   const handleServiceClick = (service: string) => {
     const location = currentAddress || 'Unknown'; // Use the current address if available
@@ -296,6 +305,8 @@ const Home: React.FC = () => {
         </div>
       )}
         </div>
+
+        <ToastContainer className="toast-container"/>
         <Suspense fallback={<div>Loading Footer...</div>}>
 
       {/* Footer Section */}

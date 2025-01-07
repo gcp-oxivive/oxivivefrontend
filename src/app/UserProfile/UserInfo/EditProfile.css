@@ -29,6 +29,7 @@ body {
     box-sizing: border-box;
     background-color: white;
     height: 100vh;
+    min-width: 350px;
   }
   
   .edit-profile-header {
@@ -37,6 +38,7 @@ body {
     align-items: center;
     padding-bottom: 20px;
     width: 100%;
+    
   }
   
   .edit-profile-header h2 {
@@ -223,8 +225,52 @@ body {
     color: #FC000E;
   }
   
-
-
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    height: 100vh; /* Adjust height as needed */
+  }
+  
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #FC000E;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .toast-container .toast {
+    background-color: #28a745; /* Green color */
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .toast-container .toast .green-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background-color: green;
+    animation: slideGreenLine 2s forwards;
+  }
+  
+  .toast-container .toast .toast-message {
+    position: relative;
+    z-index: 1;
+  }
 /* Media queries for Apple smartphones */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
   .edit-profile {

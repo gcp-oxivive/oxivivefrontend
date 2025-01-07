@@ -8,6 +8,9 @@ import { LuBookPlus } from "react-icons/lu";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { IoChevronBackSharp } from 'react-icons/io5';
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for the Toast notifications
+import { showToast } from "../../../DashBoard/customtoast/page";
 
 const getCsrfToken = () => {
   const cookies = document.cookie.split('; ');
@@ -67,7 +70,7 @@ const DriverOtp = () => {
     const sessionKey = sessionStorage.getItem('session_key');
   
     if (!sessionKey) {
-      alert('Session key is missing. Please request a new OTP.');
+      showToast("error", "Session key is missing. Please request a new OTP.");
       setLoading(false);
       return;
     }
@@ -86,16 +89,19 @@ const DriverOtp = () => {
       );
   
       if (response.status === 200) {
-        alert('OTP validated successfully');
+        showToast("success", "OTP validated successfully");
         router.push('/DriverManagementService/VendorDriverBooking/MyBooking');
       } else {
         setErrorMessage(response.data.error || 'Invalid OTP');
+        showToast(response.data.error || "Invalid OTP", "error");
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         setErrorMessage(error.response.data.error || 'Invalid OTP');
+        showToast(error.response.data.error || "Invalid OTP", "error");
       } else {
         setErrorMessage('Network error. Please try again.');
+        showToast("error", "Network error. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -140,6 +146,7 @@ const DriverOtp = () => {
           </button>
         </form>
       </div>
+      <ToastContainer className="toast-container"/>
 
       <footer className="footer">
         <div className="footerItem">

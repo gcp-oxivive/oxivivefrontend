@@ -83,14 +83,14 @@ const CancelBooking = () => {
       });
 
       if (response.ok) {
-        showToast("Booking status updated to 'Cancelled'", "top-center");
+        showToast("success", "Booking status updated to 'Cancelled'");
         router.push(`/Booking?oxi_id=${userId}`);
       } else {
-        showToast("Failed to cancel booking. Please try again.", "top-center");
+        showToast("error", "Failed to cancel booking. Please try again.");
       }
     } catch (error) {
       console.error("Error cancelling booking:", error);
-      showToast("An error occurred. Please try again later.", "top-center");
+      showToast("error", "An error occurred. Please try again later.");
     }
   };
 
