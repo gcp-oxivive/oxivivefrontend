@@ -34,15 +34,19 @@ body {
   color: #FC000E;
   border-bottom: 1px solid #ccc;
 }
-.driver-headings p:first-child {
-  margin-left: 120px;
-  text-align: center;
+.staff-headings p {
+  margin: 0; /* Reset default margins */
 }
-.driver-headings p:last-child {
-  margin-right: -10px;
-  text-align: right;
+
+.staff-headings p:first-child {
+  margin-left: 0; /* Remove left margin for the first child */
 }
-.drivers-header {
+
+.staff-headings p:last-child {
+  margin-right: -10px; /* Keep the negative margin if needed */
+  text-align: right; /* Align the Phone no heading to the right */
+}
+.drivers-header8 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -50,11 +54,11 @@ body {
   background-color: #ffffff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
-.back-icon5 {
+.back-icon8 {
   font-size: 24px;
   color: #FC000E;
 }
-.drivers-header h1 {
+.drivers-header8 h1 {
   font-size: 20px;
   color: #FC000E;
   font-weight: bold;
@@ -226,6 +230,21 @@ font-size: 14px; /* Adjust font size if needed */
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+}
+.error-text {
+  color: #FC000E; 
+  font-size: 10px; 
+  text-align: left;
+  margin-top: -10px;
+ 
+}
+.error-text0 {
+  color: #FC000E; 
+  font-size: 10px;
+  margin-top: 5px; 
+  text-align: left;
+  margin-right: 50px;
+ 
 }
 
 /* Responsive styles for mobile screens */

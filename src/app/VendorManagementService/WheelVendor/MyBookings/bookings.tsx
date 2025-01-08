@@ -184,8 +184,8 @@ const Bookings: React.FC = () => {
 
       <div className="gray-section0">
         {loading ? (
-          <div className="spinner-container">
-            <div className="spinner"></div>
+          <div className="spinner-container6">
+            <div className="spinner6"></div>
           </div>
         ) : filteredBookings.length > 0 ? (
           filteredBookings.map((booking, index) => (

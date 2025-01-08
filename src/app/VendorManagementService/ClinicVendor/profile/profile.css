@@ -15,17 +15,17 @@ body {
   scroll-behavior: smooth; */
 
   }
-.profile-container1 {
-height: 100vh;
-width: 100%;
-width: 350px;
-margin: auto;
-background-color: white;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-overflow-y: auto;
-}
+  .profile-container1 {
+    height: 100vh;
+    width: 100%;
+    max-width: 350px;
+    min-width: 350px;
+    margin: auto;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
 .profile-container1::-webkit-scrollbar {
   width: 0px; /* Remove the vertical scrollbar */
   height: 0px; /* Remove the horizontal scrollbar */
@@ -41,11 +41,15 @@ overflow-y: auto;
 
 
 .profile-header0 {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  color: #FC000E;
+  background-color: white;
   display: flex;
-justify-content: center;
-align-items: center;
-position: relative;
-color: #FC000E;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px; /* Padding on both sides to accommodate icons */
 }
 
 .profile-title {
@@ -53,7 +57,6 @@ color: #FC000E;
 font-size: 24px;
 text-align: center;
 font-weight: bold;
-margin-top: 15px;
 margin-right: px;
 }
 
@@ -68,7 +71,7 @@ margin-right: px;
   font-size: 24px;
   cursor: pointer;
   color: #FC000E;
-  margin-top: 15px;
+  
 }
 
 .profile-image-section1 {
@@ -434,4 +437,24 @@ color: black;
   .footer {
       padding: 8px 16px; /* Adjust padding for smaller screens */
     }
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid #f3f3f3; /* Light grey */
+  border-top: 6px solid #FC000E; /* Blue */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

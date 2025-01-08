@@ -52,18 +52,17 @@ const handleInvoiceCardClick = () => {
           <img src="/images/shot(1).png" alt="OxiWheel Logo" className="logo" />
         </div>
         <h1 className="title0">
-          <span className="welcome0">Welcome to</span>
-          <span className="oxiwheel0">Oxi Wheel</span>
+          <span className="welcome9">Welcome to</span>
+          <span className="oxiwheel9">Oxi Wheel</span>
         </h1>
-        <FaRegBell className="notificationIcon" />
       </header>
 
       <div className="main">
         <div className="grid1">
-          <div className="card" onClick={() => router.push('/VendorManagementService/WheelVendor/WheelPerformance')}>
+          {/* <div className="card" onClick={() => router.push('/VendorManagementService/WheelVendor/WheelPerformance')}>
             <BsGraphUpArrow className="cardIcon" />
             <p className="label">Dashboard</p>
-          </div>
+          </div> */}
           <div className="card" onClick={() => router.push('/VendorManagementService/WheelVendor/MyBookings')}>
             <FaRegAddressBook className="cardIcon" />
             <p className="label">Bookings</p>

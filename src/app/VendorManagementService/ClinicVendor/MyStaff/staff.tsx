@@ -5,6 +5,9 @@ import './staff.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faClipboardList, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useRouter,useSearchParams } from 'next/navigation';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 
 interface Staff {
   id: number;
@@ -23,6 +26,7 @@ const Staff: React.FC = () => {
   const [selectedFooter, setSelectedFooter] = useState('home');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStaff, setNewStaff] = useState({ name: '', phone: '', imageUrl: '', email:'',vendor: vendorId || '' });
+  const [errors, setErrors] = useState({ name: '', email: '', phone: '', imageUrl: '' });
   const router = useRouter();
 
   useEffect(() => {
@@ -69,6 +73,7 @@ const Staff: React.FC = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setNewStaff({ name: '', phone: '', imageUrl: '', email:'', vendor: vendorId || '' });
+    setErrors({ name: '', email: '', phone: '', imageUrl: '' });
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,6 +82,7 @@ const Staff: React.FC = () => {
         ...newStaff,
         imageUrl: URL.createObjectURL(event.target.files[0]),
       });
+      setErrors((prev) => ({ ...prev, imageUrl: '' }));
     }
   };
 
@@ -103,23 +109,18 @@ const Staff: React.FC = () => {
     }
   };
 
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePhone = (phone: string) => /^\d{10}$/.test(phone);
-  const validateName = (name: string) => name.trim() !== '';
+  const validateInputs = () => {
+    const errors: { name: string; email: string; phone: string; imageUrl: string } = { name: '', email: '', phone: '', imageUrl: '' };
+    if (!newStaff.name.trim()) errors.name = 'Name is required.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newStaff.email)) errors.email = 'Invalid email address.';
+    if (!/^\d{10}$/.test(newStaff.phone)) errors.phone = 'Phone number must be 10 digits.';
+    if (!newStaff.imageUrl) errors.imageUrl = 'Profile image required.';
+    setErrors(errors);
+    return Object.values(errors).every((error) => error === '');
+  };
 
   const handleSave = async () => {
-    if (!validateName(newStaff.name)) {
-      alert('Please enter a valid name.');
-      return;
-    }
-    if (!validateEmail(newStaff.email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-    if (!validatePhone(newStaff.phone)) {
-      alert('Please enter a valid 10-digit phone number.');
-      return;
-    }
+    if (!validateInputs()) return;
 
     try {
       let imageUrl = '';
@@ -165,17 +166,14 @@ const Staff: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log('Staff saved successfully');
         closeModal();
         fetchStaff();
         alert('Staff saved successfully!');
       } else {
         const errorData = await response.json();
-        console.log('Failed to save staff:', errorData);
         alert(`Failed to save staff: ${errorData.message || 'Please check the details and try again.'}`);
       }
     } catch (error) {
-      console.log('Error occurred while saving staff:', error);
       alert('An error occurred while saving the staff. Please try again.');
     }
   };
@@ -192,16 +190,17 @@ const Staff: React.FC = () => {
 
       <div className="staff-list">
         <div className="staff-headings1">
+        <p>Profile</p>
           <p>Name</p>
           <p>Phone no</p>
         </div>
 
         {isLoading ? (
-          <div className="spinner"></div>
+          <div className="spinner5"></div>
         ) : (
           staff.map((member) => (
             <div key={member.id} className="staff-card">
-              <img src={member.imageUrl} alt={member.name} className="staff-image" />
+              <LazyLoadImage src={member.imageUrl} alt={member.name} className="staff-image" />
               <div className="staff-info">
                 <p className="staff-name">{member.name}</p>
                 <p className="staff-phone">{member.phone}</p>
@@ -235,18 +234,22 @@ const Staff: React.FC = () => {
           <div className="modal-content">
             <div className="image-upload">
               <label htmlFor="file-input">
-                <img src={newStaff.imageUrl || 'https://via.placeholder.com/100'} alt="Staff" className="staff-modal-image" />
+              <LazyLoadImage src={newStaff.imageUrl || 'https://via.placeholder.com/100'} alt="Staff" className="staff-modal-image" />
                 <FaPlus className="plus-icon" />
               </label>
               <input id="file-input" type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
+              {errors.imageUrl && <p className="error-text3">{errors.imageUrl}</p>}
             </div>
             <div className="modal-fields">
               <label>Name:</label>
               <input type="text" value={newStaff.name} onChange={(e) => setNewStaff({ ...newStaff, name: e.target.value })} />
+              {errors.name && <p className="error-text1">{errors.name}</p>}
               <label>Email:</label>
               <input type="text" value={newStaff.email} onChange={(e) => setNewStaff({ ...newStaff, email: e.target.value })} />
+              {errors.email && <p className="error-text1">{errors.email}</p>}
               <label>Phone Number:</label>
               <input type="text" value={newStaff.phone} onChange={(e) => setNewStaff({ ...newStaff, phone: e.target.value })} />
+              {errors.phone && <p className="error-text1">{errors.phone}</p>}
             </div>
             <div className="modal-footer">
               <button className="modal-close" onClick={closeModal}>Close</button>

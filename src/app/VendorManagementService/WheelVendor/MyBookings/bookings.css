@@ -379,14 +379,14 @@ p{
         font-size: 20px;
     }
 }
-.spinner-container {
+.spinner-container6 {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 350px;
   }
   
-  .spinner {
+  .spinner6 {
     border: 4px solid rgba(0, 0, 0, 0.1);
     border-left-color: #FC000E;
     border-radius: 50%;

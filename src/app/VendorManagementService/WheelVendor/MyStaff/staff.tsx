@@ -23,6 +23,7 @@ const Staff: React.FC = () => {
   const [selectedFooter, setSelectedFooter] = useState('home');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStaff, setNewStaff] = useState({ name: '', phone: '', imageUrl: '',email:'',vendor: vendorId || '' });
+  const [errors, setErrors] = useState({ name: '', email: '', phone: '', imageUrl: '' });
   const router = useRouter();
 
   useEffect(() => {
@@ -47,6 +48,7 @@ const Staff: React.FC = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setNewStaff({ name: '', phone: '', imageUrl: '',email:'',vendor: vendorId || '' });
+    setErrors({ name: '', email: '', phone: '', imageUrl: '' });
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +56,9 @@ const Staff: React.FC = () => {
       setNewStaff({
         ...newStaff,
         imageUrl: URL.createObjectURL(event.target.files[0]),
+        
       });
+      setErrors((prev) => ({ ...prev, imageUrl: '' }));
     }
   };
 
@@ -105,24 +109,19 @@ const Staff: React.FC = () => {
     }
   };
 
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePhone = (phone: string) => /^\d{10}$/.test(phone);
-  const validateName = (name: string) => name.trim() !== '';
+  const validateInputs = () => {
+    const errors: { name: string; email: string; phone: string; imageUrl: string } = { name: '', email: '', phone: '', imageUrl: '' };
+    if (!newStaff.name.trim()) errors.name = 'Name is required.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newStaff.email)) errors.email = 'Invalid email address.';
+    if (!/^\d{10}$/.test(newStaff.phone)) errors.phone = 'Phone number must be 10 digits.';
+    if (!newStaff.imageUrl) errors.imageUrl = 'Profile image required.';
+    setErrors(errors);
+    return Object.values(errors).every((error) => error === '');
+  };
 
   const handleSave = async () => {
-    if (!validateName(newStaff.name)) {
-      alert('Please enter a valid name.');
-      return;
-    }
-    if (!validateEmail(newStaff.email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-    if (!validatePhone(newStaff.phone)) {
-      alert('Please enter a valid 10-digit phone number.');
-      return;
-    }
-  
+    if (!validateInputs()) return;
+
     try {
       let imageUrl = '';
       const fileInput = document.getElementById('file-input') as HTMLInputElement;
@@ -130,15 +129,12 @@ const Staff: React.FC = () => {
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);
         formData.append('upload_preset', 'driver_images');
-  
-        const cloudinaryResponse = await fetch(
-          'https://api.cloudinary.com/v1_1/dvxscrjk0/image/upload',
-          {
-            method: 'POST',
-            body: formData,
-          }
-        );
-  
+
+        const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dvxscrjk0/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
         if (cloudinaryResponse.ok) {
           const cloudinaryData = await cloudinaryResponse.json();
           imageUrl = cloudinaryData.secure_url;
@@ -147,16 +143,16 @@ const Staff: React.FC = () => {
           return;
         }
       }
-  
+
       const staffData = {
         name: newStaff.name,
         email: newStaff.email,
         phone: newStaff.phone,
         profile_photo: imageUrl,
         vendor: newStaff.vendor,
-        user_type: 'Wheel_staff', // Specify user_type dynamically
+        user_type: 'Wheel_staff',
       };
-  
+
       const response = await fetch('https://drivermanagementservice-69668940637.asia-east1.run.app/api/staff/add_staff/', {
         method: 'POST',
         headers: {
@@ -164,7 +160,7 @@ const Staff: React.FC = () => {
         },
         body: JSON.stringify(staffData),
       });
-  
+
       if (response.ok) {
         closeModal();
         fetchStaff();
@@ -182,7 +178,7 @@ const Staff: React.FC = () => {
   return (
     <div className="staff-container">
       <header className="staff-header">
-        <FaArrowLeft className="back-icon" onClick={() => router.push('/VendorManagementService/Vendors/WheelVendor/Wheel')} />
+        <FaArrowLeft className="back-icon11" onClick={() => router.push('/VendorManagementService/Vendors/WheelVendor/Wheel')} />
         <h1>My Staff</h1>
         <button className="add-button" onClick={openModal}>
           <FaPlus /> ADD
@@ -191,6 +187,7 @@ const Staff: React.FC = () => {
 
       <div className="staff-list">
         <div className="staff-headings1">
+        <p>Profile</p>
           <p>Name</p>
           <p>Phone no</p>
         </div>
@@ -240,14 +237,18 @@ const Staff: React.FC = () => {
                 <FaPlus className="plus-icon" />
               </label>
               <input id="file-input" type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
+              {errors.imageUrl && <p className="error-text1">{errors.imageUrl}</p>}
             </div>
             <div className="modal-fields">
               <label>Name:</label>
               <input type="text" value={newStaff.name} onChange={(e) => setNewStaff({ ...newStaff, name: e.target.value })} />
+              {errors.name && <p className="error-text">{errors.name}</p>}
               <label>Email:</label>
               <input type="text" value={newStaff.email} onChange={(e) => setNewStaff({ ...newStaff, email: e.target.value })} />
+              {errors.email && <p className="error-text">{errors.email}</p>}
               <label>Phone Number:</label>
               <input type="text" value={newStaff.phone} onChange={(e) => setNewStaff({ ...newStaff, phone: e.target.value })} />
+              {errors.phone && <p className="error-text">{errors.phone}</p>}
             </div>
             <div className="modal-footer">
               <button className="modal-close" onClick={closeModal}>Close</button>

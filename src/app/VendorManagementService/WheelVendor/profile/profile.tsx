@@ -26,6 +26,7 @@ const Profile: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const oxiFileInputRef1 = useRef<HTMLInputElement | null>(null);
   const oxiFileInputRef2 = useRef<HTMLInputElement | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Set the isEditing state from localStorage when the component mounts
@@ -37,6 +38,7 @@ const Profile: React.FC = () => {
     if (vendorId) {
       const fetchVendorData = async () => {
         try {
+          setLoading(true);
           const response = await axios.get(`https://clinicmanagementservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/${vendorId}/`);
           const fetchedSlots = response.data.available_slots;
           setProfileImage(response.data.profile_photo);
@@ -55,7 +57,10 @@ const Profile: React.FC = () => {
         } catch (error) {
           console.error('Error fetching vendor data:', error);
           setAvailableslots([]);
+        }finally {
+          setLoading(false); // Set loading to false after fetch, whether success or failure
         }
+        
       };
       fetchVendorData();
     }
@@ -96,6 +101,9 @@ const Profile: React.FC = () => {
 
   const handleFooterClick = (footer: string) => {
     setSelectedFooter(footer);
+    if (footer !== 'profile') {
+      localStorage.setItem('isEditing', JSON.stringify(false));
+    }
 
     switch (footer) {
       case "home":
@@ -222,9 +230,16 @@ const Profile: React.FC = () => {
   const handleCancelLogout = () => {
     setShowLogoutPopup(false);
   };
+  
 
   return (
+    
     <div className="profile-container">
+      {loading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <div className="profile-header">
       <FaArrowLeft 
   className="arrow-icon1" 

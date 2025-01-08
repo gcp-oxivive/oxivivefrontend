@@ -34,13 +34,17 @@ body {
     color: #FC000E;
     border-bottom: 1px solid #ccc;
 }
+.staff-headings1 p {
+    margin: 0; /* Reset default margins */
+}
+
 .staff-headings1 p:first-child {
-    margin-left: 110px;
+    margin-left: 0; /* Remove left margin for the first child */
 }
 
 .staff-headings1 p:last-child {
-    margin-right: -10px;
-    text-align: right;
+    margin-right: -10px; /* Keep the negative margin if needed */
+    text-align: right; /* Align the Phone no heading to the right */
 }
 
 .staff-header {
@@ -242,7 +246,21 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-
+.error-text1 {
+    color: #FC000E; 
+    font-size: 10px; 
+    text-align: left;
+    margin-top: -10px;
+   
+  }
+  .error-text3 {
+    color: #FC000E; 
+    font-size: 10px;
+    margin-top: 5px; 
+    text-align: left;
+    margin-right: 50px;
+   
+  }
 /* Responsive styles for mobile screens */
 @media (max-width: 600px) {
     .staff-container {
@@ -424,8 +442,11 @@ body {
     }
 }
 /* staff.css */
-.spinner {
-    margin: 20px auto;
+.spinner5 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border: 4px solid #f3f3f3;
     border-top: 4px solid #FC000E;
     border-radius: 50%;

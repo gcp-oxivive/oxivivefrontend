@@ -5,6 +5,12 @@ import { faHome, faClipboardList, faBell, faUser, faArrowLeft } from '@fortaweso
 import './invoice.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import { GrAdd } from "react-icons/gr";
+import { showToast } from "../../../DashBoard/customtoast/page";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
+
+
 
 const InvoicePage: React.FC = () => {
   const [selectedFooter, setSelectedFooter] = useState('home');
@@ -86,7 +92,7 @@ const InvoicePage: React.FC = () => {
 
   const handleSave = () => {
     if (!validateItems(items)) {
-      alert('Please ensure all items have a name and price before saving.');
+      showToast('error','Please ensure all items have a name and price before saving.');
       return;
     }
     setSavedItems([...savedItems, ...items]);
@@ -96,19 +102,23 @@ const InvoicePage: React.FC = () => {
   const handleRaiseClaim = async () => {
     const allItems = [...savedItems, ...items];
     if (allItems.length === 0) {
-      alert('Please add at least one item before raising an invoice.');
+      showToast('error','Please add at least one item before raising an invoice.');
       return;
     }
     if (!validateItems(allItems)) {
-      alert('Please ensure all items have a name and price before raising an invoice.');
+      showToast('error','Please ensure all items have a name and price before raising an invoice.');
       return;
     }
     if (!vendorId) {
-      alert('Vendor ID is not available. Please ensure it is set.');
+      showToast('error','Vendor ID is not available. Please ensure it is set.');
       return;
     }
     if (!validateItems(savedItems)) {
-      alert('Please ensure all saved items have a name and price before raising an invoice.');
+      showToast('error','Please ensure all saved items have a name and price before raising an invoice.');
+      return;
+    }
+    if (savedItems.length === 0) {
+      showToast('error','Please save items before raising an invoice.');
       return;
     }
 
@@ -138,12 +148,17 @@ const InvoicePage: React.FC = () => {
       setSavedItems([]);
       setItems([]);
       toggleModal();
-      alert('Claim raised and data saved successfully!');
+      showToast('success', 'Claim raised and data saved successfully!');
     } catch (error) {
       console.log('Error raising claim:', error.response ? error.response.data : error);
-      alert('Failed to raise claim.');
+      showToast('error','Failed to raise claim.');
     }
   };
+  const filteredInvoices = invoices.filter(
+    (invoice) =>
+      selectedTab === 'invoice' ? invoice.status === 'Unpaid' : invoice.status === 'Paid'
+  );
+  
 
   return (
     <div className="invoice-container1">
@@ -156,7 +171,7 @@ const InvoicePage: React.FC = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div className="tabs2">
+      <div className="tabs22">
         <div className={`tab ${selectedTab === 'invoice' ? 'active' : ''}`} onClick={() => handleTabClick('invoice')}>
           Invoice
         </div>
@@ -169,13 +184,13 @@ const InvoicePage: React.FC = () => {
       <div className="new-invoice-card2">
         <div className="cards1">
           {loading ? (
-            <div className="spinner">
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
+            <div className="spinner-overlay">
+              <div className="spinner-container">
+              <div className="spinner"></div>
               </div>
             </div>
           ) : (
-            invoices.map((invoice) => {
+            filteredInvoices.map((invoice) => {
               const items = invoice.invoice_details ? invoice.invoice_details.split(',') : [];
               const prices = invoice.invoice_price ? invoice.invoice_price.split(',') : [];
               return (
@@ -202,8 +217,8 @@ const InvoicePage: React.FC = () => {
         </div>
 
         <button className="new-invoice-button1" onClick={toggleModal}>
-          New Invoice
-        </button>
+  <GrAdd size={25} />
+</button>
       </div>
 
       {isModalOpen && (
@@ -258,6 +273,7 @@ const InvoicePage: React.FC = () => {
                 Raise Invoice
               </button>
             </div>
+            <ToastContainer className="toast-container"/>
           </div>
         </div>
       )}

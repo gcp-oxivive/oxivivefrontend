@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faClipboardList, faBell, faUser, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import './invoice.css';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { GrAdd } from "react-icons/gr";
 import axios from 'axios';
 
 const InvoicePage: React.FC = () => {
@@ -14,6 +15,7 @@ const InvoicePage: React.FC = () => {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [savedItems, setSavedItems] = useState<{ id: number; name: string; price: string }[]>([]);
   const [vendorId, setVendorId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
   const router = useRouter();
@@ -35,6 +37,7 @@ const InvoicePage: React.FC = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
+        setLoading(true);
         const serviceTypeParam = 'Oxi Wheel'; // Always fetch "Oxi Wheel"
         const today = new Date();
         const todayString = today.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
@@ -54,6 +57,8 @@ const InvoicePage: React.FC = () => {
         setInvoices(response?.data || []);
       } catch (error) {
         console.error('Error fetching invoices:', error);
+      }finally {
+        setLoading(false); // Stop loading spinner
       }
     };
 
@@ -86,15 +91,39 @@ const InvoicePage: React.FC = () => {
   const handleAddItem = () => setItems([...items, { id: items.length, name: '', price: '' }]);
   const handleItemChange = (id: number, field: string, value: string) =>
     setItems(items.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
+  const validateItems = (itemList: { name: string; price: string }[]) => {
+    return itemList.every((item) => item.name.trim() !== '' && item.price.trim() !== '');
+  };
 
   const handleSave = () => {
+    if (!validateItems(items)) {
+      alert('Please ensure all items have a name and price before saving.');
+      return;
+    }
     setSavedItems([...savedItems, ...items]);
     setItems([]);
   };
 
   const handleRaiseClaim = async () => {
+    const allItems = [...savedItems, ...items];
+    if (allItems.length === 0) {
+      alert('Please add at least one item before raising an invoice.');
+      return;
+    }
+    if (!validateItems(allItems)) {
+      alert('Please ensure all items have a name and price before raising an invoice.');
+      return;
+    }
     if (!vendorId) {
       alert('Vendor ID is not available. Please ensure it is set.');
+      return;
+    }
+    if (!validateItems(savedItems)) {
+      alert('Please ensure all saved items have a name and price before raising an invoice.');
+      return;
+    }
+    if (savedItems.length === 0) {
+      alert('Please save items before raising an invoice.');
       return;
     }
 
@@ -130,6 +159,10 @@ const InvoicePage: React.FC = () => {
       alert('Failed to raise claim.');
     }
   };
+  const filteredInvoices = invoices.filter(
+    (invoice) =>
+      selectedTab === 'invoice' ? invoice.status === 'Unpaid' : invoice.status === 'Paid'
+  );
 
   return (
     <div className="invoice-container6">
@@ -152,9 +185,12 @@ const InvoicePage: React.FC = () => {
       </div>
 
       {/* Invoice Cards */}
+      {loading && <div className="spinner-overlay"><div className="spinner"></div></div>}
+
+      {/* Invoice Cards */}
       <div className="new-invoice-card1">
         <div className="cards0">
-          {invoices.map((invoice) => {
+          {filteredInvoices.map((invoice) => {
             const items = invoice.invoice_details ? invoice.invoice_details.split(',') : [];
             const prices = invoice.invoice_price ? invoice.invoice_price.split(',') : [];
             return (
@@ -163,9 +199,7 @@ const InvoicePage: React.FC = () => {
                   {items.map((item, index) => (
                     <div key={index} className="item-row">
                       <span className="item-name">{item}</span>
-                      <span className="item-price">
-                        Rs {prices[index] ? prices[index] : '0'}
-                      </span>
+                      <span className="item-price">Rs {prices[index] ? prices[index] : '0'}</span>
                     </div>
                   ))}
                   <div className="total-row">
@@ -182,7 +216,7 @@ const InvoicePage: React.FC = () => {
         </div>
 
         <button className="new-invoice-buttons" onClick={toggleModal}>
-          New Invoice
+          <GrAdd size={25} />
         </button>
       </div>
 

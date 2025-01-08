@@ -34,22 +34,25 @@ body {
     color: #FC000E;
     border-bottom: 1px solid #ccc;
   }
-  .doctor-headings1 p:first-child {
-    margin-left: 110px;
-  }
-  
-  .doctor-headings1 p:last-child {
-   margin-right: -10px;
-    text-align: right; /* Align the Phone no heading to the right */
-  }
+  .doctor-headings1 p {
+    margin: 0; /* Reset default margins */
+}
 
+.doctor-headings1 p:first-child {
+    margin-left: 0; /* Remove left margin for the first child */
+}
+
+.doctor-headings1 p:last-child {
+    margin-right: -10px; /* Keep the negative margin for the last child if needed */
+    text-align: right; /* Align the Phone no heading to the right */
+}
   .no-data-message{
     color: #FC000E;
     font-weight: bold;
   }
   
   
-  .doctors-header {
+  .doctors-header9 {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -58,12 +61,12 @@ body {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .back-icon {
+  .back-icon9 {
     font-size: 24px;
     color: #FC000E;
   }
   
-  .doctors-header h1 {
+  .doctors-header9 h1 {
     font-size: 20px;
     color: #FC000E;
     font-weight: bold;
@@ -250,7 +253,46 @@ body {
     border-radius: 5px;
     cursor: pointer;
   }
+  .error-text {
+    color: #FC000E; 
+    font-size: 10px; 
+    text-align: left;
+    margin-top: -10px;
+   
+  }
+  .error-text0 {
+    color: #FC000E; 
+    font-size: 10px;
+    margin-top: 5px; 
+    text-align: left;
+    margin-right: 50px;
+   
+  }
+  /* Toast Container Custom Styling */
+.toast-container .toast {
+    background-color: #ffffff; /* White background for the toast */
+    color: black; /* Black text to maintain visibility on the white background */
+    padding: 16px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow to create contrast */
+  }
   
+  /* White Line Animation */
+  .toast-container .toast .white-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background-color: white; /* White color for the line */
+    animation: slideWhiteLine 2s forwards;
+  }
+  
+  /* Toast Message */
+  .toast-container .toast .toast-message {
+    position: relative;
+    z-index: 1;
+  }
   /* Responsive styles for mobile screens */
 @media (max-width: 600px) {
   .doctors-container {
@@ -433,12 +475,12 @@ body {
     font-size: 16px;
   }
 }
-/* .spinner-container {
+.spinner-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-} */
+  height: 80%;
+}
 
 .spinner {
   margin: 20px auto;

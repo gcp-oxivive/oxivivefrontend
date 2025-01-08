@@ -23,9 +23,11 @@ const Profile: React.FC = () => {
   const [availableslots, setAvailableslots] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingTime, setIsEditingTime] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const oxiFileInputRef1 = useRef<HTMLInputElement | null>(null);
   const oxiFileInputRef2 = useRef<HTMLInputElement | null>(null);
+  
   
 
   useEffect(() => {
@@ -34,9 +36,11 @@ const Profile: React.FC = () => {
     if (savedEditingState !== null) {
       setIsEditing(JSON.parse(savedEditingState));
     }
+    
 
     if (vendorId) {
       const fetchVendorData = async () => {
+        setIsLoading(true);
         try {
           const response = await axios.get(`https://clinicmanagementservice-69668940637.asia-east1.run.app/api/vendorapp-vendordetails/${vendorId}/`);
           const fetchedSlots = response.data.available_slots;
@@ -56,6 +60,8 @@ const Profile: React.FC = () => {
         } catch (error) {
           console.error('Error fetching vendor data:', error);
           setAvailableslots([]);
+        }finally {
+          setIsLoading(false); // End loading
         }
       };
       fetchVendorData();
@@ -99,6 +105,11 @@ const Profile: React.FC = () => {
 
   const handleFooterClick = (footer: string) => {
     setSelectedFooter(footer);
+    if (footer !== 'profile') {
+      localStorage.setItem('isEditing', JSON.stringify(false));
+    }
+ 
+    
   
     // Redirect to respective pages
     switch (footer) {
@@ -238,6 +249,15 @@ const Profile: React.FC = () => {
   const handleCancelLogout = () => {
     setShowLogoutPopup(false); // Close the logout popup
   };
+    if (isLoading) {
+    return (
+      <div className="profile-container1">
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      </div>
+    );
+  }
 
 
 
@@ -255,6 +275,7 @@ const Profile: React.FC = () => {
           style={{ color: 'red', fontSize: '20px', cursor: 'pointer' }}
         />
       </div>
+      
 
       {/* Profile Image Section */}
       <div className="profile-image-section1">

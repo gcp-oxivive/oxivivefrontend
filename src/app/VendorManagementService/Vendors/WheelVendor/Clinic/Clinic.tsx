@@ -32,7 +32,7 @@ const Clinic = () => {
     } else if (section === 'bookings') {
       router.push('/VendorManagementService/ClinicVendor/MyBookings');
     } else if (section === 'notifications') {
-      router.push('/VendorManagementService/ClinicVendor/notifications');
+      router.push('/VendorManagementService/Notificationvendor');
     } else if (section === 'profile') {
       router.push(`/VendorManagementService/ClinicVendor/profile?vendor_id=${vendorId}`);
     }
@@ -68,15 +68,14 @@ const Clinic = () => {
           <span className="welcome">Welcome to</span>
           <span className="oxiClinics">Oxi Clinic</span>
         </h1>
-        <FaRegBell className="notificationIcon" />
       </header>
 
       <div className="main">
         <div className="grid">
-          <div className="card" onClick={() => router.push('/VendorManagementService/ClinicVendor/ClinicPerformance')}>
+          {/* <div className="card" onClick={() => router.push('/VendorManagementService/ClinicVendor/ClinicPerformance')}>
             <BsGraphUpArrow className="cardIcon" />
             <p className="label">Dashboard</p>
-          </div>
+          </div> */}
           <div className="card" onClick={() => router.push(`/VendorManagementService/ClinicVendor/MyBookings?vendor_id=${vendorId}`)}>
             <FaRegAddressBook className="cardIcon" />
             <p className="label">Bookings</p>

@@ -97,10 +97,10 @@ body {
   .cards0 {
     display: flex;
   flex-direction: column;
-  gap: 10px; 
+  /* gap: 1px;  */
   }
   .new-invoice-card1 {
-  background-color: #dddddd; /* Gray card */
+  background-color: white; /* Gray card */
   padding: 20px;
   margin: 15px 0;
   border-radius: 10px;
@@ -114,14 +114,17 @@ body {
   }
   .new-invoice-buttons {
     background-color: #FC000E;
-    color: #fff;
-    padding: 10px 20px;
+    color: white;
+    padding: 10px;
+    border-radius: 50%; /* To make it circular like a FAB */
     border: none;
+    font-size: 20px; /* Icon size */
     cursor: pointer;
-    border-radius: 5px;
-    margin-bottom: 200px;
-    margin-top: 250px;
-    box-sizing: border-box;
+    position: fixed; /* Fixed position */
+    bottom: 80px; /* Position it above the bottom edge */
+    z-index: 10;
+    right: 620px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   }
   .invoice-cards {
     background-color: #f9f9f9; /* Light gray background for better contrast */
@@ -129,6 +132,7 @@ body {
   padding: 15px;
   margin: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid #FC000E;
   }
   
   .invoice-info {
@@ -183,15 +187,16 @@ body {
   .new-invoice-buttons {
     background-color: #FC000E;
     color: white;
+    padding: 10px;
+    border-radius: 50%; /* To make it circular like a FAB */
     border: none;
-    padding: 13px;
-    border-radius: 10px;
-    font-size: 16px;
+    font-size: 20px; /* Icon size */
     cursor: pointer;
-    width: 100%;
-    margin-bottom: px;
-    margin-top: 200px;
-    font-weight: bold;
+    position: fixed; /* Fixed position */
+    bottom: 80px; /* Position it above the bottom edge */
+    z-index: 10;
+    right: 620px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   }
 
   .modal {
@@ -392,7 +397,7 @@ body {
 
   
   .footerd {
-    position: fixed;
+    position: sticky;
     bottom: 0;
     width: 100vw;
     max-width: 350px;
@@ -444,6 +449,7 @@ body {
   }
 }
 
+
 /* Responsive styles for tablets */
 @media (min-width: 401px) and (max-width: 600px) {
   .invoice-container6 {
@@ -480,4 +486,31 @@ body {
 .footer-icon {
     font-size: 26px; /* Larger icons for desktop */
 }
+}
+/* Spinner styles */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  z-index: 999;
+}
+
+.spinner {
+  border: 4px solid white;
+  border-top: 4px solid #FC000E;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

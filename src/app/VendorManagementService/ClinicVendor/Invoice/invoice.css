@@ -58,7 +58,7 @@ body {
     margin-right: 30px;
   }
   
-  .tabs2 {
+  .tabs22 {
     display: flex;
     justify-content: space-around;
     margin: 20px;
@@ -66,6 +66,7 @@ body {
   }
   
   .tab {
+    
     font-size: 20px;
   padding: 10px;
   cursor: pointer;
@@ -93,7 +94,7 @@ body {
   gap: 10px; /* Space between cards */
   }
   .new-invoice-card2 {
-    background-color: #dddddd; /* Gray card */
+    background-color: white; /* Gray card */
   padding: 20px;
   margin: 15px 0;
   border-radius: 10px;
@@ -105,17 +106,7 @@ body {
   .new-invoice-card2::-webkit-scrollbar {
     display: none; /* For Webkit browsers (Chrome, Safari) */
   }
-  .new-invoice-button1 {
-    background-color: #FC000E;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-bottom: 200px;
-    margin-top: 210px;
-    box-sizing: border-box;
-  }
+
   .invoice-card {
     display: flex;
     justify-content: space-between;
@@ -124,6 +115,7 @@ body {
     margin: 3px 0;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid #FC000E;
   }
   
   .invoice-info {
@@ -165,9 +157,9 @@ body {
     margin-top: 5px;
   }
   
-  .paid {
+  /* .paid {
     background-color: #34C759;
-  }
+  } */
   
   .unpaid {
     background-color: #FC000E;
@@ -176,15 +168,18 @@ body {
   .new-invoice-button1 {
     background-color: #FC000E;
     color: white;
+    padding: 10px;
+    border-radius: 50%; /* To make it circular like a FAB */
     border: none;
-    padding: 13px;
-    border-radius: 10px;
-    font-size: 16px;
+    font-size: 20px; /* Icon size */
     cursor: pointer;
-    width: 100%;
-    margin-bottom: px;
-    margin-top: 240 px;
+    position: fixed; /* Fixed position */
+    bottom: 80px; /* Position it above the bottom edge */
+    z-index: 10;
+    right: 620px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   }
+  
 
   
   .modal {
@@ -384,7 +379,7 @@ body {
   }
   
   .footer2 {
-    position: fixed;
+    position: sticky;
     bottom: 0;
     width: 100vw;
     max-width: 350px;
@@ -572,17 +567,30 @@ body {
   height: 100%;
 } */
 
-.spinner{
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #FC000E;
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  z-index: 999;
+}
+
+.spinner {
+  border: 4px solid white;
+  border-top: 4px solid #FC000E;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  animation: spin 2s linear infinite;
-  margin: 0 auto;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+/* Toast Container Custom Styling */

@@ -3,6 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaHome, FaBell, FaUser, FaCalendarAlt } from 'react-icons/fa';
 import './inventory.css';
 import { useRouter } from 'next/navigation';
+import { showToast } from "../../../DashBoard/customtoast/page";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
 const Inventory: React.FC = () => {
   const [selectedFooter, setSelectedFooter] = useState<string>('home');
@@ -25,10 +30,10 @@ const Inventory: React.FC = () => {
           const filteredData = data.filter((item: any) => item.request_status === 'Approved');
           setApprovedItems(filteredData);
         } else {
-          console.error('Error fetching approved items:', response.statusText);
+          showToast('error', 'Error fetching approved items: ' + response.statusText);
         }
       } catch (error) {
-        console.error('Error fetching approved items:', error);
+        showToast('error', 'An error occurred while fetching approved items');
       } finally {
         setLoading(false); // Set loading to false after fetching data
       }
@@ -46,9 +51,10 @@ const Inventory: React.FC = () => {
           const data = await response.json();
           setInventoryItems(data);
         } else {
-          console.error('Error fetching inventory items:', response.statusText);
+          showToast('error', 'Error fetching inventory items: ' + response.statusText);
         }
       } catch (error) {
+        showToast('error', 'An error occurred while fetching inventory items');
         console.error('Error fetching inventory items:', error);
       } finally {
         setLoading(false); // Set loading to false after fetching data
@@ -82,7 +88,7 @@ const Inventory: React.FC = () => {
 
   const handleSave = async () => {
     if (!vendorId) {
-      alert('Vendor ID not found. Please try again.');
+      showToast('error', 'Vendor ID not found. Please try again.');
       return;
     }
 
@@ -96,7 +102,7 @@ const Inventory: React.FC = () => {
       }));
 
     if (payload.length === 0) {
-      alert('No items with increased quantity to save.');
+      showToast('error', 'No items with increased quantity to save.');
       return;
     }
 
@@ -114,15 +120,16 @@ const Inventory: React.FC = () => {
 
       if (response.ok) {
         const result = await response.json();
+        showToast('success', result.message);
         alert(result.message);
       } else {
         const errorData = await response.json();
-        console.error('Failed to save inventory:', errorData);
+        showToast('error', 'Failed to save inventory: ' + JSON.stringify(errorData));
         alert('Failed to save inventory.');
       }
     } catch (error) {
       console.error('Error saving inventory:', error);
-      alert('An error occurred while saving inventory.');
+      showToast('error', 'An error occurred while saving inventory');
     }
   };
 
@@ -148,7 +155,7 @@ const Inventory: React.FC = () => {
           <div className="approved-items">
             {approvedItems.map((item, index) => (
               <div className="approved-item-card" key={index}>
-                <img
+                <LazyLoadImage
                   src={item.product_image || '/images/default.png'}
                   alt={item.product_name}
                   className="approved-item-image"
@@ -175,7 +182,7 @@ const Inventory: React.FC = () => {
             <div className="inventory-cards">
               {inventoryItems.map((item, index) => (
                 <div className="inventory-card" key={index}>
-                  <img
+                  <LazyLoadImage
                     src={item.product_image || '/images/default.png'}
                     alt={item.product_name}
                     className="item-image"

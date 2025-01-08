@@ -24,6 +24,7 @@ const Drivers: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [vendorIds, setvendorIds] = useState('');
   const [newDriver, setNewDriver] = useState({ name: '', email: '', phone: '', imageUrl: '',vendor: vendorId || '' });
+  const [errors, setErrors] = useState({ name: '', email: '', phone: '', imageUrl: '' });
   const router = useRouter();
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const Drivers: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched drivers:", data); // Log the fetched data for debugging
-        const formattedDrivers = data.map((driver) => ({
+        const formattedDrivers = data.map((driver: any) => ({
           id: driver.id,
           name: driver.name,
           phone: driver.phone,
@@ -108,6 +109,7 @@ const Drivers: React.FC = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setNewDriver({ name: '', email: '', phone: '', imageUrl: '' ,vendor: vendorId || ''});
+    setErrors({ name: '', email: '', phone: '', imageUrl: '' });
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,83 +118,63 @@ const Drivers: React.FC = () => {
         ...newDriver,
         imageUrl: URL.createObjectURL(event.target.files[0]),
       });
+      setErrors((prev) => ({ ...prev, imageUrl: '' }));
     }
   };
 
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePhone = (phone: string) => /^\d{10}$/.test(phone);
-  const validateName = (name: string) => name.trim() !== '';
+  const validateInputs = () => {
+    const errors: { name: string; email: string; phone: string; imageUrl: string } = { name: '', email: '', phone: '', imageUrl: '' };
+    if (!newDriver.name.trim()) errors.name = 'Name is required.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newDriver.email)) errors.email = 'Invalid email address.';
+    if (!/^\d{10}$/.test(newDriver.phone)) errors.phone = 'Phone number must be 10 digits.';
+    if (!newDriver.imageUrl) errors.imageUrl = 'Profile image required.';
+    setErrors(errors);
+    return Object.values(errors).every((error) => error === '');
+  };
 
   const handleSave = async () => {
-    if (!validateName(newDriver.name)) {
-      alert("Please enter a valid name.");
-      return;
-    }
-    if (!validateEmail(newDriver.email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-    if (!validatePhone(newDriver.phone)) {
-      alert("Please enter a valid 10-digit phone number.");
-      return;
-    }
-  
+    if (!validateInputs()) return;
+
     try {
       let imageUrl = '';
-  
-      // Get the file from the input
+
       const fileInput = document.getElementById('file-input') as HTMLInputElement;
       if (fileInput && fileInput.files && fileInput.files[0]) {
         const formData = new FormData();
         formData.append('file', fileInput.files[0]);
-        formData.append('upload_preset', 'driver_images'); // Cloudinary upload preset
-  
-        // Upload image to Cloudinary
+        formData.append('upload_preset', 'driver_images');
+
         const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dvxscrjk0/image/upload', {
           method: 'POST',
           body: formData,
         });
-  
+
         if (cloudinaryResponse.ok) {
           const cloudinaryData = await cloudinaryResponse.json();
           imageUrl = cloudinaryData.secure_url;
         } else {
-          console.log('Failed to upload image to Cloudinary');
-          alert("Failed to upload image. Please try again.");
+          alert('Failed to upload image. Please try again.');
           return;
         }
       }
-  
-      // Prepare the driver data to be sent to the backend
-      const driverData = {
-        name: newDriver.name,
-        email: newDriver.email,
-        phone: newDriver.phone,
-        profile_photo: imageUrl, // Cloudinary image URL
-        vendor: newDriver.vendor,
-      };
-  
-      // Send driver data to the backend
+
+      const driverData = { ...newDriver, profile_photo: imageUrl };
+
       const response = await fetch('https://drivermanagementservice-69668940637.asia-east1.run.app/api/drivers/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(driverData),
       });
-  
+
       if (response.ok) {
-        console.log('Driver saved successfully');
         closeModal();
-        fetchDrivers(); // Re-fetch drivers to update the list
-        alert("Driver saved successfully!");
+        fetchDrivers();
+        alert('Driver saved successfully!');
       } else {
         const errorData = await response.json();
-        console.log('Failed to save driver:', errorData);
         alert(`Failed to save driver: ${errorData.message || 'Please check the details and try again.'}`);
       }
     } catch (error) {
-      console.log('Error occurred while saving driver:', error);
       alert('An error occurred while saving the driver. Please try again.');
     }
   };
@@ -201,8 +183,8 @@ const Drivers: React.FC = () => {
 
   return (
     <div className="drivers-container">
-      <header className="drivers-header">
-        <FaArrowLeft className="back-icon5" onClick={() => router.push('/VendorManagementService/Vendors/WheelVendor/Wheel')}/>
+      <header className="drivers-header8">
+        <FaArrowLeft className="back-icon8" onClick={() => router.push('/VendorManagementService/Vendors/WheelVendor/Wheel')}/>
         <h1>My Drivers</h1>
         <button className="add-button" onClick={openModal}>
           <FaPlus /> ADD
@@ -216,6 +198,7 @@ const Drivers: React.FC = () => {
       ) : (
         <div className="driver-list">
           <div className="driver-headings">
+          <p>Profile</p>
             <p>Name</p>
             <p>Phone no</p>
           </div>
@@ -259,14 +242,18 @@ const Drivers: React.FC = () => {
                 <FaPlus className="plus-icon" />
               </label>
               <input id="file-input" type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
+              {errors.imageUrl && <p className="error-text0">{errors.imageUrl}</p>}
             </div>
             <div className="modal-fields">
               <label>Name:</label>
               <input type="text" value={newDriver.name} onChange={(e) => setNewDriver({ ...newDriver, name: e.target.value })} />
+              {errors.name && <p className="error-text">{errors.name}</p>}
               <label>Email:</label>
               <input type="text" value={newDriver.email} onChange={(e) => setNewDriver({ ...newDriver, email: e.target.value })} />
+              {errors.email && <p className="error-text">{errors.email}</p>}
               <label>Phone Number:</label>
               <input type="text" value={newDriver.phone} onChange={(e) => setNewDriver({ ...newDriver, phone: e.target.value })} />
+              {errors.phone && <p className="error-text">{errors.phone}</p>}
             </div>
             <div className="modal-footer">
               <button className="modal-close" onClick={closeModal}>Close</button>
