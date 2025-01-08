@@ -33,6 +33,14 @@ const Details = () => {
 
   const [isFormValid, setIsFormValid] = useState(false);
 
+  // Retrieve saved form data on component mount
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('formData');
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+  }, []);
+
   useEffect(() => {
     const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
     const allFieldsFilled = Object.entries(formData).every(([field, value]) => {
@@ -70,10 +78,11 @@ const Details = () => {
       validatedValue = value; // No character restrictions, validate format later
     }
 
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: validatedValue
-    }));
+    setFormData(prevData => {
+      const updatedFormData = { ...prevData, [name]: validatedValue };
+      localStorage.setItem('formData', JSON.stringify(updatedFormData)); // Save updated form data
+      return updatedFormData;
+    });
   };
 
   const handleContinue = () => {

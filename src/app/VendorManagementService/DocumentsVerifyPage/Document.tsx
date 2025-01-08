@@ -67,14 +67,14 @@ const Document: React.FC = () => {
         setIsDrivingLicenceUploaded(localStorage.getItem("isDrivingLicenceUploaded") === "true");
         setIsVehicleRCUploaded(localStorage.getItem("isVehicleRCUploaded") === "true");
 
-        const cleanup = () => {
-            localStorage.clear();
-        };
+        // const cleanup = () => {
+        //     localStorage.clear();
+        // };
 
-        window.addEventListener("beforeunload", cleanup);
-        return () => {
-            window.removeEventListener("beforeunload", cleanup);
-        };
+        // window.addEventListener("beforeunload", cleanup);
+        // return () => {
+        //     window.removeEventListener("beforeunload", cleanup);
+        // };
     }, []);
 
     useEffect(() => {

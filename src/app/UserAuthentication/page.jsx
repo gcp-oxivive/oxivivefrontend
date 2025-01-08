@@ -21,7 +21,7 @@ function HomePage() {
   };
 
   return (
-    <div className="container">
+    <div className="container100">
       <div className="button-section">
         <div className="logo-section">
           <img src="/images/shot.png" alt="Oxivive Shot Logo" className="logo" />

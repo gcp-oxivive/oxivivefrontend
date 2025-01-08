@@ -6,17 +6,19 @@ import { useRouter } from 'next/navigation';
 
 const Oxivive: React.FC = () => {
     const [selected_service, setSelected_Service] = useState<string | null>(null);
-    const [service_id, setService_Id] = useState<string | null>(null);
     const [isProceedEnabled, setIsProceedEnabled] = useState<boolean>(false);
     const [isServiceClicked, setIsServiceClicked] = useState<boolean>(false);
     const router = useRouter();
 
+    // Restore state from localStorage on page load
     useEffect(() => {
-        const serviceName = localStorage.getItem('selected_service');
-        const price = localStorage.getItem('price');
-        console.log(serviceName, price);
-        setSelected_Service(serviceName);
-        
+        const savedService = localStorage.getItem('selected_service');
+        const savedServiceClicked = localStorage.getItem('isServiceClicked') === 'true';
+        const savedProceedEnabled = localStorage.getItem('isProceedEnabled') === 'true';
+
+        if (savedService) setSelected_Service(savedService);
+        setIsServiceClicked(savedServiceClicked);
+        setIsProceedEnabled(savedProceedEnabled);
     }, []);
 
     const handleBackClick = () => {
@@ -24,11 +26,21 @@ const Oxivive: React.FC = () => {
     };
 
     const handleServiceClick = () => {
-        setIsServiceClicked(prevState => !prevState);
-        setIsProceedEnabled(prevState => !prevState);
+        const newServiceClickedState = !isServiceClicked;
+        setIsServiceClicked(newServiceClickedState);
+        setIsProceedEnabled(newServiceClickedState);
+
+        // Save state to localStorage
+        localStorage.setItem('isServiceClicked', newServiceClickedState.toString());
+        localStorage.setItem('isProceedEnabled', newServiceClickedState.toString());
     };
 
     const handleProceedClick = () => {
+        // Save the selected service to localStorage before navigating
+        if (selected_service) {
+            localStorage.setItem('selected_service', selected_service);
+        }
+
         router.push('/VendorManagementService/SV/Service/Oxivive/Details'); // Navigate to the next page
     };
 

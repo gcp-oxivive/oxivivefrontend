@@ -68,7 +68,7 @@ body {
     padding: 10px;
     /* margin-left: 25px; */
     /* border-radius: 10px; */
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     width: 100%;
 }
@@ -85,7 +85,7 @@ body {
 }
 
 .document-info h2 {
-    font-size: 1rem;
+    font-size: 14px;
     margin: 0;
     font-weight: bold;
 }
@@ -132,11 +132,11 @@ body {
     /* position:relative; */
 }
 
-.document-card {
+/* .document-card {
     width: 100%;
     max-width: 320px; 
     margin-bottom: 15px; 
-}
+} */
 
 
 
@@ -161,14 +161,15 @@ body {
 .title-and-tick {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
-.document-title {
+/* .document-title {
     font-size: 1rem;
     margin: 0;
     font-weight: bold;
-    margin-right: 8px; /* Space between title and tick */
-}
+    margin-right: 8px; 
+} */
 
 .tick-icon {
     color: #34C759;
@@ -180,6 +181,7 @@ body {
 .title-with-tick {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .document-title1 {
@@ -202,12 +204,12 @@ body {
     align-items: center; /* Aligns the heading and tick icon vertically */
 }
 
-.document-title {
+/* .document-title {
     margin: 0;
     font-size: 1rem;
     font-weight: bold;
-    margin-right: 8px; /* Space between the title and tick icon */
-}
+    margin-right: 8px; 
+} */
 
 /* Adjust tick icon size and color */
 .tick-icon2 {
@@ -230,10 +232,11 @@ body {
 .title-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .document-title {
-    font-size: 1rem;
+    font-size: 5px;
     margin: 0;
     font-weight: bold;
     margin-right: 5px; /* Space between title and tick icon */
@@ -261,13 +264,14 @@ body {
 .document-title-container {
     display: flex;
     align-items: center; /* Aligns tick icon with title text */
+    justify-content: space-between;
 }
 
-.document-title {
+/* .document-title {
     font-size: 1rem;
     margin: 0;
     font-weight: bold;
-}
+} */
 
 .tick-icon4 {
     color: #34C759;

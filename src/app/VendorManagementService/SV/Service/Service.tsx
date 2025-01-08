@@ -76,24 +76,38 @@
 // };
 
 // export default Service;
-"use client"
-import React, { useEffect, useState } from 'react';
-import './Service.css';
+"use client";
+import React, { useEffect, useState } from "react";
+import "./Service.css";
 import { BiArrowBack } from "react-icons/bi";
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from "next/navigation";
 
 const Service: React.FC = () => {
-  const [services, setServices] = useState<any[]>([]); 
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
   const router = useRouter();
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch('https://patientservice-69668940637.asia-east1.run.app/api/services2/');
+        setLoading(true); // Start loading
+        const cachedServices = localStorage.getItem("cachedServices");
+        if (cachedServices) {
+          setServices(JSON.parse(cachedServices));
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(
+          "https://patientservice-69668940637.asia-east1.run.app/api/services2/"
+        );
         const data = await response.json();
-        setServices(data); 
+        setServices(data);
+        localStorage.setItem("cachedServices", JSON.stringify(data)); // Cache data locally
       } catch (error) {
-        console.error('Error fetching services:', error);
+        console.error("Error fetching services:", error);
+      } finally {
+        setLoading(false); // End loading
       }
     };
 
@@ -101,19 +115,21 @@ const Service: React.FC = () => {
   }, []);
 
   const handleServiceClick = (price: string, serviceName: string) => {
-    localStorage.setItem('price', price);
-    localStorage.setItem('selected_service', serviceName);
-    router.push('/VendorManagementService/SV/Service/Oxivive');
+    localStorage.setItem("price", price);
+    localStorage.setItem("selected_service", serviceName);
+    router.push("/VendorManagementService/SV/Service/Oxivive");
   };
 
   const handleBackClick = () => {
     router.back();
-};
+  };
 
   return (
     <div className="service-container">
       <div className="header123">
-        <button className="backbutton123"><BiArrowBack onClick={handleBackClick}/></button>
+        <button className="backbutton123">
+          <BiArrowBack onClick={handleBackClick} />
+        </button>
         <div className="logo123">
           <img src="/images/circle.png" alt="Oxivive Logo" />
         </div>
@@ -127,16 +143,27 @@ const Service: React.FC = () => {
         <h2>Please select your service</h2>
         <p>What specific service will you be providing?</p>
         <div className="services">
-          {services.map(service => (
-            <div
-              className="service-item"
-              key={service.service_id}
-              onClick={() => handleServiceClick(service.price, service.service_type)}
-            >
-              <img src={service.service_image} alt={service.service_type} />
-              <p>{service.service_type}</p>
+          {loading ? (
+            // Loading skeleton
+            <div className="skeleton-container">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div className="skeleton-item" key={index}></div>
+              ))}
             </div>
-          ))}
+          ) : (
+            services.map((service) => (
+              <div
+                className="service-item"
+                key={service.service_id}
+                onClick={() =>
+                  handleServiceClick(service.price, service.service_type)
+                }
+              >
+                <img src={service.service_image} alt={service.service_type} />
+                <p>{service.service_type}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

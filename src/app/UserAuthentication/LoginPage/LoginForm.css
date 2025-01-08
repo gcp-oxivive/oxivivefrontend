@@ -1,7 +1,7 @@
 body, html {
   font-family:"Poppins", sans-serif;
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
   background-color: rgb(226, 222, 222);
   font-style: normal;
 }
@@ -21,6 +21,7 @@ body, html {
   justify-content: center;
   align-items: center;
   padding-top: 40px;
+  margin: auto;
   
 }
 
