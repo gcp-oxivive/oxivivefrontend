@@ -25,8 +25,9 @@ const Inventorys = () => {
                 product_id: productId,
                 action: "approve",
             });
-
+    
             if (response.data.message === "Request status updated successfully") {
+                // Update request status
                 setGroupedRequests((prevGroupedRequests) => {
                     const updatedGroupedRequests = { ...prevGroupedRequests };
                     Object.keys(updatedGroupedRequests).forEach((date) => {
@@ -38,6 +39,18 @@ const Inventorys = () => {
                     });
                     return updatedGroupedRequests;
                 });
+    
+                // Add notification to local storage
+                const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+                notifications.push({
+                    vendorId,
+                    productId,
+                    message: `Request approved for vendor ID: ${vendorId}, product ID: ${productId}`,
+                    type: "success",
+                    timestamp: new Date().toISOString(),
+                });
+                localStorage.setItem("notifications", JSON.stringify(notifications));
+    
                 showAlert("Request approved successfully!", "success");
             }
         } catch (error) {
@@ -45,7 +58,7 @@ const Inventorys = () => {
             showAlert("Failed to approve the request.", "error");
         }
     };
-
+    
     const handleRejectButton = async (vendorId, productId) => {
         try {
             const response = await axios.post("https://inventorymanagementservice-69668940637.asia-east1.run.app/api/inventoryapp_inventorydetails/", {
@@ -53,8 +66,9 @@ const Inventorys = () => {
                 product_id: productId,
                 action: "reject",
             });
-
+    
             if (response.data.message === "Request status updated successfully") {
+                // Update request status
                 setGroupedRequests((prevGroupedRequests) => {
                     const updatedGroupedRequests = { ...prevGroupedRequests };
                     Object.keys(updatedGroupedRequests).forEach((date) => {
@@ -66,6 +80,18 @@ const Inventorys = () => {
                     });
                     return updatedGroupedRequests;
                 });
+    
+                // Add notification to local storage
+                const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+                notifications.push({
+                    vendorId,
+                    productId,
+                    message: `Request rejected for vendor ID: ${vendorId}, product ID: ${productId}`,
+                    type: "error",
+                    timestamp: new Date().toISOString(),
+                });
+                localStorage.setItem("notifications", JSON.stringify(notifications));
+    
                 showAlert("Request rejected successfully!", "success");
             }
         } catch (error) {
@@ -73,6 +99,7 @@ const Inventorys = () => {
             showAlert("Failed to reject the request.", "error");
         }
     };
+    
 
     const [customAlert, setCustomAlert] = useState({ visible: false, message: '', type: '' });
 

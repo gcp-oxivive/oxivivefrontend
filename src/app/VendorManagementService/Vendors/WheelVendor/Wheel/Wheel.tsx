@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Wheel.css';
 import {  FaRegBell, FaRegAddressBook, FaFileInvoiceDollar, FaCarAlt,FaUsers } from 'react-icons/fa';
 import { BsGraphUpArrow } from 'react-icons/bs';
@@ -11,6 +11,13 @@ import { faHome, faClipboardList, faBell, faUser, } from '@fortawesome/free-soli
 const Wheel = () => {
   const router = useRouter();
   const [selectedFooter, setSelectedFooter] = useState('home'); // Define selectedFooter in state
+  const [notificationCount, setNotificationCount] = useState(0); // State to hold the notification count
+
+  // useEffect to fetch notification count from localStorage
+  useEffect(() => {
+    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]'); // Retrieve notifications from localStorage
+    setNotificationCount(notifications.length); // Update notification count
+  }, []); // Empty dependency array to run on component mount
 
   const handleFooterClick = (section: string) => {
     setSelectedFooter(section); // Update the selected footer section
@@ -20,7 +27,7 @@ const Wheel = () => {
     } else if (section === 'bookings') {
       router.push('/VendorManagementService/WheelVendor/MyBookings');
     } else if (section === 'notifications') {
-      router.push('/VendorManagementService/WheelVendor/notifications');
+      router.push('/VendorManagementService/WheelVendor/Notify');
     } else if (section === 'profile') {
       router.push(`/VendorManagementService/WheelVendor/profile?vendor_id=${vendorId}`);
     }
@@ -55,6 +62,10 @@ const handleInvoiceCardClick = () => {
           <span className="welcome99">Welcome to</span>
           <span className="oxiwheel99">Oxi Wheel</span>
         </h1>
+        <FaRegBell className="notificationIcon" onClick={() => router.push('/VendorManagementService/WheelVendor/Notify')} />
+          {notificationCount > 0 && (
+            <span className="notificationCount">{notificationCount}</span> // Display notification count if greater than 0
+          )}
       </header>
 
       <div className="main">
