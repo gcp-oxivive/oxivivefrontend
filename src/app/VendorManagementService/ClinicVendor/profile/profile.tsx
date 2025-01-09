@@ -462,7 +462,7 @@ const Profile: React.FC = () => {
       {showLogoutPopup && (
         <div className="logout-popup">
           <div className="popup-content">
-            <h1>Log out</h1>
+            <h1>Logout</h1>
             <p>Are you sure you want to logout?</p>
             <button className="logout-btn" onClick={handleConfirmLogout}>
               Logout

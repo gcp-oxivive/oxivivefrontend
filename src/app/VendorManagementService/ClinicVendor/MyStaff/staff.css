@@ -23,7 +23,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow-y: hidden;
+  overflow-y: hidden !important;
   box-sizing: border-box;
 }
 .staff-headings1 {
@@ -86,7 +86,7 @@ body {
 .staff-list {
     flex-grow: 1;
     padding: 10px;
-    overflow-y: auto;
+    overflow-y: auto !important;
 }
 
 .staff-card {

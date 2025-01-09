@@ -24,7 +24,7 @@ body.clinic {
   justify-content: space-between;
 }
 
-.headera {
+.header06 {
   background-color: #ff0000;
   color: white;
   padding: 20px;
@@ -34,13 +34,13 @@ body.clinic {
   font-family: Arial, sans-serif;
 }
 
-.logoContainer {
+.logoContainerr {
   position: absolute;
   top: 10px;
   left: 10px;
 }
 
-.logo {
+.logo8 {
   width: 140px; /* Adjust to desired size */
   height: 140px; /* Adjust to desired size */
 }

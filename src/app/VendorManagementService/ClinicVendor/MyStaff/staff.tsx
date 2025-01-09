@@ -7,6 +7,9 @@ import { faHome, faClipboardList, faBell, faUser } from '@fortawesome/free-solid
 import { useRouter,useSearchParams } from 'next/navigation';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { showToast } from "../../../DashBoard/customtoast/page";
+// import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 
 interface Staff {
@@ -144,7 +147,7 @@ const Staff: React.FC = () => {
           imageUrl = cloudinaryData.secure_url;
         } else {
           console.log('Failed to upload image to Cloudinary');
-          alert('Failed to upload image. Please try again.');
+          showToast('error','Failed to upload image. Please try again.');
           return;
         }
       }
@@ -168,13 +171,13 @@ const Staff: React.FC = () => {
       if (response.ok) {
         closeModal();
         fetchStaff();
-        alert('Staff saved successfully!');
+        showToast('success','Staff saved successfully!');
       } else {
         const errorData = await response.json();
-        alert(`Failed to save staff: ${errorData.message || 'Please check the details and try again.'}`);
+        showToast('error',`Failed to save staff: ${errorData.message || 'Please check the details and try again.'}`);
       }
     } catch (error) {
-      alert('An error occurred while saving the staff. Please try again.');
+      showToast('error','An error occurred while saving the staff. Please try again.');
     }
   };
 

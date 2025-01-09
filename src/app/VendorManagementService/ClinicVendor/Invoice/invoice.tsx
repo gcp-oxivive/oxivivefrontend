@@ -266,10 +266,10 @@ const InvoicePage: React.FC = () => {
             </div>
 
             <div className="modal-buttons">
-              <button className="save-button" onClick={handleSave}>
+              <button className="save-button7" onClick={handleSave}>
                 Save
               </button>
-              <button className="raise-claim-button" onClick={handleRaiseClaim}>
+              <button className="raise-claim-button7" onClick={handleRaiseClaim}>
                 Raise Invoice
               </button>
             </div>

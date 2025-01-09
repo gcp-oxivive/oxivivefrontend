@@ -29,12 +29,12 @@ body {
 
 }
 
-  
+ 
   .header1 {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    position: relative;
+    /* position: relative; */
   }
   
   .back-button {
@@ -92,6 +92,7 @@ body {
     display: flex;
   flex-direction: column;
   gap: 10px; /* Space between cards */
+  min-height: 350px;
   }
   .new-invoice-card2 {
     background-color: white; /* Gray card */
@@ -255,7 +256,7 @@ body {
     font-weight: bold;
   }
 
-  .raise-claim-button {
+  .raise-claim-button7 {
     background-color: #FC000E;
     color: white;
     padding: 10px;
@@ -271,7 +272,7 @@ body {
   }
   
 
-  .save-button {
+  .save-button7 {
     background-color: #FC000E;
     color: white;
     padding: 10px;
@@ -435,9 +436,8 @@ body {
   }
 
   .new-invoice-button1 {
-      font-size: 14px;
-      padding: 10px;
-      margin-top: 150px;
+    right: 20px; /* Even closer to the right edge for very small screens */
+    bottom: 100px; /* Adjust if needed due to footer or other elements */
   }
 
   .modal-content {
@@ -472,7 +472,7 @@ body {
   }
 
   .new-invoice-button1 {
-      font-size: 16px;
+    right: 20px; /* Keep consistent with default */
   }
 
   .modal-content {
@@ -568,7 +568,7 @@ body {
 } */
 
 .spinner-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

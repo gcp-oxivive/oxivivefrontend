@@ -60,9 +60,9 @@ const Clinic = () => {
 
   return (
     <div className="clinic-containers6">
-      <header className="headera">
-        <div className="logoContainer">
-          <img src="/images/shot(1).png" alt="OxiWheel Logo" className="logo" />
+      <header className="header06">
+        <div className="logoContainerr">
+          <img src="/images/shot(1).png" alt="OxiWheel Logo" className="logo8" />
         </div>
         <h1 className="titlea">
           <span className="welcome">Welcome to</span>

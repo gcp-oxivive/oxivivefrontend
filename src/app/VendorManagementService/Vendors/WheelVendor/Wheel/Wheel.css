@@ -4,7 +4,7 @@ body {
   background-color: #d7d2d2;
 }
 
-.container5 {
+.container55 {
   height: 100vh;
   width: 100%;
   max-width: 350px;
@@ -15,7 +15,7 @@ body {
   justify-content: space-between;
 }
 
-.header {
+.header9 {
   background-color: #ff0000;
   color: white;
   padding: 20px;
@@ -31,12 +31,12 @@ body {
   left: 10px;
 }
 
-.logo {
+.logo9 {
   width: 140px; /* Adjust to desired size */
   height: 140px; /* Adjust to desired size */
 }
 
-.title0 {
+.title01 {
   display: flex;
   flex-direction: column; /* Stack the text vertically */
   align-items: center; /* Center the text horizontally */
@@ -45,7 +45,7 @@ body {
   top: 20px; /* Adjust for vertical spacing */
 }
 
-.welcome9 {
+.welcome99 {
   font-size: 14px; /* Font size for 'Welcome to' */
   margin: 0; /* No margin */
   margin-left: 30px;
@@ -53,7 +53,7 @@ body {
   color: white;
 }
 
-.oxiwheel9 {
+.oxiwheel99 {
   font-size: 40px; /* Font size for 'OxiWheel' */
   margin: 0; /* No margin */
   margin-left: 110px;
