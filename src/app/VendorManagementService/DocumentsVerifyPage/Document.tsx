@@ -77,6 +77,69 @@ const Document: React.FC = () => {
         // };
     }, []);
 
+    // Clear only uploaded images on page refresh
+    useEffect(() => {
+        const handleRefresh = () => {
+            const imageKeys = [
+                "isMedicalUploaded",
+                "isBuildingLicenceUploaded",
+                "isAadharUploaded",
+                "isPancardUploaded",
+                "isProfilePhotoUploaded",
+                "isDrivingLicenceUploaded",
+                "isVehicleRCUploaded",
+                "medicalFrontFile",
+                "medicalBackFile",
+                "buildingFrontFile",
+                "drivingFrontFile",
+                "drivingBackFile",
+                "vehicleFrontFile",
+                "vehicleBackFile",
+                "aadharFrontFile",
+                "aadharBackFile",
+                "panFrontFile",
+                "panBackFile",
+                "profilePhotoFile"
+            ];
+            imageKeys.forEach((key) => localStorage.removeItem(key));
+        };
+
+        window.addEventListener("beforeunload", handleRefresh);
+        return () => {
+            window.removeEventListener("beforeunload", handleRefresh);
+        };
+    }, []);
+
+    useEffect(() => {
+        let touchStartY = 0;
+        let touchEndY = 0;
+    
+        const handleTouchStart = (e) => {
+            touchStartY = e.touches[0].clientY;
+        };
+    
+        const handleTouchMove = (e) => {
+            touchEndY = e.touches[0].clientY;
+        };
+    
+        const handleTouchEnd = () => {
+            if (touchStartY > touchEndY + 50) { // Swipe up detected
+                window.location.reload(); // Refresh the page
+            }
+        };
+    
+        window.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchmove', handleTouchMove);
+        window.addEventListener('touchend', handleTouchEnd);
+    
+        return () => {
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, []);
+    
+
     useEffect(() => {
         if (
             isAadharUploaded &&
@@ -220,8 +283,8 @@ const Document: React.FC = () => {
     return (
         <div className="document-container">
             <ToastContainer className="toast-container"/>
-            <header className="header">
-                <BiArrowBack className="back-icon1" onClick={() => router.back()} />
+            <header className="header100">
+                <BiArrowBack className="back-icon1" onClick={() => router.push('/VendorManagementService/SV/Service/Oxivive/Details')} />
                 <h1>Upload documents</h1>
                 <p>Quick & Simple Process</p>
             </header>

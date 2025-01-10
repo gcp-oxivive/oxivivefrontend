@@ -112,7 +112,7 @@ body {
     background: #FC000E;
     color: #fff;
     border: none;
-    /* border-radius: 20px; */
+    border-radius: 6px;
     padding: 12px 24px;
     font-size: 16px;
     cursor: pointer;
